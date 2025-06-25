@@ -1,48 +1,14 @@
-import { useEffect } from "react"
-import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from "./api/productsApi";
-import { useForm } from "react-hook-form";
+import type { FieldErrors, UseFormRegister } from "react-hook-form"
+import type { createProductType } from "../types"
 
-function App() {
+type ProductFormProps = {
+    errors: FieldErrors<createProductType>
+    register: UseFormRegister<createProductType>
+}
 
-  useEffect(() => {
-  const obtenerProductos = async() => {
-      try{
-        const response = await getProducts();
-        console.log(response);
-      }catch(error){
-        console.log(error);
-      }
-    }
-    obtenerProductos()
-  },[])
-
-
-  const {register, handleSubmit, reset,  formState: {errors}} = useForm() 
-
-  const onSubmit = async(data : any) => {
-    const formData = new FormData()
-    formData.append("product[name]", data.name);
-    formData.append("product[price]", data.price);
-    formData.append("product[description]", data.description);
-    formData.append("product[category_id]", data.category_id);
-    formData.append("product[stock]", data.stock);
-    formData.append("product[image]", data.image[0]);
-    formData.append("product[minimumQuantity]", data.minimumQuantity);
-
-    try{
-      //const response = await updateProduct(formData, 5)
-      const response = await createProduct(formData)
-      console.log(response)
-      reset()
-    }catch(error){
-      console.log(error)
-    }
-  }
-
+export default function ProductForm({errors, register} : ProductFormProps) {
   return (
-    
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="name">Nombre del producto</label>
           <input 
@@ -90,7 +56,7 @@ function App() {
             type="number"
             {...register('category_id', {required : 'La categoria es obligatoria'})} 
           />
-          {errors.category?.message && <p>{errors.category.message as string}</p>}
+          {errors.category_id?.message && <p>{errors.category_id.message as string}</p>}
         </div>
 
         <div>
@@ -100,7 +66,7 @@ function App() {
             type="number"
             {...register('minimumQuantity', {required : 'La cantidad minima de stock es obligatoria'})} 
           />
-          {errors.category?.message && <p>{errors.category.message as string}</p>}
+          {errors.minimumQuantity?.message && <p>{errors.minimumQuantity.message as string}</p>}
         </div>
 
         <div>
@@ -115,10 +81,6 @@ function App() {
         </div>
 
         <input type="submit" />
-
-      </form>
     </>
   )
 }
-
-export default App

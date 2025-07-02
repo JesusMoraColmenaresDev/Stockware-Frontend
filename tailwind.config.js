@@ -23,6 +23,9 @@ export default {
 				item: "#A5A8A9",
 				accent: "#F59E0B",
 			},
+			fontFamily: {
+				bangers: ["Bangers", "sans-serif"],
+			},
 		},
 	},
 	plugins: [],

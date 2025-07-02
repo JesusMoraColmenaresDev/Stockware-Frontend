@@ -1,15 +1,13 @@
 import { productsSchema } from "../types";
-import api from "./axiosConfig";
+import { api } from "./axiosConfig";
 
 export const getProducts = async () => {
 	try {
 		const data = await api.get("/products");
 		const response = productsSchema.safeParse(data.data);
-		console.log(response);
 
 		if (response.success) return response.data;
 		else {
-			console.log("test");
 			throw new Error(response.error.message);
 		}
 	} catch (error) {

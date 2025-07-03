@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePageView from "../views/HomePageView";
 import CreateProductsView from "../views/CreateProductsView";
-import { SideBar } from "../components/SideBar";
+import { SideBar } from "../views/SideBar";
 
 const router = createBrowserRouter([
 	{

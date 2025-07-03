@@ -1,6 +1,5 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import {
-	LuStore,
 	LuWarehouse,
 	LuUserRound,
 	LuCircleUserRound,
@@ -25,35 +24,35 @@ export const SideBar = () => {
 							title="Products"
 							to="/"
 							key={"/"}
-							icon={<LuStore focusable={"false"} className="" />}
-						/>
-						<NavBarItem
-							title="Products"
-							to="/"
-							key={"/"}
-							icon={<LuWarehouse focusable={"false"} className="" />}
+							icon={<LuWarehouse focusable={"false"} />}
 						/>
 						<NavBarItem
 							title="Categories"
 							to="/categories"
 							key={"/"}
-							icon={<LuSquareMenu focusable={"false"} className="" />}
+							icon={<LuSquareMenu focusable={"false"} />}
 						/>
 						<NavBarItem
 							title="Users"
 							to="/categories"
 							key={"/"}
-							icon={<LuUserRound focusable={"false"} className="" />}
+							icon={<LuUserRound focusable={"false"} />}
 						/>
 						<NavBarItem
 							title="Profile"
 							to="/categories"
 							key={"/"}
-							icon={<LuCircleUserRound focusable={"false"} className="" />}
+							icon={<LuCircleUserRound focusable={"false"} />}
 						/>
 					</div>
-					<h1 className="flex text-5xl justify-center px-2 py-[2rem] text-accent font-bold">
-						<LuLogOut />
+					<h1 className="text-accent font-bold ">
+						<Link
+							title="LogOut"
+							to={"/logout"}
+							className="flex w-full text-5xl -translate-y-2 justify-center py-2 border border-transparent hover:border-bg-secondary duration-50 rounded-[8rem]"
+						>
+							<LuLogOut focusable={"false"} />
+						</Link>
 					</h1>
 				</aside>
 

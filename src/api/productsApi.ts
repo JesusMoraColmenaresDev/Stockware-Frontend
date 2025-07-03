@@ -39,8 +39,8 @@ const mockData: ProductType[] = [
 		updated_at: "2025-07-01T03:06:53.763Z",
 		description:
 			"great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.",
-		category_id: 3,
-		stock: 98,
+		category_id: 9999,
+		stock: 9999,
 		minimumQuantity: 5,
 		image_url:
 			"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6MywicHVyIjoiYmxvYl9pZCJ9fQ==--0e533e3277834f1822c71e1045710df67ab26b41/mens-cotton-jacket.jpg",

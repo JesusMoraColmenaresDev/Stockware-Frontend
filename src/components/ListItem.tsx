@@ -11,8 +11,8 @@ export const ListItem = ({ product }: ListItemProps) => {
 			<td className="border">
 				<div className="flex items-center justify-center">{product.id}</div>
 			</td>
-			<td className="border max-w-0 w-1/2 bg-bg-secondary">
-				<div className="truncate px-2 flex items-center">{product.name}</div>
+			<td className="border max-w-0 w-1/2 bg-bg-secondary rounded-lg">
+				<div className="truncate px-2 flex items-center ">{product.name}</div>
 			</td>
 			<td className="border">
 				<div className="flex items-center justify-center">{product.stock}</div>

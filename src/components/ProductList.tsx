@@ -12,7 +12,9 @@ export const ProductList = () => {
 			<thead className="border">
 				<tr className="border">
 					<th className="border w-1/40">Id</th>
-					<th className="border max-w-0 w-1/2 bg-bg-secondary">Name</th>
+					<th className="border max-w-0 w-1/2 bg-bg-secondary rounded-lg">
+						Name
+					</th>
 					<th className="border w-1/18">Quantity</th>
 					<th className="border w-1/18">Category</th>
 					<th className="border w-1/13">Action</th>

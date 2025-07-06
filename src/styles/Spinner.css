@@ -1,0 +1,95 @@
+@layer components {
+	.spinner {
+		position: relative;
+		display: inline-block;
+
+		/* override me anywhere */
+		--spinner-size: 10.25rem; /* your base */
+		--spinner-color-primary: #fff;
+		--spinner-color-secondary: #ff3d00;
+
+		/* % references below are of this container’s width/height */
+		/*
+		--spinner-dot-large: 24.39%;
+		--spinner-dot-small: 12.2%; 
+		*/
+
+		--spinner-dot-large-ratio: 0.244; /* 40/164 */
+		--spinner-dot-small-ratio: 0.122; /* 20/164 */
+
+		width: var(--spinner-size);
+		height: var(--spinner-size);
+	}
+
+	.spinner::before,
+	.spinner::after {
+		content: "";
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		animation: spinner-rotate 1s ease-in infinite;
+	}
+
+	.spinner::before {
+		/* always 40/164 of the container */
+		width: calc(var(--spinner-size) * var(--spinner-dot-large-ratio));
+		height: calc(var(--spinner-size) * var(--spinner-dot-large-ratio));
+		/* 
+		width: var(--spinner-dot-large);
+		height: var(--spinner-dot-large);
+		*/
+
+		background-color: var(--spinner-color-primary);
+	}
+
+	.spinner::after {
+		width: calc(var(--spinner-size) * var(--spinner-dot-small-ratio));
+		height: calc(var(--spinner-size) * var(--spinner-dot-small-ratio));
+		/* 
+		width: var(--spinner-dot-small);
+		height: var(--spinner-dot-small);
+		*/
+
+		background-color: var(--spinner-color-secondary);
+		animation: spinner-rotate 1s ease-in infinite,
+			spinner-moveY 1s ease-in infinite;
+	}
+}
+
+@layer utilities {
+	@keyframes spinner-rotate {
+		0% {
+			transform: translate(-50%, -100%) rotate(0deg) scale(1, 1);
+		}
+		25% {
+			transform: translate(-50%, 0%) rotate(180deg) scale(1, 1);
+		}
+		45%,
+		55% {
+			transform: translate(-50%, 100%) rotate(180deg) scale(3, 0.5);
+		}
+		60% {
+			transform: translate(-50%, 100%) rotate(180deg) scale(1, 1);
+		}
+		75% {
+			transform: translate(-50%, 0%) rotate(270deg) scale(1, 1);
+		}
+		100% {
+			transform: translate(-50%, -100%) rotate(360deg) scale(1, 1);
+		}
+	}
+	@keyframes spinner-moveY {
+		0%,
+		100% {
+			top: 10%;
+		}
+		45%,
+		55% {
+			top: 59%;
+		}
+		60% {
+			top: 40%;
+		}
+	}
+}

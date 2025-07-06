@@ -35,13 +35,17 @@ export default function HomePageView() {
 		<div className="bg-bg-main">
 			{isLoading ? (
 				<div className="flex items-center justify-center min-h-screen">
-					<Spinner size="20rem" colorPrimary="black" colorSecondary="orange" />
+					<Spinner
+						size="20rem"
+						colorPrimary="#2C3E50"
+						colorSecondary="#3498DB"
+					/>
 				</div>
 			) : (
 				<>
 					<div className="flex gap-[1rem] px-[0.5rem] pb-[1rem] pt-[1.5rem]">
 						<button
-							className=" flex px-[2rem] py-[1rem] justify-start rounded-lg bg-bg-button-primary text-bg-secondary font-bold hover:bg-bg-button-secondary"
+							className="flex px-[2rem] py-[1rem] justify-start rounded-lg bg-bg-button-primary text-bg-secondary font-bold hover:bg-bg-button-secondary"
 							onClick={() => navigate("/product/create")}
 						>
 							Create Product
@@ -52,7 +56,7 @@ export default function HomePageView() {
 								id="search"
 								{...register("search")}
 								placeholder="Search products . . ."
-								className="flex px-[1rem] w-2/5 py-[1rem] justify-start bg-gray-400 text-text font-medium rounded-lg"
+								className="flex px-[1rem] w-2/5 py-[1rem] justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
 							/>
 							{search && (
 								<button onClick={() => reset()}>

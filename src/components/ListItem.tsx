@@ -25,8 +25,8 @@ export const ListItem = ({ product }: ListItemProps) => {
 			<td>
 				<div className="flex items-center justify-center h-[2rem] gap-2 border">
 					<LuSearch className="w-[1.5rem] h-auto hover:text-accent" />
-					<LuSquarePen className="w-[1.5rem] h-auto" />
-					<LuX className="w-[1.5rem] h-auto" />
+					<LuSquarePen className="w-[1.5rem] h-auto hover:text-accent" />
+					<LuX className="w-[1.5rem] h-auto hover:text-accent" />
 				</div>
 			</td>
 		</tr>

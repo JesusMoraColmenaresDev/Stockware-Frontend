@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import type { ProductType } from "../types";
 import { LuX } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import { CategoryDropDown } from "../components/CategoryDropDown";
 
 type FormValues = {
 	search: string;
@@ -43,26 +44,33 @@ export default function HomePageView() {
 				</div>
 			) : (
 				<>
-					<div className="flex gap-[1rem] px-[0.5rem] pb-[1rem] pt-[1.5rem]">
-						<button
-							className="flex px-[2rem] py-[1rem] justify-start rounded-lg bg-bg-button-primary text-bg-secondary font-bold hover:bg-bg-button-secondary"
-							onClick={() => navigate("/product/create")}
-						>
-							Create Product
-						</button>
-						<div className="flex gap-[0.2rem] w-2/5">
-							<input
-								type="text"
-								id="search"
-								{...register("search")}
-								placeholder="Search products . . ."
-								className="flex px-[1rem] w-2/5 py-[1rem] justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
-							/>
-							{search && (
-								<button onClick={() => reset()}>
-									<LuX className="text-text w-auto h-[1.5rem]" />
-								</button>
-							)}
+					<div className="flex px-[0.5rem] pb-[1rem] pt-[1.5rem] ">
+						<div className="flex flex-1/2 gap-[1rem] border">
+							<button
+								className="flex px-[2rem] py-[1rem] justify-start rounded-lg bg-bg-button-primary text-bg-secondary font-bold hover:bg-bg-button-secondary"
+								onClick={() => navigate("/product/create")}
+							>
+								Create Product
+							</button>
+							<div className="flex w-3/5 ">
+								<input
+									type="text"
+									id="search"
+									{...register("search")}
+									placeholder="Search products . . ."
+									className="flex px-[1rem] w-2/2 py-[1rem] justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
+								/>
+								{search && (
+									<button onClick={() => reset()}>
+										<LuX className="text-text w-auto h-[1.5rem]" />
+									</button>
+								)}
+							</div>
+						</div>
+						<div className="flex flex-1/4 justify-end border">
+							<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text">
+								<CategoryDropDown />
+							</div>
 						</div>
 					</div>
 					{/* {products &&

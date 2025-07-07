@@ -21,6 +21,7 @@ export const productSchema = z.object({
 });
 
 export const productsSchema = z.array(productSchema);
+export const categoriesSchema = z.array(categorySchema);
 
 export type CategoryType = z.infer<typeof categorySchema>;
 export type ProductType = z.infer<typeof productSchema>;

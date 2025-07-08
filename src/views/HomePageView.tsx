@@ -33,7 +33,13 @@ export default function HomePageView() {
 		staleTime: Infinity,
 	});
 
-	const { register, watch, reset: resetSearch } = useForm<FormHookValues>();
+	const {
+		register,
+		watch,
+		reset: resetSearch,
+	} = useForm<FormHookValues>({
+		defaultValues: { search: "", categoryFilter: "0" }, // Evitamos los Undefined, al tener un valor de antemano
+	});
 	const search = watch("search");
 
 	const categoryFilter = Number(watch("categoryFilter"));
@@ -46,7 +52,7 @@ export default function HomePageView() {
 		return products
 			.filter(
 				(prod) =>
-					categoryFilter && categoryFilter !== 0 // Esta pero no es 0
+					categoryFilter > 0 // El usuario escogio una opcion del select
 						? prod.category_id == categoryFilter // Solo los de la misma ID
 						: true // Si no, solo retorne todos
 			)

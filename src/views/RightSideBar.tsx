@@ -1,13 +1,17 @@
-import { LuOctagonX, LuOctagonAlert } from "react-icons/lu";
-import { LowStockList } from "./LowStockList";
+import { LuOctagonX, LuOctagonAlert, LuBadgeCheck } from "react-icons/lu";
+import { LowStockList } from "../components/LowStockList";
 import type { ProductType } from "../types";
-import { Spinner } from "./Spinner";
+import { Spinner } from "../components/Spinner";
 
 type RightSideBarProps = {
 	products: ProductType[] | undefined;
+	isLoadingProducts: boolean;
 };
 
-export const RightSideBar = ({ products }: RightSideBarProps) => {
+export const RightSideBar = ({
+	products,
+	isLoadingProducts,
+}: RightSideBarProps) => {
 	const lowStock = products
 		?.filter((prod) => prod.stock <= prod.minimumQuantity)
 		.sort((a, b) => a.stock - b.stock);
@@ -27,10 +31,17 @@ export const RightSideBar = ({ products }: RightSideBarProps) => {
 	) ?? { outOfStockCount: 0, lowStockCount: 0 };
 
 	return (
-		<aside className="bg-bg-secondary min-h-screen w-sidebar-expanded text-white">
-			{!products ? (
+		<aside className="bg-bg-secondary min-h-screen w-sidebar-expanded text-white border-text border">
+			{isLoadingProducts ? (
 				<div className="flex h-full items-center justify-center w-full">
 					<Spinner colorPrimary="#2C3E50" colorSecondary="#3498DB" />
+				</div>
+			) : outOfStockCount === 0 && lowStockCount === 0 ? (
+				<div className="flex flex-col h-full w-full items-center text-sucess gap-[2rem] p-[0.5rem]">
+					<LuBadgeCheck className="w-[10rem] h-auto" />
+					<span className="text-center text-3xl font-semibold">
+						Todos los Productos Tienen Suficiente Stock!
+					</span>
 				</div>
 			) : (
 				<>

@@ -1,53 +1,45 @@
-import { getProducts } from "../api/productsApi";
+import { useGetProducts } from "../api/productsApi";
 import { ProductList } from "../components/ProductList";
-import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
-import type { CategoryType, ProductType } from "../types";
-import { LuX } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import type { ProductType } from "../types";
 import { CategoryDropDown } from "../components/CategoryDropDown";
-import { getCategories } from "../api/categoriesApi";
-import { RightSideBar } from "../components/RightSideBar";
+import { useGetCategories } from "../api/categoriesApi";
+import { RightSideBar } from "./RightSideBar";
+import { CreateButton } from "../components/CreateButton";
+import { SearchField } from "../components/SearchField";
 
-export type FormHookValues = {
-	search: string;
+export type HomePageViewFormValues = {
+	searchProducts: string;
 	categoryFilter: string;
 };
 
+const defaultValues: HomePageViewFormValues = {
+	searchProducts: "",
+	categoryFilter: "0",
+};
+
 export default function HomePageView() {
-	const navigate = useNavigate();
+	const { products, isLoadingProducts } = useGetProducts();
 
-	const { data: products, isLoading: isLoadingProducts } = useQuery<
-		ProductType[]
-	>({
-		queryKey: ["products"],
-		queryFn: getProducts,
-		staleTime: Infinity,
-	});
-
-	const { data: categories } = useQuery<CategoryType[]>({
-		queryKey: ["categories"],
-		queryFn: getCategories,
-		staleTime: Infinity,
-	});
+	const { categories } = useGetCategories();
 
 	const {
 		register,
 		watch,
 		reset: resetSearch,
-	} = useForm<FormHookValues>({
-		defaultValues: { search: "", categoryFilter: "0" }, // Evitamos los Undefined, al tener un valor de antemano
+	} = useForm<HomePageViewFormValues>({
+		defaultValues, // Evitamos los Undefined, al tener un valor de antemano
 	});
-	const search = watch("search");
+	const searchProduct = watch("searchProducts");
 
 	const categoryFilter = Number(watch("categoryFilter"));
 
 	const filteredProducts = useMemo<ProductType[]>(() => {
 		if (!products) return [];
 
-		const lower = search?.trim().toLowerCase() ?? ""; // Si no esta, pongalo como string vacio
+		const lower = searchProduct.trim().toLowerCase() ?? ""; // Si no esta, pongalo como string vacio
 
 		return products
 			.filter(
@@ -57,7 +49,7 @@ export default function HomePageView() {
 						: true // Si no, solo retorne todos
 			)
 			.filter((prod) => prod.name.toLowerCase().includes(lower));
-	}, [products, search, categoryFilter]);
+	}, [products, searchProduct, categoryFilter]);
 
 	return (
 		<div className="flex w-full h-full ">
@@ -74,26 +66,15 @@ export default function HomePageView() {
 					<>
 						<div className="flex px-[0.5rem] pb-[1rem] pt-[1.5rem] ">
 							<div className="flex flex-1/2 gap-[1rem]">
-								<button
-									className="flex px-[2rem] py-[1rem] justify-start rounded-lg bg-bg-button-primary text-bg-secondary font-bold hover:bg-bg-button-secondary"
-									onClick={() => navigate("/product/create")}
-								>
-									Create Product
-								</button>
-								<div className="flex w-3/5 ">
-									<input
-										type="text"
-										id="search"
-										{...register("search")}
-										placeholder="Search products . . ."
-										className="flex px-[1rem] w-2/2 py-[1rem] justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
-									/>
-									{search && (
-										<button onClick={() => resetSearch({ search: "" })}>
-											<LuX className="text-text w-auto h-[1.5rem]" />
-										</button>
-									)}
-								</div>
+								<CreateButton name="Product" path="/product/create" />
+								<SearchField
+									name="searchProducts"
+									register={register}
+									watch={watch}
+									reset={resetSearch}
+									defaultValues={defaultValues}
+									placeholder="Search Products . . ."
+								/>
 							</div>
 							<div className="flex flex-1/4 justify-end">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text">
@@ -113,7 +94,7 @@ export default function HomePageView() {
 					</>
 				)}
 			</div>
-			<RightSideBar products={products} />
+			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />
 		</div>
 	);
 }

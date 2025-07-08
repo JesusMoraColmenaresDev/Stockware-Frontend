@@ -8,12 +8,9 @@ type RightSideBarProps = {
 };
 
 export const RightSideBar = ({ products }: RightSideBarProps) => {
-	console.log(products);
-
 	const lowStock = products
 		?.filter((prod) => prod.stock <= prod.minimumQuantity)
 		.sort((a, b) => a.stock - b.stock);
-	console.log(lowStock);
 
 	const { outOfStockCount, lowStockCount } = products?.reduce(
 		(counts, prod) => {
@@ -33,7 +30,7 @@ export const RightSideBar = ({ products }: RightSideBarProps) => {
 		<aside className="bg-bg-secondary min-h-screen w-sidebar-expanded text-white">
 			{!products ? (
 				<div className="flex h-full items-center justify-center w-full">
-					<Spinner />
+					<Spinner colorPrimary="#2C3E50" colorSecondary="#3498DB" />
 				</div>
 			) : (
 				<>

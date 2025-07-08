@@ -1,5 +1,5 @@
 import { categorySchema } from "../types";
-import { api } from "./axiosConfig";
+import api  from "./axiosConfig";
 
 export const getCategories = async () => {
 	try {

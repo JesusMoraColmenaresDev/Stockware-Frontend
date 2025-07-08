@@ -1,5 +1,5 @@
 import { productsSchema, type ProductType } from "../types";
-import { api } from "./axiosConfig";
+import api  from "./axiosConfig";
 
 const mockData: ProductType[] = [
 	{

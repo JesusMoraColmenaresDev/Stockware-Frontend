@@ -20,6 +20,15 @@ export const productSchema = z.object({
 	updated_at: z.string().datetime(),
 });
 
+export const UserSchemaAuth = z.object({
+	name: z.string().optional(),
+	email: z.string().email(),
+  	password: z.string().min(6),
+  	confirmPassword: z.string().optional()
+});
+
+export type typeUser = z.infer<typeof UserSchemaAuth>
+
 export const productsSchema = z.array(productSchema);
 
 export type CategoryType = z.infer<typeof categorySchema>;

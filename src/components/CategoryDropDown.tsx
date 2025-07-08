@@ -3,10 +3,10 @@ import type { CategoryType } from "../types";
 import { Spinner } from "./Spinner";
 import type { UseFormRegister } from "react-hook-form";
 import { getCategories } from "../api/categoriesApi";
-import type { FormHookValues } from "../views/HomePageView";
+import type { HomePageViewFormValues } from "../views/HomePageView";
 
 type CategoryDropDownProps = {
-	register: UseFormRegister<FormHookValues>;
+	register: UseFormRegister<HomePageViewFormValues>;
 };
 
 export const CategoryDropDown = ({ register }: CategoryDropDownProps) => {

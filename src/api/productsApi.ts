@@ -1,4 +1,5 @@
-import { productsSchema, type ProductType } from "../types";
+import { useQuery } from "@tanstack/react-query";
+import { productSchema, productsSchema, type ProductType } from "../types";
 import { api } from "./axiosConfig";
 
 const mockData: ProductType[] = [
@@ -90,8 +91,8 @@ const mockData: ProductType[] = [
 
 export const getProducts = async () => {
 	try {
-		const data = await api.get("/products");
-		const response = productsSchema.safeParse(data.data);
+		const { data } = await api.get("/products");
+		const response = productsSchema.safeParse(data);
 
 		if (response.success) return response.data;
 		else {
@@ -105,24 +106,31 @@ export const getProducts = async () => {
 
 export const getProduct = async (id: number) => {
 	try {
-		const response = await api.get(`/products/${id}`);
-		return response.data;
+		const { data } = await api.get(`/products/${id}`);
+		const response = productSchema.safeParse(data);
+
+		if (response.success) return response.data;
+		else {
+			throw new Error(response.error.message);
+		}
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-export const createProduct = async (data: any) => {
+export const createProduct = async (data: unknown) => {
 	try {
-		const response = await api.post("/products", data);
+		const { data: httpsMsg } = await api.post<string>("/products", data);
+		return httpsMsg;
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-export const updateProduct = async (data: any, id: number) => {
+export const updateProduct = async (data: unknown, id: number) => {
 	try {
-		const response = await api.patch(`/products/${id}`, data);
+		const { data: httpsMsg } = await api.patch<string>(`/products/${id}`, data);
+		return httpsMsg;
 	} catch (error) {
 		console.log(error);
 	}
@@ -130,8 +138,23 @@ export const updateProduct = async (data: any, id: number) => {
 
 export const deleteProduct = async (id: number) => {
 	try {
-		const response = await api.delete(`/products/${id}`);
+		const { data } = await api.delete<string>(`/products/${id}`);
+		return data;
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+export const useGetProducts = () => {
+	const {
+		data: products,
+		isLoading: isLoadingProducts,
+		isError: isProductsError,
+	} = useQuery<ProductType[]>({
+		queryKey: ["products"],
+		queryFn: getProducts,
+		staleTime: Infinity,
+	});
+
+	return { products, isLoadingProducts, isProductsError };
 };

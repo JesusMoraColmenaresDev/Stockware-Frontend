@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePageView from "../views/HomePageView";
 import CreateProductsView from "../views/CreateProductsView";
 import { LeftSideBar } from "../views/LeftSideBar";
+import { CategoriesView } from "../views/CategoriesView";
 
 const router = createBrowserRouter([
 	{
@@ -9,6 +10,7 @@ const router = createBrowserRouter([
 		element: <LeftSideBar />,
 		children: [
 			{ index: true, element: <HomePageView /> },
+			{ path: "/categories", element: <CategoriesView /> },
 			{ path: "/product/create", element: <CreateProductsView /> },
 		],
 	},

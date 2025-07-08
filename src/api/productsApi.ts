@@ -10,7 +10,7 @@ const mockData: ProductType[] = [
 		updated_at: "2025-07-07T00:52:08.698Z",
 		description:
 			"Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
-		category_id: 3,
+		category_id: 1,
 		stock: 79,
 		minimumQuantity: 5,
 		image_url:
@@ -24,7 +24,7 @@ const mockData: ProductType[] = [
 		updated_at: "2025-07-07T00:52:09.100Z",
 		description:
 			"Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
-		category_id: 3,
+		category_id: 2,
 		stock: 37,
 		minimumQuantity: 2,
 		image_url:
@@ -52,9 +52,37 @@ const mockData: ProductType[] = [
 		updated_at: "2025-07-07T00:52:09.944Z",
 		description:
 			"The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
-		category_id: 3,
+		category_id: 4,
 		stock: 9999,
 		minimumQuantity: 2,
+		image_url:
+			"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ODQsInB1ciI6ImJsb2JfaWQifX0=--60eb5d5cbe302c91c2dd8742ea8f35fe41e909b5/mens-casual-slim-fit.jpg",
+	},
+	{
+		id: 1,
+		name: "idk",
+		price: 15.99,
+		created_at: "2025-07-07T00:52:09.502Z",
+		updated_at: "2025-07-07T00:52:09.944Z",
+		description:
+			"The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+		category_id: 4,
+		stock: 1,
+		minimumQuantity: 20,
+		image_url:
+			"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ODQsInB1ciI6ImJsb2JfaWQifX0=--60eb5d5cbe302c91c2dd8742ea8f35fe41e909b5/mens-casual-slim-fit.jpg",
+	},
+	{
+		id: 4,
+		name: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos amet eaque asperiores fugit, error corrupti voluptatum, sed culpa libero obcaecati consequuntur facere cum veritatis eius sint ut autem delectus officiis.",
+		price: 15.99,
+		created_at: "2025-07-07T00:52:09.502Z",
+		updated_at: "2025-07-07T00:52:09.944Z",
+		description:
+			"The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+		category_id: 4,
+		stock: 0,
+		minimumQuantity: 20,
 		image_url:
 			"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ODQsInB1ciI6ImJsb2JfaWQifX0=--60eb5d5cbe302c91c2dd8742ea8f35fe41e909b5/mens-casual-slim-fit.jpg",
 	},

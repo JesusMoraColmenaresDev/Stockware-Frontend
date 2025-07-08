@@ -1,9 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import type { CategoryType } from "../types";
-import { getCategories } from "../api/categoriesApi";
 import { Spinner } from "./Spinner";
+import type { UseFormRegister } from "react-hook-form";
+import { getCategories } from "../api/categoriesApi";
+import type { FormHookValues } from "../views/HomePageView";
 
-export const CategoryDropDown = () => {
+type CategoryDropDownProps = {
+	register: UseFormRegister<FormHookValues>;
+};
+
+export const CategoryDropDown = ({ register }: CategoryDropDownProps) => {
 	const { data: categories, isLoading } = useQuery<CategoryType[]>({
 		queryKey: ["categories"],
 		queryFn: getCategories,
@@ -15,10 +21,16 @@ export const CategoryDropDown = () => {
 			<Spinner size="2rem" colorPrimary="#2C3E50" colorSecondary="#3498DB" />
 		);
 	return (
-		<select name="category" id="category">
-			<option value="0">Category</option>
+		<select id="categoryFilter" {...register("categoryFilter")}>
+			<option value="0" key={"0"}>
+				All Categories
+			</option>
 			{categories &&
-				categories.map((cat) => <option value={cat.id}>{cat.name}</option>)}
+				categories.map((cat) => (
+					<option value={cat.id} key={cat.id}>
+						{cat.name}
+					</option>
+				))}
 		</select>
 	);
 };

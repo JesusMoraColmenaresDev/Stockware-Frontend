@@ -8,7 +8,7 @@ import {
 } from "react-icons/lu";
 import { NavBarItem } from "../components/NavBarItem";
 
-export const SideBar = () => {
+export const LeftSideBar = () => {
 	return (
 		<>
 			<div className="flex">
@@ -29,19 +29,19 @@ export const SideBar = () => {
 						<NavBarItem
 							title="Categories"
 							to="/categories"
-							key={"/"}
+							key={"/categories"}
 							icon={<LuSquareMenu focusable={"false"} />}
 						/>
 						<NavBarItem
 							title="Users"
-							to="/categories"
-							key={"/"}
+							to="/users"
+							key={"/users"}
 							icon={<LuUserRound focusable={"false"} />}
 						/>
 						<NavBarItem
 							title="Profile"
-							to="/categories"
-							key={"/"}
+							to="/profile"
+							key={"/Profile"}
 							icon={<LuCircleUserRound focusable={"false"} />}
 						/>
 					</div>

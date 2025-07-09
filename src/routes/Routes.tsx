@@ -1,10 +1,12 @@
 import { createBrowserRouter, RouterProvider, redirect } from "react-router-dom";
 import HomePageView from "../views/HomePageView";
 import CreateProductsView from "../views/CreateProductsView";
-import { SideBar } from "../views/SideBar";
 import SignUpView from "../views/SignUpView";
 import LoginView from "../views/LoginView";
 import LogOutView from "../views/LogOutView";
+
+import { LeftSideBar } from "../views/LeftSideBar";
+import { CategoriesView } from "../views/CategoriesView";
 
 const isAuthenticated = () => {
 	const token = localStorage.getItem('jwt');
@@ -25,13 +27,16 @@ const isNotAuthenticated = () => {
 }
 
 
+
+
 const router = createBrowserRouter([
 	{
 		path: "/", //& Ya tiene el / , los hijos no lo requieren
-		element: <SideBar />,
+		element: <LeftSideBar />,
 		loader: isNotAuthenticated,
 		children: [
 			{ index: true, element: <HomePageView /> },
+			{ path: "/categories", element: <CategoriesView /> },
 			{ path: "/product/create", element: <CreateProductsView /> },
 			
 		],

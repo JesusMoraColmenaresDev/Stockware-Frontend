@@ -31,8 +31,13 @@ export default function SignUpView() {
   }
   
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <AuthenticationForm errors = {errors} register={register} isSignUp = {true}></AuthenticationForm>
-    </form>
+    <>
+      <div className="bg-bg-secondary h-screen w-screen flex items-center justify-center">
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-bg-main min-w-1/3 flex flex-col px-[36px] py-[48px] gap-[48px] rounded-lg">
+          <AuthenticationForm errors = {errors} register={register} isSignUp = {true}></AuthenticationForm>
+        </form>
+      </div>
+    </>
+
   )
 }

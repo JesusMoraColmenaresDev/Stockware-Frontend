@@ -26,6 +26,7 @@ export default {
 				sucess: "#27AE60",
 				item: "#A5A8A9",
 				accent: "#F59E0B",
+				primaryhover : "#C0392B"
 			},
 			fontFamily: {
 				bangers: ["Bangers", "sans-serif"],

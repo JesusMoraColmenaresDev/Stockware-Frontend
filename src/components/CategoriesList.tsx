@@ -18,7 +18,7 @@ export const CategoriesList = ({ categories }: CategoriesListProps) => {
 			</thead>
 			<tbody>
 				{categories.map((category) => (
-					<tr>
+					<tr key={category.id}>
 						<td>
 							<div className="flex items-center justify-center text-center">
 								{category.id}

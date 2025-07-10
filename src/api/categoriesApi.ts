@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { categoriesSchema, type CategoryType } from "../types";
+import { categoriesSchema, categorySchema, type CategoryType } from "../types";
 import { api } from "./axiosConfig";
 import { useMemo } from "react";
 
@@ -70,3 +70,21 @@ export const useCategoryDictionary = (categories: CategoryType[]) =>
 			}, {} as Record<number, string>),
 		[categories]
 	);
+
+export const createCategory = async (
+	newCategoryName: Pick<CategoryType, "name">
+) => {
+	console.log(newCategoryName);
+
+	try {
+		const { data } = await api.post("/categories", {
+			category: newCategoryName,
+		});
+		const response = categorySchema.safeParse(data);
+
+		if (response.success) return response.data;
+		else throw new Error(response.error.message);
+	} catch (error) {
+		console.log(error);
+	}
+};

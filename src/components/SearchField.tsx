@@ -31,7 +31,7 @@ export const SearchField = <T extends FieldValues>({
 	const resetValue = defaultValues[name];
 
 	return (
-		<div className="flex w-3/5">
+		<>
 			<input
 				type="text"
 				id={name}
@@ -52,6 +52,6 @@ export const SearchField = <T extends FieldValues>({
 					<LuX className="text-text w-auto h-[1.5rem] rounded-4xl hover:border-1" />
 				</button>
 			)}
-		</div>
+		</>
 	);
 };

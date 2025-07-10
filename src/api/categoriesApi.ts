@@ -1,8 +1,6 @@
-
-import { categorySchema } from "../types";
 import { useQuery } from "@tanstack/react-query";
-import { categoriesSchema, type CategoryType } from "../types";
-import  api  from "./axiosConfig";
+import { categoriesSchema, categorySchema, type CategoryType } from "../types";
+import { api } from "./axiosConfig";
 import { useMemo } from "react";
 
 const mockData: CategoryType[] = [
@@ -35,7 +33,6 @@ const mockData: CategoryType[] = [
 		products_count: 2,
 	},
 ];
-
 
 export const getCategories = async () => {
 	try {
@@ -73,3 +70,21 @@ export const useCategoryDictionary = (categories: CategoryType[]) =>
 			}, {} as Record<number, string>),
 		[categories]
 	);
+
+export const createCategory = async (
+	newCategoryName: Pick<CategoryType, "name">
+) => {
+	console.log(newCategoryName);
+
+	try {
+		const { data } = await api.post("/categories", {
+			category: newCategoryName,
+		});
+		const response = categorySchema.safeParse(data);
+
+		if (response.success) return response.data;
+		else throw new Error(response.error.message);
+	} catch (error) {
+		console.log(error);
+	}
+};

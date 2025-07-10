@@ -20,6 +20,7 @@ export default {
 					primary: "#3498DB",
 					secondary: "#2980B9",
 					delete: "#E74C3C",
+					deleteHover: "#E74C3C",
 				},
 				text: "#34495E",
 				sucess: "#27AE60",

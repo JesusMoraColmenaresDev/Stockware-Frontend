@@ -7,7 +7,7 @@ import type { ProductType } from "../types";
 import { CategoryDropDown } from "../components/CategoryDropDown";
 import { useGetCategories } from "../api/categoriesApi";
 import { RightSideBar } from "./RightSideBar";
-import { CreateButton } from "../components/CreateButton";
+import { ModalButton } from "../components/ModalButton";
 import { SearchField } from "../components/SearchField";
 
 export type HomePageViewFormValues = {
@@ -66,15 +66,23 @@ export default function HomePageView() {
 					<>
 						<div className="flex px-[0.5rem] pb-[1rem] pt-[1.5rem] ">
 							<div className="flex flex-1/2 gap-[1rem]">
-								<CreateButton name="Product" path="/product/create" />
-								<SearchField
-									name="searchProducts"
-									register={register}
-									watch={watch}
-									reset={resetSearch}
-									defaultValues={defaultValues}
-									placeholder="Search Products . . ."
+								<ModalButton
+									text="Create Product"
+									searchParam={"newProduct"}
+									openModal={true}
+									classNameInyect="px-[2rem] py-[1rem] text-lg font-bold"
+									disabled={false}
 								/>
+								<div className="flex w-3/5">
+									<SearchField
+										name="searchProducts"
+										register={register}
+										watch={watch}
+										reset={resetSearch}
+										defaultValues={defaultValues}
+										placeholder="Search Products . . ."
+									/>
+								</div>
 							</div>
 							<div className="flex flex-1/4 justify-end">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text">

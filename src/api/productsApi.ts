@@ -1,7 +1,6 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { productSchema, productsSchema, type ProductType } from "../types";
-import  api  from "./axiosConfig";
+import { api } from "./axiosConfig";
 
 const mockData: ProductType[] = [
 	{

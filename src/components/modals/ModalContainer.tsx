@@ -10,6 +10,7 @@ type ModalContainerProps = {
 	closeFn: () => void;
 	isOpen: boolean;
 	title: string;
+	titleColor: string;
 	width?: string;
 	height?: string;
 };
@@ -19,6 +20,7 @@ export const ModalContainer = ({
 	closeFn,
 	isOpen,
 	title,
+	titleColor,
 	width = "",
 	height = "",
 }: ModalContainerProps) => {
@@ -35,7 +37,9 @@ export const ModalContainer = ({
 					<DialogPanel
 						className={`px-[2rem] py-[1rem] bg-bg-main rounded-2xl ${width} ${height}`}
 					>
-						<DialogTitle className="text-text text-4xl text-center font-bold">
+						<DialogTitle
+							className={`${titleColor} text-4xl text-center font-bold`}
+						>
 							{title}
 						</DialogTitle>
 						{children}

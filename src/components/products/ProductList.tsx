@@ -1,7 +1,8 @@
-import type { ProductType } from "../types";
-import { type CategoryType } from "../types/index";
-import { useCategoryDictionary } from "../api/categoriesApi";
+import type { ProductType } from "../../types";
+import { type CategoryType } from "../../types/index";
+import { useCategoryDictionary } from "../../api/categoriesApi";
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
 type ProductListProps = {
 	products: ProductType[];
@@ -9,6 +10,7 @@ type ProductListProps = {
 };
 
 export const ProductList = ({ products, categories }: ProductListProps) => {
+	const navigate = useNavigate();
 	const categoryDictionary = useCategoryDictionary(categories);
 
 	{
@@ -26,7 +28,7 @@ export const ProductList = ({ products, categories }: ProductListProps) => {
 				</thead>
 				<tbody>
 					{products?.map((product) => (
-						<tr>
+						<tr key={product.id}>
 							<td>
 								<div className="flex items-center justify-center text-center">
 									{product.id}
@@ -66,6 +68,12 @@ export const ProductList = ({ products, categories }: ProductListProps) => {
 									<LuX
 										className="w-[1.5rem] h-auto hover:text-accent"
 										title="Delete"
+										onClick={() =>
+											navigate(
+												location.pathname +
+													`?deleteProduct=true&productId=${product.id}`
+											)
+										}
 									/>
 								</div>
 							</td>

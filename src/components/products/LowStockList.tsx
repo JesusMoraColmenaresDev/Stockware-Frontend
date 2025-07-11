@@ -1,4 +1,4 @@
-import type { ProductType } from "../types";
+import type { ProductType } from "../../types";
 
 type LowStockListProps = {
 	lowStock: ProductType[];

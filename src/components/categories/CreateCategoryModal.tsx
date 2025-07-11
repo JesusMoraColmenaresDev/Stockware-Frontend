@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
-import { ModalBridge } from "./ModalBridge";
-import { ModalButton } from "./ModalButton";
-import { SearchField } from "./SearchField";
+import { ModalBridge } from "../modals/ModalBridge";
+import { ModalButton } from "../modals/ModalButton";
+import { SearchField } from "../SearchField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCategory } from "../api/categoriesApi";
-import type { CategoryType } from "../types";
+import { createCategory } from "../../api/categoriesApi";
+import type { CategoryType } from "../../types";
 
 type CreateCategoryProps = {
 	categoryName: string;
@@ -39,6 +39,7 @@ export const CreateCategoryModal = () => {
 		<ModalBridge
 			searchParam="newCategory"
 			title="Create Category"
+			titleColor="text-text"
 			width="w-3/10"
 			height="h-auto"
 		>

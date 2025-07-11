@@ -1,12 +1,13 @@
 import { useGetCategories } from "../api/categoriesApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { CategoriesList } from "../components/CategoriesList";
+import { CategoriesList } from "../components/categories/CategoriesList";
 import { useMemo } from "react";
 import type { CategoryType } from "../types";
-import { ModalButton } from "../components/ModalButton";
+import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
-import { CreateCategoryModal } from "../components/CreateCategoryModal";
+import { CreateCategoryModal } from "../components/categories/CreateCategoryModal";
+import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModal";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -83,6 +84,7 @@ export const CategoriesView = () => {
 				)}
 			</div>
 			<CreateCategoryModal />
+			<DeleteCategoryModal />
 		</div>
 	);
 };

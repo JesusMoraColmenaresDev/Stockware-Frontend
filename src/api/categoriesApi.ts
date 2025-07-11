@@ -74,8 +74,6 @@ export const useCategoryDictionary = (categories: CategoryType[]) =>
 export const createCategory = async (
 	newCategoryName: Pick<CategoryType, "name">
 ) => {
-	console.log(newCategoryName);
-
 	try {
 		const { data } = await api.post("/categories", {
 			category: newCategoryName,
@@ -84,6 +82,15 @@ export const createCategory = async (
 
 		if (response.success) return response.data;
 		else throw new Error(response.error.message);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+export const deleteCategory = async (categoryId: CategoryType["id"]) => {
+	try {
+		const { data } = await api.delete<string>(`/categories/${categoryId}`);
+		return data;
 	} catch (error) {
 		console.log(error);
 	}

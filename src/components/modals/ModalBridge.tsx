@@ -8,6 +8,7 @@ type ModalBridgeProps = {
 	title: string;
 	width: string;
 	height: string;
+	titleColor: string;
 };
 
 const onClose = () => {
@@ -20,6 +21,7 @@ export const ModalBridge = ({
 	title,
 	width,
 	height,
+	titleColor,
 }: ModalBridgeProps) => {
 	const [searchParams] = useSearchParams();
 	const isOpen = searchParams.get(searchParam) === "true";
@@ -31,6 +33,7 @@ export const ModalBridge = ({
 			title={title}
 			width={width}
 			height={height}
+			titleColor={titleColor}
 		>
 			{children}
 		</ModalContainer>

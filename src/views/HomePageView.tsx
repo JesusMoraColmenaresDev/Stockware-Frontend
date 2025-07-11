@@ -1,14 +1,15 @@
 import { useGetProducts } from "../api/productsApi";
-import { ProductList } from "../components/ProductList";
+import { ProductList } from "../components/products/ProductList";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
 import type { ProductType } from "../types";
-import { CategoryDropDown } from "../components/CategoryDropDown";
+import { CategoryDropDown } from "../components/categories/CategoryDropDown";
 import { useGetCategories } from "../api/categoriesApi";
 import { RightSideBar } from "./RightSideBar";
-import { ModalButton } from "../components/ModalButton";
+import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
+import { DeleteProductModal } from "../components/products/DeleteProductModal";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -102,6 +103,7 @@ export default function HomePageView() {
 					</>
 				)}
 			</div>
+			<DeleteProductModal />
 			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />
 		</div>
 	);

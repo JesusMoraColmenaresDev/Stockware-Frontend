@@ -22,12 +22,12 @@ export const CategoryDropDown = ({ register }: CategoryDropDownProps) => {
 		);
 	return (
 		<select id="categoryFilter" {...register("categoryFilter")}>
-			<option value="0" key={"0"}>
+			<option value="0" key={"0"} className="bg-bg-secondary">
 				All Categories
 			</option>
 			{categories &&
 				categories.map((cat) => (
-					<option value={cat.id} key={cat.id}>
+					<option value={cat.id} key={cat.id} className="bg-bg-secondary">
 						{cat.name}
 					</option>
 				))}

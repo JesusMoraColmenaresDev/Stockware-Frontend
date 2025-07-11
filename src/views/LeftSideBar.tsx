@@ -19,7 +19,7 @@ export const LeftSideBar = () => {
 						<h1>StockWare</h1>
 					</div>
 
-					<div className="flex flex-1 flex-col justify-center text-3xl">
+					<div className="flex flex-1 flex-col justify-center text-3xl p-[16px]">
 						<NavBarItem
 							title="Products"
 							to="/"

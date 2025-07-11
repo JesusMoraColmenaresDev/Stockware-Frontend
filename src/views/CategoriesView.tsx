@@ -40,7 +40,7 @@ export const CategoriesView = () => {
 
 	return (
 		<div className="flex w-full h-full">
-			<div className="bg-bg-main flex-1 p-2">
+			<div className="bg-bg-main flex-1 px-[48px] py-2">
 				{isLoadingCategories ? (
 					<div className="flex items-center justify-center h-full">
 						<Spinner
@@ -53,7 +53,7 @@ export const CategoriesView = () => {
 					<div>idk Bro</div>
 				) : (
 					<>
-						<div className="flex flex-col px-[1rem] pb-[1rem] pt-[1.5rem] gap-[1rem]">
+						<div className="flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem]">
 							<h2 className="flex text-2xl font-bold gap-[0.75rem]">
 								Categories
 								<span className="opacity-55"> {categories.length}</span>

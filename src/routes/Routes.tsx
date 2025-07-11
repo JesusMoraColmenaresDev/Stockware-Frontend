@@ -11,6 +11,7 @@ import LogOutView from "../views/LogOutView";
 
 import { LeftSideBar } from "../views/LeftSideBar";
 import { CategoriesView } from "../views/CategoriesView";
+import UsersView from "../views/UsersView";
 
 const isAuthenticated = () => {
 	const token = localStorage.getItem("jwt");
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
 			{ index: true, element: <HomePageView /> },
 			{ path: "/categories", element: <CategoriesView /> },
 			{ path: "/product/create", element: <CreateProductsView /> },
+			{ path: "/users", element: <UsersView /> },
 		],
 	},
 	{

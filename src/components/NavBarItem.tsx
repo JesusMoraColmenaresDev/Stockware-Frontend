@@ -11,7 +11,7 @@ export const NavBarItem = ({ to, icon, title }: NavBarItemProps) => {
 	return (
 		<Link
 			to={to}
-			className="flex justify-center gap-2 py-2 border w-auto border-transparent duration-50 rounded-4xl hover:border-bg-secondary"
+			className="flex items-center justify-center gap-2 py-4 border w-full border-transparent duration-150 rounded-lg hover:border-bg-secondary group-hover:px-4 group-hover:justify-start"
 		>
 			{icon}
 

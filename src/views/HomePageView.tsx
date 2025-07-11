@@ -53,7 +53,7 @@ export default function HomePageView() {
 
 	return (
 		<div className="flex w-full h-full ">
-			<div className="bg-bg-main flex-1 p-2">
+			<div className="bg-bg-main flex-1 px-[48px] py-2">
 				{isLoadingProducts ? (
 					<div className="flex items-center justify-center min-h-screen">
 						<Spinner
@@ -64,7 +64,7 @@ export default function HomePageView() {
 					</div>
 				) : (
 					<>
-						<div className="flex px-[0.5rem] pb-[1rem] pt-[1.5rem] ">
+						<div className="flex pb-[1rem] pt-[1.5rem]">
 							<div className="flex flex-1/2 gap-[1rem]">
 								<ModalButton
 									text="Create Product"
@@ -92,7 +92,7 @@ export default function HomePageView() {
 						</div>
 
 						{products && categories && (
-							<div className="p-[0.5rem]">
+							<div className="py-[0.5rem]">
 								<ProductList
 									products={filteredProducts}
 									categories={categories}

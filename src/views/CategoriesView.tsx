@@ -7,6 +7,7 @@ import type { CategoryType } from "../types";
 import { ModalButton } from "../components/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { CreateCategoryModal } from "../components/CreateCategoryModal";
+import { CategoryItem } from "../components/CategoryItems";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -38,9 +39,17 @@ export const CategoriesView = () => {
 		);
 	}, [categories, searchCategory]);
 
+	// Lógica de ejemplo para los clics en los botones
+	const handleDetails = (category: CategoryType) =>
+		alert(`Viendo detalles de ${category.name}`);
+	const handleModify = (category: CategoryType) =>
+		alert(`Modificando a ${category.name}`);
+	const handleDelete = (category: CategoryType) =>
+		confirm(`¿Seguro que quieres eliminar a ${category.name}?`);
+
 	return (
-		<div className="flex w-full h-full">
-			<div className="bg-bg-main flex-1 px-[48px] py-2">
+		<div className="flex w-full h-full flex-col">
+			<div className="bg-bg-main flex-1 px-[48px] py-2 flex flex-col min-w-0">
 				{isLoadingCategories ? (
 					<div className="flex items-center justify-center h-full">
 						<Spinner
@@ -78,7 +87,19 @@ export const CategoriesView = () => {
 								</div>
 							</div>
 						</div>
-						<CategoriesList categories={filteredCategories} />
+						<div className="flex-1 overflow-y-auto">
+							<div className="flex flex-col">
+								{filteredCategories.map((category) => (
+									<CategoryItem
+										key={category.id}
+										category={category}
+										onDetailsClick={handleDetails}
+										onModifyClick={handleModify}
+										onDeleteClick={handleDelete}
+									/>
+								))}
+							</div>
+						</div>
 					</>
 				)}
 			</div>

@@ -12,7 +12,7 @@ export const LeftSideBar = () => {
 	return (
 		<>
 			<div className="flex">
-				<aside className="bg-bg-nav min-h-screen w-sidebar-collapsed flex flex-col overflow-hidden group hover:w-sidebar-expanded text-white transition-all duration-150 ease-in hover:duration-200 hover:ease-out">
+				<aside className="fixed peer bg-bg-nav min-h-screen w-sidebar-collapsed flex flex-col overflow-hidden group hover:w-sidebar-expanded text-white transition-all duration-150 ease-in hover:duration-200 hover:ease-out">
 					<div className="flex text-5xl justify-center px-2 py-[2rem] text-accent font-light font-bangers">
 						{/* <h1 className="group-hover:opacity-0 translate-x-[5rem]">StkW</h1> */}
 						{/* <h1 className="opacity-0 group-hover:opacity-100 group-hover:-translate-x-12">StockWare</h1> */}
@@ -56,7 +56,7 @@ export const LeftSideBar = () => {
 					</h1>
 				</aside>
 
-				<main className="flex-1">
+				<main className="flex-1 ml-sidebar-collapsed peer-hover:ml-sidebar-expanded transition-all duration-150 ease-in hover:duration-200 hover:ease-out">
 					<Outlet />
 				</main>
 			</div>

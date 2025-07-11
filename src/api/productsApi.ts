@@ -93,8 +93,8 @@ export const getProducts = async () => {
 	try {
 		const { data } = await api.get("/products");
 		const response = productsSchema.safeParse(data);
-
 		if (response.success) return response.data;
+
 		else {
 			throw new Error(response.error.message);
 		}

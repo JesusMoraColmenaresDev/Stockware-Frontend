@@ -20,13 +20,12 @@ export default {
 					primary: "#3498DB",
 					secondary: "#2980B9",
 					delete: "#E74C3C",
-					deleteHover: "#E74C3C",
+					deleteHover: "#C0392B",
 				},
 				text: "#34495E",
 				sucess: "#27AE60",
 				item: "#A5A8A9",
 				accent: "#F59E0B",
-				primaryhover : "#C0392B"
 			},
 			fontFamily: {
 				bangers: ["Bangers", "sans-serif"],

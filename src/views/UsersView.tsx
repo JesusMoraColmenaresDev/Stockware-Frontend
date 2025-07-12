@@ -3,7 +3,6 @@ import { SearchField } from "../components/SearchField";
 import type { User } from "../types";
 import { UserItem } from "../components/UserItem";
 
-
 const mockUsers: User[] = [
 	{
 		id: 1,
@@ -47,12 +46,12 @@ export default function UsersView() {
 
 	const searchUser = watch("searchUser");
 
-    // Lógica de ejemplo para los clics en los botones
-	const handleDetails = (user: User) => alert(`Viendo detalles de ${user.name}`);
+	// Lógica de ejemplo para los clics en los botones
+	const handleDetails = (user: User) =>
+		alert(`Viendo detalles de ${user.name}`);
 	const handleModify = (user: User) => alert(`Modificando a ${user.name}`);
-	const handleDelete = (user: User) =>confirm(`¿Seguro que quieres eliminar a ${user.name}?`);
 
-return (
+	return (
 		<div className="flex w-full h-full flex-col">
 			<div className="flex flex-col px-[48px] pb-[1rem] pt-[1.5rem] gap-[1rem]">
 				<h2 className="flex text-2xl font-bold gap-[0.75rem]">
@@ -92,7 +91,6 @@ return (
 							user={user}
 							onDetailsClick={handleDetails}
 							onModifyClick={handleModify}
-							onDeleteClick={handleDelete}
 						/>
 					))}
 				</div>

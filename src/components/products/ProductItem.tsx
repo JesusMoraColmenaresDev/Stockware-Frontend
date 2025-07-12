@@ -1,12 +1,12 @@
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
 import type { ProductType } from "../types";
+import { useNavigate } from "react-router-dom";
 
 type ProductItemProps = {
 	product: ProductType;
 	categoryName: string;
 	onDetailsClick?: (product: ProductType) => void;
 	onModifyClick?: (product: ProductType) => void;
-	onDeleteClick?: (product: ProductType) => void;
 };
 
 export const ProductItem = ({
@@ -14,8 +14,9 @@ export const ProductItem = ({
 	categoryName,
 	onDetailsClick,
 	onModifyClick,
-	onDeleteClick,
 }: ProductItemProps) => {
+	const navigate = useNavigate();
+
 	const formatPrice = (price: number) => {
 		return new Intl.NumberFormat("en-US", {
 			style: "currency",
@@ -53,13 +54,30 @@ export const ProductItem = ({
 					<p className="text-sm font-medium opacity-80">{product.stock}</p>
 				</div>
 				<div className="flex items-center justify-end gap-2">
-					<button onClick={() => onDetailsClick?.(product)} className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors" title="Details">
+					<button
+						onClick={() => onDetailsClick?.(product)}
+						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
+						title="Details"
+					>
 						<LuSearch size={20} />
 					</button>
-					<button onClick={() => onModifyClick?.(product)} className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors" title="Modify">
+					<button
+						onClick={() => onModifyClick?.(product)}
+						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
+						title="Modify"
+					>
 						<LuSquarePen size={20} />
 					</button>
-					<button onClick={() => onDeleteClick?.(product)} className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-bg-button-delete transition-colors" title="Delete">
+					<button
+						onClick={() =>
+							navigate(
+								location.pathname +
+									`?deleteProduct=true&productId=${product.id}`
+							)
+						}
+						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-bg-button-delete transition-colors"
+						title="Delete"
+					>
 						<LuX size={20} />
 					</button>
 				</div>

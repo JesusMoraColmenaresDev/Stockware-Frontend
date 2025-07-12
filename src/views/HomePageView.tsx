@@ -4,13 +4,13 @@ import { useForm } from "react-hook-form";
 import { useMemo } from "react";
 import type { ProductType } from "../types";
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
-import { useGetCategories } from "../api/categoriesApi";
+import { useCategoryDictionary, useGetCategories } from "../api/categoriesApi";
 import { RightSideBar } from "./RightSideBar";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { DeleteProductModal } from "../components/products/DeleteProductModal";
 import { CreateProductModal } from "../components/products/CreateProductModal";
-import { ProductItem } from "../components/ProductItem";
+import { ProductItem } from "../components/products/ProductItem";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -33,8 +33,6 @@ export default function HomePageView() {
 		alert(`Viendo detalles de ${product.name}`);
 	const handleModify = (product: ProductType) =>
 		alert(`Modificando a ${product.name}`);
-	const handleDelete = (product: ProductType) =>
-		confirm(`¿Seguro que quieres eliminar a ${product.name}?`);
 
 	const {
 		register,
@@ -114,7 +112,6 @@ export default function HomePageView() {
 											}
 											onDetailsClick={handleDetails}
 											onModifyClick={handleModify}
-											onDeleteClick={handleDelete}
 										/>
 									))}
 								</div>

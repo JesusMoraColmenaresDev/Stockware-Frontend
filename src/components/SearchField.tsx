@@ -12,7 +12,7 @@ type SearchFieldProps<T extends FieldValues> = {
 	name: Path<T>;
 	register: UseFormRegister<T>;
 	watch: UseFormWatch<T>;
-	reset: UseFormReset<T>;
+	reset?: UseFormReset<T>;
 	/** In order to reset properly */
 	defaultValues: T;
 	/** The PlaceHolder text for the Input Field */
@@ -39,7 +39,7 @@ export const SearchField = <T extends FieldValues>({
 				placeholder={placeholder}
 				className="flex px-[1rem] w-full py-[1rem] justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
 			/>
-			{value && (
+			{value && reset && (
 				<button
 					onClick={
 						() =>

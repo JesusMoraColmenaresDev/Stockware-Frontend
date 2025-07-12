@@ -23,10 +23,10 @@ export const ModalButton = ({
 		<button
 			disabled={disabled}
 			className={`flex ${classNameInyect} rounded-lg ${
-				openModal ? "bg-bg-button-primary" : "bg-bg-button-delete"
-			} text-bg-secondary hover:bg-bg-button-secondary ${
-				disabled && "opacity-20"
-			}`}
+				openModal
+					? "bg-bg-button-primary hover:bg-bg-button-secondary"
+					: "bg-bg-button-delete hover:bg-bg-button-delete-hover"
+			} text-bg-secondary  ${disabled && "opacity-20"} justify-center`}
 			onClick={() => {
 				clickFn();
 				navigate(searchParam ? `?${searchParam}=true` : "", { replace: true });

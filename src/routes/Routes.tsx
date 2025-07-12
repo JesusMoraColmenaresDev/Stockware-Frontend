@@ -4,7 +4,6 @@ import {
 	redirect,
 } from "react-router-dom";
 import HomePageView from "../views/HomePageView";
-import CreateProductsView from "../views/CreateProductsView";
 import SignUpView from "../views/SignUpView";
 import LoginView from "../views/LoginView";
 import LogOutView from "../views/LogOutView";
@@ -39,7 +38,6 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <HomePageView /> },
 			{ path: "/categories", element: <CategoriesView /> },
-			{ path: "/product/create", element: <CreateProductsView /> },
 			{ path: "/users", element: <UsersView /> },
 		],
 	},

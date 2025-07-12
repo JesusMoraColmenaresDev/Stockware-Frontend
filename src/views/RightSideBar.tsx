@@ -1,5 +1,5 @@
 import { LuOctagonX, LuOctagonAlert, LuBadgeCheck } from "react-icons/lu";
-import { LowStockList } from "../components/LowStockList";
+import { LowStockList } from "../components/products/LowStockList";
 import type { ProductType } from "../types";
 import { Spinner } from "../components/Spinner";
 

@@ -1,13 +1,13 @@
 import { useGetCategories } from "../api/categoriesApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { CategoriesList } from "../components/CategoriesList";
 import { useMemo } from "react";
 import type { CategoryType } from "../types";
-import { ModalButton } from "../components/ModalButton";
+import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
-import { CreateCategoryModal } from "../components/CreateCategoryModal";
-import { CategoryItem } from "../components/CategoryItems";
+import { CreateCategoryModal } from "../components/categories/CreateCategoryModal";
+import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModal";
+import { CategoryItem } from "../components/categories/CategoryItems";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -44,8 +44,6 @@ export const CategoriesView = () => {
 		alert(`Viendo detalles de ${category.name}`);
 	const handleModify = (category: CategoryType) =>
 		alert(`Modificando a ${category.name}`);
-	const handleDelete = (category: CategoryType) =>
-		confirm(`¿Seguro que quieres eliminar a ${category.name}?`);
 
 	return (
 		<div className="flex w-full h-full flex-col">
@@ -95,7 +93,6 @@ export const CategoriesView = () => {
 										category={category}
 										onDetailsClick={handleDetails}
 										onModifyClick={handleModify}
-										onDeleteClick={handleDelete}
 									/>
 								))}
 							</div>
@@ -104,6 +101,7 @@ export const CategoriesView = () => {
 				)}
 			</div>
 			<CreateCategoryModal />
+			<DeleteCategoryModal />
 		</div>
 	);
 };

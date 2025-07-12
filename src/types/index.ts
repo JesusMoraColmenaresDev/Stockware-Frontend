@@ -24,11 +24,11 @@ export const productSchema = z.object({
 export const UserSchemaAuth = z.object({
 	name: z.string().optional(),
 	email: z.string().email(),
-  	password: z.string().min(6),
-  	confirmPassword: z.string().optional()
+	password: z.string().min(6),
+	confirmPassword: z.string().optional(),
 });
 
-export type typeUser = z.infer<typeof UserSchemaAuth>
+export type typeUser = z.infer<typeof UserSchemaAuth>;
 
 export const productsSchema = z.array(productSchema);
 export const categoriesSchema = z.array(categorySchema);
@@ -58,5 +58,17 @@ export type User = {
 	role: string;
 	date_added: string;
 };
+
+export const userSchema = z.object({
+	id: z.union([z.string(), z.number()]),
+	name: z.string(),
+	email: z.string().email(),
+	role: z.string().optional(),
+	created_at: z.string(),
+});
+
+export const usersSchema = z.array(userSchema);
+
+export type UserType = z.infer<typeof userSchema>;
 
 // 2. Definimos las props que recibirá el componente.

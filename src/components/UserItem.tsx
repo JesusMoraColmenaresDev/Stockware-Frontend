@@ -1,11 +1,12 @@
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
-import type { User } from "../types";
+import type { UserType } from "../types";
 import { useNavigate } from "react-router-dom";
+import { parseCreatedAtDate } from "../api/usersApi";
 
 type UserItemProps = {
-	user: User;
-	onDetailsClick?: (user: User) => void;
-	onModifyClick?: (user: User) => void;
+	user: UserType;
+	onDetailsClick?: (user: UserType) => void;
+	onModifyClick?: (user: UserType) => void;
 };
 
 export const UserItem = ({
@@ -36,7 +37,9 @@ export const UserItem = ({
 			<div className="flex items-center gap-8">
 				<div className="text-center">
 					<p className="text-xs opacity-50">Date Added</p>
-					<p className="text-sm font-medium opacity-80">{user.date_added}</p>
+					<p className="text-sm font-medium opacity-80">
+						{parseCreatedAtDate(user.created_at)}
+					</p>
 				</div>
 				<div className="flex items-center justify-end gap-2">
 					<button

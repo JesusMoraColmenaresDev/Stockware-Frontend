@@ -10,6 +10,7 @@ import { RightSideBar } from "./RightSideBar";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { DeleteProductModal } from "../components/products/DeleteProductModal";
+import { CreateProductModal } from "../components/products/CreateProductModal";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -104,6 +105,7 @@ export default function HomePageView() {
 				)}
 			</div>
 			<DeleteProductModal />
+			<CreateProductModal />
 			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />
 		</div>
 	);

@@ -92,7 +92,6 @@ const mockData: ProductType[] = [
 export const getProducts = async () => {
 	try {
 		const { data } = await api.get("/products");
-		return data;
 		const response = productsSchema.safeParse(data);
 		if (response.success) return response.data;
 		else {

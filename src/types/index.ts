@@ -50,3 +50,13 @@ export const createProductSchema = productSchema
 	});
 
 export type createProductType = z.infer<typeof createProductSchema>;
+
+export type User = {
+	id: number | string;
+	name: string;
+	email: string;
+	role: string;
+	date_added: string;
+};
+
+// 2. Definimos las props que recibirá el componente.

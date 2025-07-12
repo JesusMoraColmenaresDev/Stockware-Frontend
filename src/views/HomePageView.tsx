@@ -1,5 +1,4 @@
 import { useGetProducts } from "../api/productsApi";
-import { ProductList } from "../components/products/ProductList";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
@@ -11,6 +10,7 @@ import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { DeleteProductModal } from "../components/products/DeleteProductModal";
 import { CreateProductModal } from "../components/products/CreateProductModal";
+import { ProductItem } from "../components/ProductItem";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -25,7 +25,16 @@ const defaultValues: HomePageViewFormValues = {
 export default function HomePageView() {
 	const { products, isLoadingProducts } = useGetProducts();
 
-	const { categories } = useGetCategories();
+	const { categories, isLoadingCategories } = useGetCategories();
+	const categoryDictionary = useCategoryDictionary(categories ?? []);
+
+	// Lógica de ejemplo para los clics en los botones
+	const handleDetails = (product: ProductType) =>
+		alert(`Viendo detalles de ${product.name}`);
+	const handleModify = (product: ProductType) =>
+		alert(`Modificando a ${product.name}`);
+	const handleDelete = (product: ProductType) =>
+		confirm(`¿Seguro que quieres eliminar a ${product.name}?`);
 
 	const {
 		register,
@@ -55,7 +64,7 @@ export default function HomePageView() {
 
 	return (
 		<div className="flex w-full h-full ">
-			<div className="bg-bg-main flex-1 p-2">
+			<div className="bg-bg-main flex-1 px-[48px] py-2 flex flex-col min-w-0">
 				{isLoadingProducts ? (
 					<div className="flex items-center justify-center min-h-screen">
 						<Spinner
@@ -66,8 +75,8 @@ export default function HomePageView() {
 					</div>
 				) : (
 					<>
-						<div className="flex px-[0.5rem] pb-[1rem] pt-[1.5rem] ">
-							<div className="flex flex-1/2 gap-[1rem]">
+						<div className="flex pb-[1rem] pt-[1.5rem]">
+							<div className="flex w-1/2 gap-[1rem]">
 								<ModalButton
 									text="Create Product"
 									searchParam={"newProduct"}
@@ -86,19 +95,29 @@ export default function HomePageView() {
 									/>
 								</div>
 							</div>
-							<div className="flex flex-1/4 justify-end">
+							<div className="flex w-1/4 justify-end">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 									<CategoryDropDown register={register} />
 								</div>
 							</div>
 						</div>
 
-						{products && categories && (
-							<div className="p-[0.5rem]">
-								<ProductList
-									products={filteredProducts}
-									categories={categories}
-								/>
+						{products && !isLoadingCategories && (
+							<div className="flex-1 overflow-y-auto">
+								<div className="flex flex-col">
+									{filteredProducts.map((product) => (
+										<ProductItem
+											key={product.id}
+											product={product}
+											categoryName={
+												categoryDictionary[product.category_id] ?? "N/A"
+											}
+											onDetailsClick={handleDetails}
+											onModifyClick={handleModify}
+											onDeleteClick={handleDelete}
+										/>
+									))}
+								</div>
 							</div>
 						)}
 					</>

@@ -1,7 +1,7 @@
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
-import type { UserType } from "../types";
+import type { UserType } from "../../types";
 import { useNavigate } from "react-router-dom";
-import { parseCreatedAtDate } from "../api/usersApi";
+import { parseCreatedAtDate } from "../../api/usersApi";  
 
 type UserItemProps = {
 	user: UserType;
@@ -24,9 +24,7 @@ export const UserItem = ({
 					<h3 className="text-lg truncate">{user.name}</h3>
 					<p className="text-sm opacity-60">{user.email}</p>
 					<p
-						className={`text-sm  ${
-							user.role === "Admin" ? "text-bg-button-primary" : "text-text"
-						} font-semibold`}
+						className={`text-sm  ${user.role === "admin" ? "text-bg-button-primary" : "text-text"} font-semibold`}
 					>
 						{user.role}
 					</p>

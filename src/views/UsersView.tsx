@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import { SearchField } from "../components/SearchField";
 import type { UserType } from "../types";
-import { UserItem } from "../components/UserItem";
+import { UserItem } from "../components/users/UserItem";
 import { useGetAllUsers } from "../api/usersApi";
+import { useMemo, useState } from "react";
+import { DeleteUserModal } from "../components/users/DeleteUserModal";
 
 type UsersViewFormValues = {
 	searchUser: string;
@@ -30,6 +32,43 @@ export default function UsersView() {
 		alert(`Viendo detalles de ${user.name}`);
 	const handleModify = (user: UserType) => alert(`Modificando a ${user.name}`);
 
+
+
+	const filteredUsers = useMemo(() => {
+    	if (!users) return [];
+
+		const usersAvailables = users.filter((user) => user.is_enabled === true)
+
+    	const lowerCaseSearch = searchUser.trim().toLowerCase();
+		if (!lowerCaseSearch) return usersAvailables;
+
+		return usersAvailables.filter(
+			(userAvailable) =>
+				userAvailable.name.toLowerCase().includes(lowerCaseSearch) ||
+				userAvailable.email.toLowerCase().includes(lowerCaseSearch)
+		);
+	}, [users, searchUser]);
+
+
+	const { adminCount, userCount } = useMemo(() => {
+		if (!users) {
+			return { adminCount: 0, userCount: 0 };
+		}
+
+		return users.reduce(
+			(counts, user) => {
+				if (user.role === "admin") {
+					counts.adminCount++;
+				} else {
+					counts.userCount++;
+				}
+				return counts;
+			},
+			{ adminCount: 0, userCount: 0 }
+		);
+	}, [users]);
+
+
 	if (users)
 		return (
 			<div className="flex w-full h-full flex-col">
@@ -41,10 +80,10 @@ export default function UsersView() {
 
 					<div className="flex w-1/2 gap-[48px] ">
 						<p className="text-xl font-extrabold text-bg-button-primary">
-							Admins<span className="ml-4 opacity-50">{1}</span>
+							Admins<span className="ml-4 opacity-50">{adminCount}</span>
 						</p>
 						<p className="text-xl font-extrabold">
-							Users<span className="ml-4 opacity-50">{2}</span>
+							Users<span className="ml-4 opacity-50">{userCount}</span>
 						</p>
 					</div>
 
@@ -65,7 +104,7 @@ export default function UsersView() {
 				{/* Contenedor principal para la lista de usuarios */}
 				<div className="bg-bg-main flex-1 px-[48px] py-[1rem] overflow-y-auto">
 					<div className="flex flex-col">
-						{users.map((user) => (
+						{filteredUsers.map((user) => (
 							<UserItem
 								key={user.id}
 								user={user}
@@ -75,6 +114,9 @@ export default function UsersView() {
 						))}
 					</div>
 				</div>
+				<DeleteUserModal />;
 			</div>
 		);
+
+		 
 }

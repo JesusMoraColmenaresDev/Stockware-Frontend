@@ -7,21 +7,24 @@ const mockUsers: UserType[] = [
 		id: 1,
 		name: "Alice Smith",
 		email: "alice.smith@example.com",
-		role: "Admin",
+		role: "admin",
+		is_enabled : true,
 		created_at: "2024-05-21",
 	},
 	{
 		id: 2,
 		name: "Bob Johnson",
 		email: "bob.johnson@example.com",
-		role: "User",
+		role: "user",
+		is_enabled : true,
 		created_at: "2024-05-20",
 	},
 	{
 		id: 3,
 		name: "Charlie Brown",
 		email: "charlie.brown@example.com",
-		role: "User",
+		role: "user",
+		is_enabled : true,
 		created_at: "2024-05-19",
 	},
 ];
@@ -65,4 +68,12 @@ export const useGetAllUsers = () => {
 	});
 
 	return { users, isLoadingUsers, isErrorUsers };
+};
+
+export const disableUser = async (userId: string) => {
+	// Usamos PATCH porque solo estamos actualizando un campo
+	const { data } = await api.patch(`/users/${userId}`, {
+		is_enabled: false,
+	});
+	return data;
 };

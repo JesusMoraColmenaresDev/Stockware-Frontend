@@ -35,7 +35,7 @@ export const ModalContainer = ({
 			<DialogBackdrop className="fixed inset-0 bg-black/50">
 				<div className="fixed inset-0 flex items-center justify-center">
 					<DialogPanel
-						className={`px-[2rem] py-[1rem] bg-bg-main rounded-2xl ${width} ${height}`}
+						className={`px-[2rem] py-[56px] bg-bg-main rounded-2xl ${width} ${height}`}
 					>
 						<DialogTitle
 							className={`${titleColor} text-4xl text-center font-bold`}

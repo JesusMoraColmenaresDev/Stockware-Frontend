@@ -64,6 +64,7 @@ export const userSchema = z.object({
 	name: z.string(),
 	email: z.string().email(),
 	role: z.string().optional(),
+	is_enabled : z.boolean(),
 	created_at: z.string(),
 });
 

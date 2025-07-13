@@ -1,5 +1,5 @@
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
-import type { CategoryType } from "../types";
+import type { CategoryType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
 type CategoryItemProps = {

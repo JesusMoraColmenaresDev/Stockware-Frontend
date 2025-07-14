@@ -4,7 +4,7 @@ import type { UserType } from "../types";
 import { UserItem } from "../components/users/UserItem";
 import { useGetAllUsers } from "../api/usersApi";
 import { useMemo, useState } from "react";
-import { DeleteUserModal } from "../components/users/DeleteUserModal";
+import { ConfirmUserActionModal } from "../components/users/ConfirmActionModal";
 
 type UsersViewFormValues = {
 	searchUser: string;
@@ -26,13 +26,6 @@ export default function UsersView() {
 	});
 
 	const searchUser = watch("searchUser");
-
-	// Lógica de ejemplo para los clics en los botones
-	const handleDetails = (user: UserType) =>
-		alert(`Viendo detalles de ${user.name}`);
-	const handleModify = (user: UserType) => alert(`Modificando a ${user.name}`);
-
-
 
 	const filteredUsers = useMemo(() => {
     	if (!users) return [];
@@ -108,13 +101,12 @@ export default function UsersView() {
 							<UserItem
 								key={user.id}
 								user={user}
-								onDetailsClick={handleDetails}
-								onModifyClick={handleModify}
 							/>
 						))}
 					</div>
 				</div>
-				<DeleteUserModal />;
+				<ConfirmUserActionModal actionType="disable" />
+            	<ConfirmUserActionModal actionType="promote" />
 			</div>
 		);
 

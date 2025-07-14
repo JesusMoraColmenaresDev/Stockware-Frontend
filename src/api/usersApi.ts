@@ -77,3 +77,11 @@ export const disableUser = async (userId: string) => {
 	});
 	return data;
 };
+
+export const promoteUser = async (userId: string) => {
+	// Usamos PATCH porque solo estamos actualizando un campo
+	const { data } = await api.patch(`/users/${userId}`, {
+		role: "admin",
+	});
+	return data;
+};

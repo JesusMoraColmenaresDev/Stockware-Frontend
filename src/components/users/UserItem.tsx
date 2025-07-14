@@ -1,4 +1,4 @@
-import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
+import { LuCircleArrowUp, LuSearch, LuSquarePen, LuUserX } from "react-icons/lu";
 import type { UserType } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { parseCreatedAtDate } from "../../api/usersApi";  
@@ -10,9 +10,7 @@ type UserItemProps = {
 };
 
 export const UserItem = ({
-	user,
-	onDetailsClick,
-	onModifyClick,
+	user
 }: UserItemProps) => {
 	const navigate = useNavigate();
 
@@ -40,28 +38,28 @@ export const UserItem = ({
 					</p>
 				</div>
 				<div className="flex items-center justify-end gap-2">
-					<button
-						onClick={() => onDetailsClick?.(user)}
-						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
-						title="Details"
-					>
-						<LuSearch size={20} />
-					</button>
-					<button
-						onClick={() => onModifyClick?.(user)}
-						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
-						title="Modify"
-					>
-						<LuSquarePen size={20} />
-					</button>
+					{user.role !== "admin" && (
+						<>
+							<button
+								onClick={() =>
+									navigate(location.pathname + `?action=promote&userId=${user.id}`)
+								}
+									className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-sucess transition-colors"
+									title="Promote to Admin"
+								>
+									<LuCircleArrowUp size={20} />
+							</button>	
+						</>
+
+					)}
 					<button
 						onClick={() =>
-							navigate(location.pathname + `?deleteUser=true&userId=${user.id}`)
+							navigate(location.pathname + `?action=disable&userId=${user.id}`)
 						}
 						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-bg-button-delete transition-colors"
-						title="Delete"
+						title="Disable User"
 					>
-						<LuX size={20} />
+						<LuUserX size={20} />
 					</button>
 				</div>
 			</div>

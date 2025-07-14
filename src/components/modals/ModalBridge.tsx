@@ -9,10 +9,7 @@ type ModalBridgeProps = {
 	width: string;
 	height: string;
 	titleColor: string;
-};
-
-const onClose = () => {
-	console.log("close");
+	onClose?: () => void;
 };
 
 export const ModalBridge = ({
@@ -22,14 +19,21 @@ export const ModalBridge = ({
 	width,
 	height,
 	titleColor,
+	onClose,
 }: ModalBridgeProps) => {
-	const [searchParams] = useSearchParams();
+	const [searchParams, setSearchParams] = useSearchParams();
 	const isOpen = searchParams.get(searchParam) === "true";
+
+	const handleClose = () => {
+		searchParams.delete(searchParam);
+		setSearchParams(searchParams, { replace: true });
+		onClose?.();
+	};
 
 	return (
 		<ModalContainer
 			isOpen={isOpen}
-			closeFn={onClose}
+			closeFn={handleClose}
 			title={title}
 			width={width}
 			height={height}

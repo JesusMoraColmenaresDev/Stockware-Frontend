@@ -71,6 +71,9 @@ export const CreateCategoryModal = () => {
 							openModal={false}
 							classNameInyect="px-[2rem] py-[0.25rem] font-semibold"
 							disabled={false}
+							clickFn={() => {
+								reset();
+							}}
 						/>
 					</div>
 				</div>

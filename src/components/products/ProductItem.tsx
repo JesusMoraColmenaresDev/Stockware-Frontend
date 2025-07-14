@@ -1,19 +1,17 @@
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
-import type { ProductType } from "../types";
+import type { ProductType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
 type ProductItemProps = {
 	product: ProductType;
 	categoryName: string;
 	onDetailsClick?: (product: ProductType) => void;
-	onModifyClick?: (product: ProductType) => void;
 };
 
 export const ProductItem = ({
 	product,
 	categoryName,
 	onDetailsClick,
-	onModifyClick,
 }: ProductItemProps) => {
 	const navigate = useNavigate();
 
@@ -62,7 +60,11 @@ export const ProductItem = ({
 						<LuSearch size={20} />
 					</button>
 					<button
-						onClick={() => onModifyClick?.(product)}
+						onClick={() =>
+							navigate(
+								location.pathname + `?editProduct=true&productId=${product.id}`
+							)
+						}
 						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
 						title="Modify"
 					>

@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { SearchField } from "../components/SearchField";
-import type { UserType } from "../types";
 import { UserItem } from "../components/users/UserItem";
 import { useGetAllUsers } from "../api/usersApi";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ConfirmUserActionModal } from "../components/users/ConfirmActionModal";
 
 type UsersViewFormValues = {
@@ -28,11 +27,11 @@ export default function UsersView() {
 	const searchUser = watch("searchUser");
 
 	const filteredUsers = useMemo(() => {
-    	if (!users) return [];
+		if (!users) return [];
 
-		const usersAvailables = users.filter((user) => user.is_enabled === true)
+		const usersAvailables = users.filter((user) => user.is_enabled === true);
 
-    	const lowerCaseSearch = searchUser.trim().toLowerCase();
+		const lowerCaseSearch = searchUser.trim().toLowerCase();
 		if (!lowerCaseSearch) return usersAvailables;
 
 		return usersAvailables.filter(
@@ -41,7 +40,6 @@ export default function UsersView() {
 				userAvailable.email.toLowerCase().includes(lowerCaseSearch)
 		);
 	}, [users, searchUser]);
-
 
 	const { adminCount, userCount } = useMemo(() => {
 		if (!users) {
@@ -60,7 +58,6 @@ export default function UsersView() {
 			{ adminCount: 0, userCount: 0 }
 		);
 	}, [users]);
-
 
 	if (users)
 		return (
@@ -98,17 +95,12 @@ export default function UsersView() {
 				<div className="bg-bg-main flex-1 px-[48px] py-[1rem] overflow-y-auto">
 					<div className="flex flex-col">
 						{filteredUsers.map((user) => (
-							<UserItem
-								key={user.id}
-								user={user}
-							/>
+							<UserItem key={user.id} user={user} />
 						))}
 					</div>
 				</div>
 				<ConfirmUserActionModal actionType="disable" />
-            	<ConfirmUserActionModal actionType="promote" />
+				<ConfirmUserActionModal actionType="promote" />
 			</div>
 		);
-
-		 
 }

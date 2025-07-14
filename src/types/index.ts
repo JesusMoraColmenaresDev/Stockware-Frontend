@@ -1,12 +1,8 @@
 import { z } from "zod";
 
-export const categorySchema = z.object({
-	id: z.number(),
-	name: z.string(),
-	products_count: z.number().int().min(0), // Verificar que sea un int
-	created_at: z.string().datetime(),
-	updated_at: z.string().datetime(),
-});
+// +
+// + Products
+// +
 
 export const productSchema = z.object({
 	id: z.number(),
@@ -21,6 +17,45 @@ export const productSchema = z.object({
 	updated_at: z.string().datetime(),
 });
 
+export const productsSchema = z.array(productSchema);
+
+export type ProductType = z.infer<typeof productSchema>;
+
+// export const createProductSchema = productSchema
+// 	.pick({
+// 		name: true,
+// 		price: true,
+// 		description: true,
+// 		category_id: true,
+// 		stock: true,
+// 		minimumQuantity: true,
+// 	})
+// 	.extend({
+// 		image: z.instanceof(FileList),
+// 	});
+
+// export type createProductType = z.infer<typeof createProductSchema>;
+
+// +
+// + Categories
+// +
+
+export const categorySchema = z.object({
+	id: z.number(),
+	name: z.string(),
+	products_count: z.number().int().min(0), // Verificar que sea un int
+	created_at: z.string().datetime(),
+	updated_at: z.string().datetime(),
+});
+
+export const categoriesSchema = z.array(categorySchema);
+
+export type CategoryType = z.infer<typeof categorySchema>;
+
+// +
+// + Users
+// +
+
 export const UserSchemaAuth = z.object({
 	name: z.string().optional(),
 	email: z.string().email(),
@@ -30,46 +65,15 @@ export const UserSchemaAuth = z.object({
 
 export type typeUser = z.infer<typeof UserSchemaAuth>;
 
-export const productsSchema = z.array(productSchema);
-export const categoriesSchema = z.array(categorySchema);
-
-export type CategoryType = z.infer<typeof categorySchema>;
-export type ProductType = z.infer<typeof productSchema>;
-
-export const createProductSchema = productSchema
-	.pick({
-		name: true,
-		price: true,
-		description: true,
-		category_id: true,
-		stock: true,
-		minimumQuantity: true,
-	})
-	.extend({
-		image: z.instanceof(FileList),
-	});
-
-export type createProductType = z.infer<typeof createProductSchema>;
-
-export type User = {
-	id: number | string;
-	name: string;
-	email: string;
-	role: string;
-	date_added: string;
-};
-
 export const userSchema = z.object({
 	id: z.union([z.string(), z.number()]),
 	name: z.string(),
 	email: z.string().email(),
 	role: z.string().optional(),
-	is_enabled : z.boolean(),
+	is_enabled: z.boolean(),
 	created_at: z.string(),
 });
 
 export const usersSchema = z.array(userSchema);
 
 export type UserType = z.infer<typeof userSchema>;
-
-// 2. Definimos las props que recibirá el componente.

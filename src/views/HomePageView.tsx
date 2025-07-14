@@ -11,6 +11,7 @@ import { SearchField } from "../components/SearchField";
 import { DeleteProductModal } from "../components/products/DeleteProductModal";
 import { CreateProductModal } from "../components/products/CreateProductModal";
 import { ProductItem } from "../components/products/ProductItem";
+import { EditProductModal } from "../components/products/EditProductModal";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -28,11 +29,8 @@ export default function HomePageView() {
 	const { categories, isLoadingCategories } = useGetCategories();
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
 
-	// Lógica de ejemplo para los clics en los botones
 	const handleDetails = (product: ProductType) =>
 		alert(`Viendo detalles de ${product.name}`);
-	const handleModify = (product: ProductType) =>
-		alert(`Modificando a ${product.name}`);
 
 	const {
 		register,
@@ -74,7 +72,7 @@ export default function HomePageView() {
 				) : (
 					<>
 						<div className="flex pb-[1rem] pt-[1.5rem]">
-							<div className="flex w-1/2 gap-[1rem]">
+							<div className="flex w-3/4 gap-[1rem]">
 								<ModalButton
 									text="Create Product"
 									searchParam={"newProduct"}
@@ -111,7 +109,6 @@ export default function HomePageView() {
 												categoryDictionary[product.category_id] ?? "N/A"
 											}
 											onDetailsClick={handleDetails}
-											onModifyClick={handleModify}
 										/>
 									))}
 								</div>
@@ -120,8 +117,9 @@ export default function HomePageView() {
 					</>
 				)}
 			</div>
-			<DeleteProductModal />
 			<CreateProductModal />
+			<EditProductModal />
+			<DeleteProductModal />
 			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />
 		</div>
 	);

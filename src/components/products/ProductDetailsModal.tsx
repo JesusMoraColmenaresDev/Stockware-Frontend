@@ -107,7 +107,7 @@ export const ProductDetailsModal = () => {
 									src={product.image_url}
 									alt={product.name}
 									title={product.name}
-									className="max-h-[7rem] w-auto object-contain rounded-2xl"
+									className="max-h-[7rem] w-auto object-contain rounded-xl"
 								/>
 							</div>
 							<div className="flex justify-between w-full mt-4">

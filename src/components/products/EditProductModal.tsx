@@ -45,7 +45,7 @@ export const EditProductModal = () => {
 		watch,
 		handleSubmit,
 		reset,
-		formState: { dirtyFields, isDirty },
+		formState: { dirtyFields },
 	} = useForm<editProductForm>({ defaultValues, mode: "onChange" });
 	const categoryId = Number(watch("category_id"));
 
@@ -165,22 +165,8 @@ export const EditProductModal = () => {
 								</div>
 							) : (
 								<>
-									<pre className="mb-4 text-sm">
-										{JSON.stringify(
-											{
-												isDirty,
-												imageDirty,
-												categoryId,
-												canSubmit: (isDirty || imageDirty) && categoryId !== 0,
-											},
-											null,
-											2
-										)}
-									</pre>
 									<form
 										onSubmit={handleSubmit((data) => {
-											console.log("🛎 handleSubmit got:", data);
-											alert("Submitting changes…");
 											onSubmit(data);
 										})}
 									>

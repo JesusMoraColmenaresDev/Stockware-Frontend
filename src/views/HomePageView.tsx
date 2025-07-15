@@ -12,6 +12,7 @@ import { DeleteProductModal } from "../components/products/DeleteProductModal";
 import { CreateProductModal } from "../components/products/CreateProductModal";
 import { ProductItem } from "../components/products/ProductItem";
 import { EditProductModal } from "../components/products/EditProductModal";
+import { ProductDetailsModal } from "../components/products/ProductDetailsModal";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -28,9 +29,6 @@ export default function HomePageView() {
 
 	const { categories, isLoadingCategories } = useGetCategories();
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
-
-	const handleDetails = (product: ProductType) =>
-		alert(`Viendo detalles de ${product.name}`);
 
 	const {
 		register,
@@ -108,7 +106,6 @@ export default function HomePageView() {
 											categoryName={
 												categoryDictionary[product.category_id] ?? "N/A"
 											}
-											onDetailsClick={handleDetails}
 										/>
 									))}
 								</div>
@@ -118,6 +115,7 @@ export default function HomePageView() {
 				)}
 			</div>
 			<CreateProductModal />
+			<ProductDetailsModal />
 			<EditProductModal />
 			<DeleteProductModal />
 			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />

@@ -5,14 +5,9 @@ import { useNavigate } from "react-router-dom";
 type ProductItemProps = {
 	product: ProductType;
 	categoryName: string;
-	onDetailsClick?: (product: ProductType) => void;
 };
 
-export const ProductItem = ({
-	product,
-	categoryName,
-	onDetailsClick,
-}: ProductItemProps) => {
+export const ProductItem = ({ product, categoryName }: ProductItemProps) => {
 	const navigate = useNavigate();
 
 	const formatPrice = (price: number) => {
@@ -53,7 +48,11 @@ export const ProductItem = ({
 				</div>
 				<div className="flex items-center justify-end gap-2">
 					<button
-						onClick={() => onDetailsClick?.(product)}
+						onClick={() =>
+							navigate(
+								location.pathname + `?viewProduct=true&productId=${product.id}`
+							)
+						}
 						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
 						title="Details"
 					>

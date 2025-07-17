@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { productSchema, productsSchema, type ProductType } from "../types";
 import { api } from "./axiosConfig";
+import { useMemo } from "react";
 
 const mockData: ProductType[] = [
 	{
@@ -157,3 +158,24 @@ export const useGetProducts = () => {
 
 	return { products, isLoadingProducts, isProductsError };
 };
+
+export const useProductDictionary = (products: ProductType[]) => {
+	return useMemo(() => {
+		const dictionary: Record<number, string> = {};
+		products.forEach((product) => {
+			dictionary[product.id] = product.name;
+		});
+		return dictionary;
+	}, [products]);
+};
+
+export function formatCurrency(
+	amount: number,
+	currencyCode: string = "USD",
+	locale?: string
+): string {
+	return new Intl.NumberFormat(locale, {
+		style: "currency",
+		currency: currencyCode,
+	}).format(amount);
+}

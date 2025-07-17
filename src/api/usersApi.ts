@@ -8,7 +8,7 @@ const mockUsers: UserType[] = [
 		name: "Alice Smith",
 		email: "alice.smith@example.com",
 		role: "admin",
-		is_enabled : true,
+		is_enabled: true,
 		created_at: "2024-05-21",
 	},
 	{
@@ -16,7 +16,7 @@ const mockUsers: UserType[] = [
 		name: "Bob Johnson",
 		email: "bob.johnson@example.com",
 		role: "user",
-		is_enabled : true,
+		is_enabled: true,
 		created_at: "2024-05-20",
 	},
 	{
@@ -24,7 +24,15 @@ const mockUsers: UserType[] = [
 		name: "Charlie Brown",
 		email: "charlie.brown@example.com",
 		role: "user",
-		is_enabled : true,
+		is_enabled: true,
+		created_at: "2024-05-19",
+	},
+	{
+		id: 4,
+		name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni numquam vel minima facilis soluta omnis eligendi, maxime blanditiis, inventore molestias architecto aperiam corporis, sit quisquam perferendis saepe dolorem tempore ipsum.",
+		email: "charlie.brown@example.com",
+		role: "user",
+		is_enabled: true,
 		created_at: "2024-05-19",
 	},
 ];

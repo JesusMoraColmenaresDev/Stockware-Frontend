@@ -3,6 +3,14 @@ import { api } from "./axiosConfig";
 import { useQuery } from "@tanstack/react-query";
 
 const mockMovements: StockMovementType[] = [
+	// {
+	// 	id: 6,
+	// 	product_id: 7,
+	// 	user_id: 1,
+	// 	movement: -1,
+	// 	created_at: "2025-07-17T04:05:17.431Z",
+	// 	updated_at: "2025-07-17T04:05:17.431Z",
+	// },
 	{
 		id: 5,
 		product_id: 7,

@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import type { ProductType } from "../types";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import { useGetAllUsers } from "../api/usersApi";
+import { useCategoryDictionary, useGetCategories } from "../api/categoriesApi";
 
 type StockMovementsViewFormValues = {
 	searchProducts: string;
@@ -27,10 +28,14 @@ const defaultValues: StockMovementsViewFormValues = {
 export const StockMovementsView = () => {
 	const { products, isLoadingProducts } = useGetProducts();
 	const productDictionary = useProductDictionary(products ?? []);
-	const { stockMovements, isLoadingStockMovements } = useGetStockMovements();
-	const { users, isLoadingUsers } = useGetAllUsers();
 
+	const { categories } = useGetCategories();
+	const categoriesDictionary = useCategoryDictionary(categories ?? []);
+
+	const { stockMovements, isLoadingStockMovements } = useGetStockMovements();
 	console.log(stockMovements);
+
+	const { users, isLoadingUsers } = useGetAllUsers();
 
 	const { register, watch, reset } = useForm<StockMovementsViewFormValues>({
 		defaultValues,
@@ -137,8 +142,8 @@ export const StockMovementsView = () => {
 														Type
 													</div>
 												</div>
-												<div className="flex justify-start items-center w-4/10 text-text font-semibold">
-													Product
+												<div className="flex justify-between w-4/10 text-text font-semibold">
+													<span className="flex items-center">Product</span>
 												</div>
 												<div className="flex w-1/10 justify-center items-center text-text font-semibold">
 													Value
@@ -184,13 +189,27 @@ export const StockMovementsView = () => {
 															)}
 														</div>
 													</div>
-													<div
-														className="flex justify-start items-center w-4/10 text-text font-semibold"
-														title={productDictionary[movement.product_id]}
-													>
-														<span className="truncate">
-															{productDictionary[movement.product_id]}
-														</span>
+													<div className="flex flex-col w-4/10 text-text font-semibold gap-[0.5rem]">
+														<div
+															className="flex justify-start items-start text-text font-semibold"
+															title={productDictionary[movement.product_id]}
+														>
+															<span className="truncate">
+																{productDictionary[movement.product_id]}
+															</span>
+														</div>
+														<div className="flex text-text gap-[0.5rem] opacity-60">
+															<span className="">Category:</span>
+															<span className="truncate">
+																{
+																	categoriesDictionary[
+																		filteredProducts.find(
+																			(prod) => prod.id === movement.product_id
+																		)?.category_id ?? 0
+																	]
+																}
+															</span>
+														</div>
 													</div>
 													<div
 														className={`flex w-1/10 justify-center items-center ${

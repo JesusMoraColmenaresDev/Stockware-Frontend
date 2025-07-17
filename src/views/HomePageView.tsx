@@ -89,7 +89,7 @@ export default function HomePageView() {
 									/>
 								</div>
 							</div>
-							<div className="flex w-1/4 justify-end">
+							<div className="flex max-w-1/4 justify-end">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 									<CategoryDropDown register={register} />
 								</div>

@@ -88,6 +88,20 @@ const mockData: ProductType[] = [
 		image_url:
 			"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ODQsInB1ciI6ImJsb2JfaWQifX0=--60eb5d5cbe302c91c2dd8742ea8f35fe41e909b5/mens-casual-slim-fit.jpg",
 	},
+	// {
+	// 	id: 6,
+	// 	name: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eos amet eaque asperiores fugit, error corrupti voluptatum, sed culpa libero obcaecati consequuntur facere cum veritatis eius sint ut autem delectus officiis.",
+	// 	price: 15.99,
+	// 	created_at: "2025-07-07T00:52:09.502Z",
+	// 	updated_at: "2025-07-07T00:52:09.944Z",
+	// 	description:
+	// 		"The color could be slightly different between on the screen and in practice. / Please note that body builds vary by person, therefore, detailed size information should be reviewed below on the product description.",
+	// 	category_id: 5,
+	// 	stock: 0,
+	// 	minimumQuantity: 20,
+	// 	image_url:
+	// 		"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ODQsInB1ciI6ImJsb2JfaWQifX0=--60eb5d5cbe302c91c2dd8742ea8f35fe41e909b5/mens-casual-slim-fit.jpg",
+	// },
 ];
 
 export const getProducts = async () => {

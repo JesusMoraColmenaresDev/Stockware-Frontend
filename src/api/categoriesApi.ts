@@ -32,6 +32,13 @@ const mockData: CategoryType[] = [
 		updated_at: "2025-07-07T00:52:07.108Z",
 		products_count: 2,
 	},
+	{
+		id: 5,
+		name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni numquam vel minima facilis soluta omnis eligendi, maxime blanditiis, inventore molestias architecto aperiam corporis, sit quisquam perferendis saepe dolorem tempore ipsum.",
+		created_at: "2025-07-07T00:52:07.108Z",
+		updated_at: "2025-07-07T00:52:07.108Z",
+		products_count: 2,
+	},
 ];
 
 export const getCategories = async () => {

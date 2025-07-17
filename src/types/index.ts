@@ -5,7 +5,7 @@ import { z } from "zod";
 // +
 
 export const productSchema = z.object({
-	id: z.number(),
+	id: z.number().int(),
 	name: z.string(),
 	price: z.number().min(0),
 	description: z.string(),
@@ -41,7 +41,7 @@ export type ProductType = z.infer<typeof productSchema>;
 // +
 
 export const categorySchema = z.object({
-	id: z.number(),
+	id: z.number().int(),
 	name: z.string(),
 	products_count: z.number().int().min(0), // Verificar que sea un int
 	created_at: z.string().datetime(),
@@ -77,3 +77,21 @@ export const userSchema = z.object({
 export const usersSchema = z.array(userSchema);
 
 export type UserType = z.infer<typeof userSchema>;
+
+// +
+// + Movements
+// +
+export const stockMovementSchema = z.object({
+	id: z.number().int(),
+	product_id: z.number().int(),
+	user_id: z.number().int(),
+	movement: z.number().int(),
+	// created_at: z.string().refine((s) => !isNaN(Date.parse(s)), {
+	// 	message: "Invalid ISO date",
+	// }),
+	created_at: z.string().datetime(),
+	updated_at: z.string().datetime(),
+});
+
+export type StockMovementType = z.infer<typeof stockMovementSchema>;
+export const stockMovementsSchema = z.array(stockMovementSchema);

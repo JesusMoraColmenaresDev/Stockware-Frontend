@@ -12,6 +12,7 @@ import { LeftSideBar } from "../views/LeftSideBar";
 import { CategoriesView } from "../views/CategoriesView";
 import UsersView from "../views/UsersView";
 import ProfileView from "../views/ProfileView";
+import { StockMovementsView } from "../views/StockMovementsView";
 
 const isAuthenticated = () => {
 	const token = localStorage.getItem("jwt");
@@ -40,7 +41,8 @@ const router = createBrowserRouter([
 			{ index: true, element: <HomePageView /> },
 			{ path: "/categories", element: <CategoriesView /> },
 			{ path: "/users", element: <UsersView /> },
-			{ path : "/profile", element: <ProfileView />}
+			{ path: "/profile", element: <ProfileView /> },
+			{ path: "/stock_movements", element: <StockMovementsView /> },
 		],
 	},
 	{

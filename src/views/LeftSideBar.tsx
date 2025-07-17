@@ -5,6 +5,7 @@ import {
 	LuCircleUserRound,
 	LuSquareMenu,
 	LuLogOut,
+	LuSendToBack,
 } from "react-icons/lu";
 import { NavBarItem } from "../components/NavBarItem";
 
@@ -31,6 +32,12 @@ export const LeftSideBar = () => {
 							to="/categories"
 							key={"/categories"}
 							icon={<LuSquareMenu focusable={"false"} />}
+						/>
+						<NavBarItem
+							title="Movements"
+							to="/stock_movements"
+							key={"/stock_movements"}
+							icon={<LuSendToBack focusable={"false"} />}
 						/>
 						<NavBarItem
 							title="Users"

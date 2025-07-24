@@ -44,7 +44,20 @@ const mockData: CategoryType[] = [
 export const getCategories = async () => {
 	try {
 		const { data } = await api.get("/categories");
-		const response = categoriesSchema.safeParse(data);
+		const response = categoriesSchema.safeParse(data.data);
+
+		if (response.success) return response.data;
+		else throw new Error(response.error.message);
+	} catch (error) {
+		console.log(error);
+		return mockData;
+	}
+};
+
+export const getAllCategories = async () => {
+	try {
+		const { data } = await api.get("/categories/all");
+		const response = categoriesSchema.safeParse(data.data);
 
 		if (response.success) return response.data;
 		else throw new Error(response.error.message);
@@ -67,6 +80,21 @@ export const useGetCategories = () => {
 
 	return { categories, isLoadingCategories, isCategoriesError };
 };
+
+export const useGetAllCategories = () => {
+	const {
+		data: categories,
+		isLoading: isLoadingCategories,
+		isError: isCategoriesError,
+	} = useQuery<CategoryType[]>({
+		queryKey: ["categories"],
+		queryFn: getAllCategories,
+		staleTime: Infinity,
+	});
+
+	return { categories, isLoadingCategories, isCategoriesError };
+};
+
 
 export const useCategoryDictionary = (categories: CategoryType[]) =>
 	useMemo<Record<number, string>>(

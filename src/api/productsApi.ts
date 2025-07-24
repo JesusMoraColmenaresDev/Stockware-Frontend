@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { productSchema, productsSchema, type ProductType } from "../types";
 import { api } from "./axiosConfig";
 import { useMemo } from "react";
@@ -104,17 +104,35 @@ const mockData: ProductType[] = [
 	// },
 ];
 
-export const getProducts = async () => {
+export type PaginatedProductsResponse = {
+	products: ProductType[];
+	totalPages: number;
+};
+
+export const getProducts = async (page : number, search: string, categoryId: number) => {
 	try {
-		const { data } = await api.get("/products");
-		const response = productsSchema.safeParse(data);
-		if (response.success) return response.data;
+
+		const params = new URLSearchParams()
+		params.append("page" , page.toString())
+
+		if(search) {
+			params.append("search", search.toString())
+		}
+
+		if(categoryId > 0) {
+			params.append("category_id", categoryId.toString())
+		}
+
+		const { data } = await api.get(`/products/?${params.toString()}`);
+		const totalPages = data.metadata.pages
+		const response = productsSchema.safeParse(data.data);
+		if (response.success) return {products : response.data, totalPages};
 		else {
 			throw new Error(response.error.message);
 		}
 	} catch (error) {
 		console.log(error);
-		return mockData;
+		throw error
 	}
 };
 
@@ -159,18 +177,19 @@ export const deleteProduct = async (id: number) => {
 	}
 };
 
-export const useGetProducts = () => {
+export const useGetProducts = (page : number = 1, search: string = "", categoryId : number = 0) => {
 	const {
-		data: products,
+		data,
 		isLoading: isLoadingProducts,
 		isError: isProductsError,
-	} = useQuery<ProductType[]>({
-		queryKey: ["products"],
-		queryFn: getProducts,
+	} = useQuery<PaginatedProductsResponse>({
+		queryKey: ["products", page, search, categoryId],
+		queryFn: () => getProducts(page, search, categoryId),
 		staleTime: Infinity,
+		placeholderData: keepPreviousData,
 	});
 
-	return { products, isLoadingProducts, isProductsError };
+	return { products: data?.products, totalPages: data?.totalPages, isLoadingProducts, isProductsError };
 };
 
 export const useProductDictionary = (products: ProductType[]) => {

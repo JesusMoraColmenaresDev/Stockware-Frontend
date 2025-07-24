@@ -1,10 +1,10 @@
 import { useGetProducts } from "../api/productsApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ProductType } from "../types";
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
-import { useCategoryDictionary, useGetCategories } from "../api/categoriesApi";
+import { useCategoryDictionary, useGetAllCategories, useGetCategories } from "../api/categoriesApi";
 import { RightSideBar } from "./RightSideBar";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
@@ -13,6 +13,7 @@ import { CreateProductModal } from "../components/products/CreateProductModal";
 import { ProductItem } from "../components/products/ProductItem";
 import { EditProductModal } from "../components/products/EditProductModal";
 import { ProductDetailsModal } from "../components/products/ProductDetailsModal";
+import ReactPaginate from "react-paginate";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -24,11 +25,17 @@ const defaultValues: HomePageViewFormValues = {
 	categoryFilter: "0",
 };
 
-export default function HomePageView() {
-	const { products, isLoadingProducts } = useGetProducts();
 
-	const { categories, isLoadingCategories } = useGetCategories();
-	const categoryDictionary = useCategoryDictionary(categories ?? []);
+
+export default function HomePageView() {
+
+	const [currentPage , setCurrentPage] = useState(1)
+	const [debouncedSearch, setDebouncedSearch] = useState("");
+	
+
+	const handlePageClick = (event: { selected: number }) => {
+		setCurrentPage(event.selected + 1);
+	};
 
 	const {
 		register,
@@ -37,24 +44,27 @@ export default function HomePageView() {
 	} = useForm<HomePageViewFormValues>({
 		defaultValues, // Evitamos los Undefined, al tener un valor de antemano
 	});
-	const searchProduct = watch("searchProducts");
 
+	const searchProduct = watch("searchProducts");
 	const categoryFilter = Number(watch("categoryFilter"));
 
-	const filteredProducts = useMemo<ProductType[]>(() => {
-		if (!products) return [];
 
-		const lower = searchProduct.trim().toLowerCase() ?? ""; // Si no esta, pongalo como string vacio
+	const { products, isLoadingProducts, totalPages } = useGetProducts(currentPage, debouncedSearch, categoryFilter);
+	const { categories, isLoadingCategories } = useGetAllCategories()
+	const categoryDictionary = useCategoryDictionary(categories ?? []);
 
-		return products
-			.filter(
-				(prod) =>
-					categoryFilter > 0 // El usuario escogio una opcion del select
-						? prod.category_id == categoryFilter // Solo los de la misma ID
-						: true // Si no, solo retorne todos
-			)
-			.filter((prod) => prod.name.toLowerCase().includes(lower));
-	}, [products, searchProduct, categoryFilter]);
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedSearch(searchProduct);
+		}, 300); // Espera 300ms después de que el usuario deja de escribir
+
+		return () => clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
+	}, [searchProduct]);
+
+		// Efecto para reiniciar la paginación cuando cambian los filtros
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [debouncedSearch, categoryFilter]);
 
 	return (
 		<div className="flex w-full h-full ">
@@ -99,7 +109,7 @@ export default function HomePageView() {
 						{products && !isLoadingCategories && (
 							<div className="flex-1 overflow-y-auto">
 								<div className="flex flex-col">
-									{filteredProducts.map((product) => (
+									{products.map((product) => (
 										<ProductItem
 											key={product.id}
 											product={product}
@@ -111,6 +121,25 @@ export default function HomePageView() {
 								</div>
 							</div>
 						)}
+
+						<ReactPaginate
+							breakLabel="..."
+							nextLabel="Siguiente >"
+							onPageChange={handlePageClick}
+							pageRangeDisplayed={3}
+							marginPagesDisplayed={2}
+							pageCount={totalPages ?? 0}
+							forcePage={currentPage - 1}
+							previousLabel="< Anterior"
+							renderOnZeroPageCount={null}
+							containerClassName="flex items-center justify-center p-4 gap-2 text-lg text-text"
+							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
+							pageLinkClassName="cursor-pointer w-full h-full flex items-center justify-center"
+							previousClassName="px-4 py-2 rounded-md"
+							nextClassName="px-4 py-2 rounded-md"
+							activeClassName="font-bold"
+							disabledClassName="opacity-50 cursor-not-allowed"
+						/>
 					</>
 				)}
 			</div>

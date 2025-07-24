@@ -123,7 +123,7 @@ export const getProducts = async (page : number, search: string, categoryId: num
 			params.append("category_id", categoryId.toString())
 		}
 
-		const { data } = await api.get(`/products/?${params.toString()}`);
+		const { data } = await api.get(`/products?${params.toString()}`);
 		const totalPages = data.metadata.pages
 		const response = productsSchema.safeParse(data.data);
 		if (response.success) return {products : response.data, totalPages};

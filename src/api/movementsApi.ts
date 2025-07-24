@@ -1,81 +1,74 @@
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { stockMovementsSchema, type StockMovementType } from "../types";
 import { api } from "./axiosConfig";
-import { useQuery } from "@tanstack/react-query";
 
-const mockMovements: StockMovementType[] = [
-	// {
-	// 	id: 6,
-	// 	product_id: 7,
-	// 	user_id: 1,
-	// 	movement: -1,
-	// 	created_at: "2025-07-17T04:05:17.431Z",
-	// 	updated_at: "2025-07-17T04:05:17.431Z",
-	// },
-	{
-		id: 5,
-		product_id: 7,
-		user_id: 1,
-		movement: -1,
-		created_at: "2025-07-17T04:05:17.431Z",
-		updated_at: "2025-07-17T04:05:17.431Z",
-	},
-	{
-		id: 4,
-		product_id: 2,
-		user_id: 3,
-		movement: -5,
-		created_at: "2025-07-17T04:05:17.425Z",
-		updated_at: "2025-07-17T04:05:17.425Z",
-	},
-	{
-		id: 3,
-		product_id: 18,
-		user_id: 2,
-		movement: 4,
-		created_at: "2025-07-17T04:05:17.419Z",
-		updated_at: "2025-07-17T04:05:17.419Z",
-	},
-	{
-		id: 2,
-		product_id: 10,
-		user_id: 3,
-		movement: -3,
-		created_at: "2025-07-17T04:05:17.411Z",
-		updated_at: "2025-07-17T04:05:17.411Z",
-	},
-	{
-		id: 1,
-		product_id: 12,
-		user_id: 3,
-		movement: -9,
-		created_at: "2025-07-17T04:05:17.404Z",
-		updated_at: "2025-07-17T04:05:17.404Z",
-	},
-];
+export type PaginatedMovementResponse = {
+	movements: StockMovementType[];
+	totalPages: number;
+};
 
-export const getStockMovements = async () => {
+const formatDateForBackend = (date: Date): string => {
+	const year = date.getFullYear();
+	// getMonth() devuelve 0-11, por eso se suma 1.
+	// padStart(2, '0') asegura que tenga dos dígitos (ej: 07 en vez de 7).
+	const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	const day = date.getDate().toString().padStart(2, "0");
+
+	return `${year}-${month}-${day}`;
+};
+
+export const getStockMovements = async (
+	page: number = 1,
+	search: string = "",
+	categoryId: number = 0,
+	startDate : Date | null , 
+	endDate: Date | null
+) => {
 	try {
-		const { data } = await api.get("/stock_movements");
-		const response = stockMovementsSchema.safeParse(data);
-		if (response.success) return response.data;
-		else {
+		const params = new URLSearchParams();
+		params.append("page", page.toString());
+
+		if (search) {
+			params.append("search", search);
+		}
+
+		if (categoryId > 0) {
+			params.append("category_id", categoryId.toString());
+		}
+
+		if (startDate) {
+			params.append("start_date", formatDateForBackend(startDate));
+		}
+
+		if (endDate) {
+			params.append("end_date", formatDateForBackend(endDate));
+		}
+
+		const { data } = await api.get(`/stock_movements?${params.toString()}`);
+		const totalPages = data.metadata.pages;
+		const response = stockMovementsSchema.safeParse(data.data);
+		if (response.success) {
+			return { movements: response.data, totalPages };
+		} else {
 			throw new Error(response.error.message);
 		}
 	} catch (error) {
 		console.log(error);
-		return mockMovements;
+		throw error;
 	}
 };
 
-export const useGetStockMovements = () => {
-	const { data, isLoading, isError } = useQuery({
-		queryKey: ["stockMovements"],
-		queryFn: getStockMovements,
+export const useGetStockMovements = (page: number = 1, search: string = "", categoryId: number = 0, startDate : Date | null , endDate: Date | null) => {
+	const { data, isLoading, isError } = useQuery<PaginatedMovementResponse>({
+		queryKey: ["stockMovements", { page, search, categoryId , startDate, endDate }],
+		queryFn: () => getStockMovements(page, search, categoryId, startDate, endDate),
 		staleTime: Infinity,
+		placeholderData: keepPreviousData,
 	});
 
 	return {
-		stockMovements: data,
+		stockMovements: data?.movements,
+		totalPages: data?.totalPages,
 		isLoadingStockMovements: isLoading,
 		isErrorStockMovements: isError,
 	};

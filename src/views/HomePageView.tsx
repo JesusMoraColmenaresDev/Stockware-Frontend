@@ -50,6 +50,7 @@ export default function HomePageView() {
 
 
 	const { products, isLoadingProducts, totalPages } = useGetProducts(currentPage, debouncedSearch, categoryFilter);
+	console.log("llamando a las categorias")
 	const { categories, isLoadingCategories } = useGetAllCategories()
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
 
@@ -101,7 +102,7 @@ export default function HomePageView() {
 							</div>
 							<div className="flex max-w-1/4 justify-end">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
-									<CategoryDropDown register={register} />
+									<CategoryDropDown register={register} categories={categories ?? []} isLoading = {isLoadingCategories}/>
 								</div>
 							</div>
 						</div>

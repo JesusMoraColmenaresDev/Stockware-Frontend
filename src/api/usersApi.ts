@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { usersSchema, type UserType } from "../types";
 import { api } from "./axiosConfig";
 
@@ -37,6 +37,11 @@ const mockUsers: UserType[] = [
 	},
 ];
 
+export type PaginatedUserResponse = {
+	users: UserType[];
+	totalPages: number;
+};
+
 export const parseCreatedAtDate = (created_at: string) => {
 	const date = new Date(created_at);
 	const year = date.getFullYear();
@@ -51,31 +56,73 @@ export const parseCreatedAtDate = (created_at: string) => {
 	return formattedDate;
 };
 
+export const getUsers = async (page: number = 1, search: string = "") => {
+	try {
+		const params = new URLSearchParams();
+		params.append("page", page.toString());
+
+		if (search) {
+			params.append("search", search.toString());
+		}
+
+		const { data } = await api.get(`/users?${params.toString()}`);
+		const totalPages = data.metadata.pages;
+		const response = usersSchema.safeParse(data.data);
+
+		if (response.success) return { users: response.data, totalPages };
+		else throw new Error(response.error.message);
+	} catch (error) {
+		console.log(error);
+		throw error
+	}
+};
+
+
+export const useGetUsers = (page: number = 1, search: string = "") => {
+	const {
+		data,
+		isLoading: isLoadingUsers,
+		isError: isErrorUsers,
+	} = useQuery<PaginatedUserResponse>({
+		queryFn: () => getUsers(page, search),
+		queryKey: ["users", { page, search }],
+		staleTime: Infinity,
+		placeholderData: keepPreviousData,
+	});
+
+	return {
+		users: data?.users,
+		totalPages: data?.totalPages,
+		isLoadingUsers,
+		isErrorUsers,
+	};
+};
+
 export const getAllUsers = async () => {
 	try {
-		const { data } = await api.get("/users");
+		const { data } = await api.get("/users/all");
 		const response = usersSchema.safeParse(data);
-
 		if (response.success) return response.data;
 		else throw new Error(response.error.message);
 	} catch (error) {
 		console.log(error);
-		return mockUsers;
+		throw error;
 	}
 };
+
 
 export const useGetAllUsers = () => {
 	const {
 		data: users,
 		isLoading: isLoadingUsers,
-		isError: isErrorUsers,
+		isError: isUsersError,
 	} = useQuery<UserType[]>({
+		queryKey: ["users", "all"],
 		queryFn: getAllUsers,
-		queryKey: ["users"],
 		staleTime: Infinity,
 	});
 
-	return { users, isLoadingUsers, isErrorUsers };
+	return { users, isLoadingUsers, isUsersError };
 };
 
 export const disableUser = async (userId: string) => {

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { ModalBridge } from "../modals/ModalBridge";
 import type { CategoryType, ProductType } from "../../types";
-import { getCategories } from "../../api/categoriesApi";
+import { getAllCategories, getCategories } from "../../api/categoriesApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createProduct } from "../../api/productsApi";
 import { ImageUploadField } from "../ImageUploadField";
@@ -22,7 +22,7 @@ export const CreateProductModal = () => {
 
 	const { data: categories } = useQuery<CategoryType[]>({
 		queryKey: ["categories"],
-		queryFn: getCategories,
+		queryFn: getAllCategories,
 		staleTime: Infinity,
 	});
 

@@ -7,15 +7,11 @@ import type { HomePageViewFormValues } from "../../views/HomePageView";
 
 type CategoryDropDownProps = {
 	register: UseFormRegister<HomePageViewFormValues>;
+	categories : CategoryType[];
+	isLoading: boolean;
 };
 
-export const CategoryDropDown = ({ register }: CategoryDropDownProps) => {
-	const { data: categories, isLoading } = useQuery<CategoryType[]>({
-		queryKey: ["categories"],
-		queryFn: getCategories,
-		staleTime: Infinity,
-	});
-
+export const CategoryDropDown = ({ register , categories, isLoading}: CategoryDropDownProps) => {
 	if (isLoading)
 		return (
 			<Spinner size="2rem" colorPrimary="#2C3E50" colorSecondary="#3498DB" />

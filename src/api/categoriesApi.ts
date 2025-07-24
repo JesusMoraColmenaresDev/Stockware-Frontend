@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { categoriesSchema, categorySchema, type CategoryType } from "../types";
 import { api } from "./axiosConfig";
 import { useMemo } from "react";
@@ -41,44 +41,60 @@ const mockData: CategoryType[] = [
 	},
 ];
 
-export const getCategories = async () => {
-	try {
-		const { data } = await api.get("/categories");
-		const response = categoriesSchema.safeParse(data.data);
+export type PaginatedCategoryResponse = {
+	categories: CategoryType[];
+	totalPages: number;
+};
 
-		if (response.success) return response.data;
-		else throw new Error(response.error.message);
+export const getCategories = async (page : number = 1, search: string = "") => {
+	try {
+		const params = new URLSearchParams()
+		params.append("page" , page.toString())
+
+		if(search) {
+			params.append("search", search.toString())
+			
+		}
+
+		console.log(params.toString())
+		const { data } = await api.get(`/categories?${params.toString()}`);
+		const totalPages = data.metadata.pages
+		const response = categoriesSchema.safeParse(data.data);
+		if (response.success) return {categories : response.data, totalPages};
+		else {
+			throw new Error(response.error.message);
+		}
 	} catch (error) {
 		console.log(error);
-		return mockData;
+		throw error
 	}
 };
 
 export const getAllCategories = async () => {
 	try {
 		const { data } = await api.get("/categories/all");
-		const response = categoriesSchema.safeParse(data.data);
-
+		const response = categoriesSchema.safeParse(data);
 		if (response.success) return response.data;
 		else throw new Error(response.error.message);
 	} catch (error) {
 		console.log(error);
-		return mockData;
+		throw error
 	}
 };
 
-export const useGetCategories = () => {
+export const useGetCategories = (page : number = 1, search: string = "") => {
 	const {
-		data: categories,
+		data,
 		isLoading: isLoadingCategories,
 		isError: isCategoriesError,
-	} = useQuery<CategoryType[]>({
-		queryKey: ["categories"],
-		queryFn: getCategories,
+	} = useQuery<PaginatedCategoryResponse>({
+		queryKey: ["categories", page, search],
+		queryFn: () => getCategories(page,search),
 		staleTime: Infinity,
+		placeholderData: keepPreviousData,
 	});
 
-	return { categories, isLoadingCategories, isCategoriesError };
+	return { categories : data?.categories , totalPages: data?.totalPages,  isLoadingCategories, isCategoriesError };
 };
 
 export const useGetAllCategories = () => {
@@ -87,7 +103,7 @@ export const useGetAllCategories = () => {
 		isLoading: isLoadingCategories,
 		isError: isCategoriesError,
 	} = useQuery<CategoryType[]>({
-		queryKey: ["categories"],
+		queryKey: ["categories", "all"],
 		queryFn: getAllCategories,
 		staleTime: Infinity,
 	});

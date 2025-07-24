@@ -1,13 +1,14 @@
 import { useGetCategories } from "../api/categoriesApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CategoryType } from "../types";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { CreateCategoryModal } from "../components/categories/CreateCategoryModal";
 import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModal";
 import { CategoryItem } from "../components/categories/CategoryItems";
+import ReactPaginate from "react-paginate";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -18,7 +19,8 @@ const defaultValues: CategoriesViewFormValues = {
 };
 
 export const CategoriesView = () => {
-	const { categories, isLoadingCategories } = useGetCategories();
+		const [currentPage , setCurrentPage] = useState(1)
+		const [debouncedSearch, setDebouncedSearch] = useState("");
 
 	const {
 		register,
@@ -28,16 +30,25 @@ export const CategoriesView = () => {
 		defaultValues, // Evitamos los Undefined, al tener un valor de antemano
 	});
 	const searchCategory = watch("searchCategory");
+	const { categories, isLoadingCategories, totalPages } = useGetCategories(currentPage, debouncedSearch);
 
-	const filteredCategories = useMemo<CategoryType[]>(() => {
-		if (!categories) return [];
 
-		const lower = searchCategory.trim().toLowerCase() ?? "";
+	const handlePageClick = (event: { selected: number }) => {
+		setCurrentPage(event.selected + 1);
+	};
 
-		return categories.filter((category) =>
-			category.name.toLowerCase().includes(lower)
-		);
-	}, [categories, searchCategory]);
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedSearch(searchCategory);
+		}, 300); // Espera 300ms después de que el usuario deja de escribir
+
+		return () => clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
+	}, [searchCategory]);
+
+		// Efecto para reiniciar la paginación cuando cambian los filtros
+	useEffect(() => {
+		setCurrentPage(1);
+	}, [debouncedSearch]);
 
 	// Lógica de ejemplo para los clics en los botones
 	const handleDetails = (category: CategoryType) =>
@@ -87,7 +98,7 @@ export const CategoriesView = () => {
 						</div>
 						<div className="flex-1 overflow-y-auto">
 							<div className="flex flex-col">
-								{filteredCategories.map((category) => (
+								{categories.map((category) => (
 									<CategoryItem
 										key={category.id}
 										category={category}
@@ -97,6 +108,25 @@ export const CategoriesView = () => {
 								))}
 							</div>
 						</div>
+
+						<ReactPaginate
+							breakLabel="..."
+							nextLabel="Siguiente >"
+							onPageChange={handlePageClick}
+							pageRangeDisplayed={3}
+							marginPagesDisplayed={2}
+							pageCount={totalPages ?? 0}
+							forcePage={currentPage - 1}
+							previousLabel="< Anterior"
+							renderOnZeroPageCount={null}
+							containerClassName="flex items-center justify-center p-4 gap-2 text-lg text-text"
+							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
+							pageLinkClassName="cursor-pointer w-full h-full flex items-center justify-center"
+							previousClassName="px-4 py-2 rounded-md"
+							nextClassName="px-4 py-2 rounded-md"
+							activeClassName="font-bold"
+							disabledClassName="opacity-50 cursor-not-allowed"
+						/>
 					</>
 				)}
 			</div>

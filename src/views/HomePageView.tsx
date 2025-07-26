@@ -1,8 +1,9 @@
-import { useGetProducts } from "../api/productsApi";
+import { getProductsPdf, useGetProducts } from "../api/productsApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import type { ProductType } from "../types";
+
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
 import { useCategoryDictionary, useGetAllCategories, useGetCategories } from "../api/categoriesApi";
 import { RightSideBar } from "./RightSideBar";
@@ -14,6 +15,9 @@ import { ProductItem } from "../components/products/ProductItem";
 import { EditProductModal } from "../components/products/EditProductModal";
 import { ProductDetailsModal } from "../components/products/ProductDetailsModal";
 import ReactPaginate from "react-paginate";
+import { usePdfDownloader } from "../hooks/usePdfDownloader";
+import { getFileTimestamp } from "../utils/dateUtils";
+import GenerationReportButton from "../components/GenerationReportButton";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -31,11 +35,15 @@ export default function HomePageView() {
 
 	const [currentPage , setCurrentPage] = useState(1)
 	const [debouncedSearch, setDebouncedSearch] = useState("");
-	
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
 	};
+
+	const { isDownloading, downloadPdf } = usePdfDownloader(
+		() => getProductsPdf(searchProduct, categoryFilter),
+		`reporte-productos-${getFileTimestamp()}.pdf`
+	);
 
 	const {
 		register,
@@ -100,11 +108,13 @@ export default function HomePageView() {
 									/>
 								</div>
 							</div>
-							<div className="flex max-w-1/4 justify-end">
+							<div className="flex  justify-end gap-[8px]">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 									<CategoryDropDown register={register} categories={categories ?? []} isLoading = {isLoadingCategories}/>
 								</div>
+								{GenerationReportButton(downloadPdf, isDownloading)}
 							</div>
+							
 						</div>
 
 						{products && !isLoadingCategories && (

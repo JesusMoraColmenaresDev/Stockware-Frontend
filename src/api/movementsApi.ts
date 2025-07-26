@@ -17,6 +17,40 @@ const formatDateForBackend = (date: Date): string => {
 	return `${year}-${month}-${day}`;
 };
 
+export const getStockMovementsPdf = async (
+	search: string = "",
+	categoryId: number = 0,
+	startDate: Date | null,
+	endDate: Date | null
+) => {
+	try {
+		const params = new URLSearchParams();
+
+		if (search) {
+			params.append("search", search);
+		}
+
+		if (categoryId > 0) {
+			params.append("category_id", categoryId.toString());
+		}
+
+		if (startDate) {
+			params.append("start_date", formatDateForBackend(startDate));
+		}
+
+		if (endDate) {
+			params.append("end_date", formatDateForBackend(endDate));
+		}
+
+		const response = await api.get(`/stock_movements.pdf?${params.toString()}`, { responseType: "blob" });
+		return response;
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+};
+
+
 export const getStockMovements = async (
 	page: number = 1,
 	search: string = "",

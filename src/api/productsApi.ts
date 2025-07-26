@@ -136,6 +136,29 @@ export const getProducts = async (page : number, search: string, categoryId: num
 	}
 };
 
+export const getProductsPdf = async (
+	search: string = "",
+	categoryId: number = 0
+) => {
+	try {
+		const params = new URLSearchParams();
+
+		if (search) {
+			params.append("search", search);
+		}
+
+		if (categoryId > 0) {
+			params.append("category_id", categoryId.toString());
+		}
+
+		const response = await api.get(`/products.pdf?${params.toString()}`, { responseType: "blob" });
+		return response;
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+};
+
 export const getProduct = async (id: number) => {
 	try {
 		const { data } = await api.get(`/products/${id}`);

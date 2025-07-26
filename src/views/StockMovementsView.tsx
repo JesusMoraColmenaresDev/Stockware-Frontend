@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import ReactPaginate from "react-paginate";
 import { useGetAllCategories } from "../api/categoriesApi";
-import { formatMovementDate, useGetStockMovements } from "../api/movementsApi";
+import { formatMovementDate, getStockMovementsPdf, useGetStockMovements } from "../api/movementsApi";
 import { formatCurrency } from "../api/productsApi";
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
 import { ModalButton } from "../components/modals/ModalButton";
@@ -12,6 +12,9 @@ import { Spinner } from "../components/Spinner";
 import 'react-datepicker/dist/react-datepicker.css'
 import ReactDatePicker from "react-datepicker";
 import DatePicker from "react-datepicker";
+import { usePdfDownloader } from "../hooks/usePdfDownloader";
+import { getFileTimestamp } from "../utils/dateUtils";
+import GenerationReportButton from "../components/GenerationReportButton";
 
 type StockMovementsViewFormValues = {
 	searchProducts: string;
@@ -38,6 +41,8 @@ export const StockMovementsView = () => {
 		defaultValues,
 	});
 
+
+
 	const searchProduct = watch("searchProducts");
 	const categoryFilter = Number(watch("categoryFilter"));
 
@@ -47,6 +52,11 @@ export const StockMovementsView = () => {
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
 	};
+
+   	const { isDownloading, downloadPdf } = usePdfDownloader(
+		() => getStockMovementsPdf(searchProduct, categoryFilter, startDate, endDate),
+		`reporte-movimientos-${getFileTimestamp()}.pdf`
+	);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -74,27 +84,18 @@ export const StockMovementsView = () => {
 					</div>
 				) : (
 					<>
-						<div className="flex pb-[1rem] pt-[1.5rem] z-50 gap-[8px]">
-							<div className="flex w-3/4 gap-[1rem]">
-								<ModalButton
-									text="Record Movement"
-									searchParam={"newMovement"}
-									openModal={true}
-									classNameInyect="px-[2rem] py-[1rem] text-lg font-bold"
-									disabled={false}
+						<div className="flex pb-[1rem] pt-[1.5rem] z-50 gap-[8px] justify-between">
+							<div className="flex w-3/7 gap-[1rem]">
+								<SearchField
+									name="searchProducts"
+									register={register}
+									watch={watch}
+									reset={reset}
+									defaultValues={defaultValues}
+									placeholder="Search Products . . ."
 								/>
-								<div className="flex w-3/5">
-									<SearchField
-										name="searchProducts"
-										register={register}
-										watch={watch}
-										reset={reset}
-										defaultValues={defaultValues}
-										placeholder="Search Products . . ."
-									/>
-								</div>
 							</div>
-
+							
 							<div className="flex gap-[16px]">
 								<div className="flex flex-col gap-[8px] justify-end">
 									<DatePicker
@@ -121,7 +122,7 @@ export const StockMovementsView = () => {
 										dateFormat="dd/MM/yyyy"
 									/>
 								</div>
-								<div className="flex min-w-1/4 justify-end">
+								<div className="flex min-w-1/4 justify-end gap-[8px]">
 									<div className="flex justify-end w-auto px-4 py-4 font-semibold border rounded-lg border-text bg-bg-secondary">
 										<CategoryDropDown
 											register={register}
@@ -129,7 +130,11 @@ export const StockMovementsView = () => {
 											isLoading={isLoadingCategories}
 										/>
 									</div>
+									{GenerationReportButton(downloadPdf, isDownloading)}
 								</div>
+
+								
+
 							</div>
 						</div>
 

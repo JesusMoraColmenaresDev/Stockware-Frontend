@@ -6,7 +6,7 @@ import type { ProductType } from "../../types";
 import { updateProduct, useGetProducts } from "../../api/productsApi";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
-import { useGetAllCategories, useGetCategories } from "../../api/categoriesApi";
+import { useGetAllCategories } from "../../api/categoriesApi";
 import { ImageUploadField } from "../ImageUploadField";
 
 type editProductForm = Pick<

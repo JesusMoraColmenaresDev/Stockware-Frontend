@@ -1,7 +1,7 @@
 import { useGetCategories } from "../api/categoriesApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { CategoryType } from "../types";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
@@ -9,6 +9,7 @@ import { CreateCategoryModal } from "../components/categories/CreateCategoryModa
 import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModal";
 import { CategoryItem } from "../components/categories/CategoryItems";
 import ReactPaginate from "react-paginate";
+import { EditCategoryModal } from "../components/categories/EditCategoryModal";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -19,8 +20,8 @@ const defaultValues: CategoriesViewFormValues = {
 };
 
 export const CategoriesView = () => {
-		const [currentPage , setCurrentPage] = useState(1)
-		const [debouncedSearch, setDebouncedSearch] = useState("");
+	const [currentPage, setCurrentPage] = useState(1);
+	const [debouncedSearch, setDebouncedSearch] = useState("");
 
 	const {
 		register,
@@ -30,8 +31,10 @@ export const CategoriesView = () => {
 		defaultValues, // Evitamos los Undefined, al tener un valor de antemano
 	});
 	const searchCategory = watch("searchCategory");
-	const { categories, isLoadingCategories, totalPages } = useGetCategories(currentPage, debouncedSearch);
-
+	const { categories, isLoadingCategories, totalPages } = useGetCategories(
+		currentPage,
+		debouncedSearch
+	);
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
@@ -45,7 +48,7 @@ export const CategoriesView = () => {
 		return () => clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
 	}, [searchCategory]);
 
-		// Efecto para reiniciar la paginación cuando cambian los filtros
+	// Efecto para reiniciar la paginación cuando cambian los filtros
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [debouncedSearch]);
@@ -103,7 +106,6 @@ export const CategoriesView = () => {
 										key={category.id}
 										category={category}
 										onDetailsClick={handleDetails}
-										onModifyClick={handleModify}
 									/>
 								))}
 							</div>
@@ -131,6 +133,7 @@ export const CategoriesView = () => {
 				)}
 			</div>
 			<CreateCategoryModal />
+			<EditCategoryModal />
 			<DeleteCategoryModal />
 		</div>
 	);

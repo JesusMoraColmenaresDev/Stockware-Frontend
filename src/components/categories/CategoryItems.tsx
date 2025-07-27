@@ -5,13 +5,11 @@ import { useNavigate } from "react-router-dom";
 type CategoryItemProps = {
 	category: CategoryType;
 	onDetailsClick?: (category: CategoryType) => void;
-	onModifyClick?: (category: CategoryType) => void;
 };
 
 export const CategoryItem = ({
 	category,
 	onDetailsClick,
-	onModifyClick,
 }: CategoryItemProps) => {
 	const navigate = useNavigate();
 
@@ -49,7 +47,12 @@ export const CategoryItem = ({
 						<LuSearch size={20} />
 					</button>
 					<button
-						onClick={() => onModifyClick?.(category)}
+						onClick={() =>
+							navigate(
+								location.pathname +
+									`?editCategory=true&categoryId=${category.id}`
+							)
+						}
 						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
 						title="Modify"
 					>

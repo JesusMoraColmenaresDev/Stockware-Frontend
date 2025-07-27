@@ -1,6 +1,7 @@
 import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
 import type { ProductType } from "../../types";
 import { useNavigate } from "react-router-dom";
+import { formatCurrency } from "../../api/productsApi";
 
 type ProductItemProps = {
 	product: ProductType;
@@ -9,13 +10,6 @@ type ProductItemProps = {
 
 export const ProductItem = ({ product, categoryName }: ProductItemProps) => {
 	const navigate = useNavigate();
-
-	const formatPrice = (price: number) => {
-		return new Intl.NumberFormat("en-US", {
-			style: "currency",
-			currency: "USD",
-		}).format(price);
-	};
 
 	return (
 		<div className="px-6 py-4 flex items-center justify-between border-b border-item/50 transition-all duration-200 hover:-translate-y-1">
@@ -29,7 +23,7 @@ export const ProductItem = ({ product, categoryName }: ProductItemProps) => {
 						{product.name}
 					</h3>
 					<p className="text-sm text-accent font-bold">
-						{formatPrice(product.price)}
+						{formatCurrency(product.price)}
 					</p>
 				</div>
 			</div>

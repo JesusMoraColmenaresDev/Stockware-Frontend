@@ -3,7 +3,7 @@ import { productSchema, productsSchema, type ProductType } from "../types";
 import { api } from "./axiosConfig";
 import { useMemo } from "react";
 
-const mockData: ProductType[] = [
+/* const mockData: ProductType[] = [
 	{
 		id: 1,
 		name: "Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops",
@@ -102,37 +102,40 @@ const mockData: ProductType[] = [
 	// 	image_url:
 	// 		"http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsiZGF0YSI6ODQsInB1ciI6ImJsb2JfaWQifX0=--60eb5d5cbe302c91c2dd8742ea8f35fe41e909b5/mens-casual-slim-fit.jpg",
 	// },
-];
+]; */
 
 export type PaginatedProductsResponse = {
 	products: ProductType[];
 	totalPages: number;
 };
 
-export const getProducts = async (page : number, search: string, categoryId: number) => {
+export const getProducts = async (
+	page: number,
+	search: string,
+	categoryId: number
+) => {
 	try {
+		const params = new URLSearchParams();
+		params.append("page", page.toString());
 
-		const params = new URLSearchParams()
-		params.append("page" , page.toString())
-
-		if(search) {
-			params.append("search", search.toString())
+		if (search) {
+			params.append("search", search.toString());
 		}
 
-		if(categoryId > 0) {
-			params.append("category_id", categoryId.toString())
+		if (categoryId > 0) {
+			params.append("category_id", categoryId.toString());
 		}
 
 		const { data } = await api.get(`/products?${params.toString()}`);
-		const totalPages = data.metadata.pages
+		const totalPages = data.metadata.pages;
 		const response = productsSchema.safeParse(data.data);
-		if (response.success) return {products : response.data, totalPages};
+		if (response.success) return { products: response.data, totalPages };
 		else {
 			throw new Error(response.error.message);
 		}
 	} catch (error) {
 		console.log(error);
-		throw error
+		throw error;
 	}
 };
 
@@ -151,7 +154,9 @@ export const getProductsPdf = async (
 			params.append("category_id", categoryId.toString());
 		}
 
-		const response = await api.get(`/products.pdf?${params.toString()}`, { responseType: "blob" });
+		const response = await api.get(`/products.pdf?${params.toString()}`, {
+			responseType: "blob",
+		});
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -200,7 +205,11 @@ export const deleteProduct = async (id: number) => {
 	}
 };
 
-export const useGetProducts = (page : number = 1, search: string = "", categoryId : number = 0) => {
+export const useGetProducts = (
+	page: number = 1,
+	search: string = "",
+	categoryId: number = 0
+) => {
 	const {
 		data,
 		isLoading: isLoadingProducts,
@@ -212,7 +221,12 @@ export const useGetProducts = (page : number = 1, search: string = "", categoryI
 		placeholderData: keepPreviousData,
 	});
 
-	return { products: data?.products, totalPages: data?.totalPages, isLoadingProducts, isProductsError };
+	return {
+		products: data?.products,
+		totalPages: data?.totalPages,
+		isLoadingProducts,
+		isProductsError,
+	};
 };
 
 export const useProductDictionary = (products: ProductType[]) => {
@@ -228,7 +242,7 @@ export const useProductDictionary = (products: ProductType[]) => {
 export function formatCurrency(
 	amount: number,
 	currencyCode: string = "USD",
-	locale?: string
+	locale: string = "en-US"
 ): string {
 	return new Intl.NumberFormat(locale, {
 		style: "currency",

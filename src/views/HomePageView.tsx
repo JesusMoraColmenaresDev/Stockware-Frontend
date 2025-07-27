@@ -1,11 +1,13 @@
 import { getProductsPdf, useGetProducts } from "../api/productsApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { useEffect, useMemo, useState } from "react";
-import type { ProductType } from "../types";
+import { useEffect, useState } from "react";
 
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
-import { useCategoryDictionary, useGetAllCategories, useGetCategories } from "../api/categoriesApi";
+import {
+	useCategoryDictionary,
+	useGetAllCategories,
+} from "../api/categoriesApi";
 import { RightSideBar } from "./RightSideBar";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
@@ -29,11 +31,8 @@ const defaultValues: HomePageViewFormValues = {
 	categoryFilter: "0",
 };
 
-
-
 export default function HomePageView() {
-
-	const [currentPage , setCurrentPage] = useState(1)
+	const [currentPage, setCurrentPage] = useState(1);
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 
 	const handlePageClick = (event: { selected: number }) => {
@@ -56,10 +55,13 @@ export default function HomePageView() {
 	const searchProduct = watch("searchProducts");
 	const categoryFilter = Number(watch("categoryFilter"));
 
-
-	const { products, isLoadingProducts, totalPages } = useGetProducts(currentPage, debouncedSearch, categoryFilter);
-	console.log("llamando a las categorias")
-	const { categories, isLoadingCategories } = useGetAllCategories()
+	const { products, isLoadingProducts, totalPages } = useGetProducts(
+		currentPage,
+		debouncedSearch,
+		categoryFilter
+	);
+	console.log("llamando a las categorias");
+	const { categories, isLoadingCategories } = useGetAllCategories();
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
 
 	useEffect(() => {
@@ -70,7 +72,7 @@ export default function HomePageView() {
 		return () => clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
 	}, [searchProduct]);
 
-		// Efecto para reiniciar la paginación cuando cambian los filtros
+	// Efecto para reiniciar la paginación cuando cambian los filtros
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [debouncedSearch, categoryFilter]);
@@ -110,11 +112,14 @@ export default function HomePageView() {
 							</div>
 							<div className="flex  justify-end gap-[8px]">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
-									<CategoryDropDown register={register} categories={categories ?? []} isLoading = {isLoadingCategories}/>
+									<CategoryDropDown
+										register={register}
+										categories={categories ?? []}
+										isLoading={isLoadingCategories}
+									/>
 								</div>
 								{GenerationReportButton(downloadPdf, isDownloading)}
 							</div>
-							
 						</div>
 
 						{products && !isLoadingCategories && (

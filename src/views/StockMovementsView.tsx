@@ -3,14 +3,16 @@ import { useForm } from "react-hook-form";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import ReactPaginate from "react-paginate";
 import { useGetAllCategories } from "../api/categoriesApi";
-import { formatMovementDate, getStockMovementsPdf, useGetStockMovements } from "../api/movementsApi";
+import {
+	formatMovementDate,
+	getStockMovementsPdf,
+	useGetStockMovements,
+} from "../api/movementsApi";
 import { formatCurrency } from "../api/productsApi";
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
-import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { Spinner } from "../components/Spinner";
-import 'react-datepicker/dist/react-datepicker.css'
-import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
@@ -31,9 +33,9 @@ export const StockMovementsView = () => {
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 
 	// Estado para la fecha de inicio del filtro
-    const [startDate, setStartDate] = useState<Date | null>(null); 
-    // Estado para la fecha de fin del filtro
-    const [endDate, setEndDate] = useState<Date | null>(null);
+	const [startDate, setStartDate] = useState<Date | null>(null);
+	// Estado para la fecha de fin del filtro
+	const [endDate, setEndDate] = useState<Date | null>(null);
 
 	const { categories, isLoadingCategories } = useGetAllCategories();
 
@@ -41,20 +43,25 @@ export const StockMovementsView = () => {
 		defaultValues,
 	});
 
-
-
 	const searchProduct = watch("searchProducts");
 	const categoryFilter = Number(watch("categoryFilter"));
 
 	const { stockMovements, totalPages, isLoadingStockMovements } =
-		useGetStockMovements(currentPage, debouncedSearch, categoryFilter, startDate, endDate);
+		useGetStockMovements(
+			currentPage,
+			debouncedSearch,
+			categoryFilter,
+			startDate,
+			endDate
+		);
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
 	};
 
-   	const { isDownloading, downloadPdf } = usePdfDownloader(
-		() => getStockMovementsPdf(searchProduct, categoryFilter, startDate, endDate),
+	const { isDownloading, downloadPdf } = usePdfDownloader(
+		() =>
+			getStockMovementsPdf(searchProduct, categoryFilter, startDate, endDate),
 		`reporte-movimientos-${getFileTimestamp()}.pdf`
 	);
 
@@ -95,7 +102,7 @@ export const StockMovementsView = () => {
 									placeholder="Search Products . . ."
 								/>
 							</div>
-							
+
 							<div className="flex gap-[16px]">
 								<div className="flex flex-col gap-[8px] justify-end">
 									<DatePicker
@@ -132,12 +139,8 @@ export const StockMovementsView = () => {
 									</div>
 									{GenerationReportButton(downloadPdf, isDownloading)}
 								</div>
-
-								
-
 							</div>
 						</div>
-
 
 						<div className="flex-1 overflow-y-auto">
 							<div className="flex flex-col">
@@ -157,6 +160,9 @@ export const StockMovementsView = () => {
 										</div>
 										<div className="flex w-1/10 justify-center items-center text-text font-semibold">
 											Value
+										</div>
+										<div className="flex w-1/10 justify-center items-center text-text font-semibold">
+											Historical Price
 										</div>
 										<div className="flex w-1/10 justify-center items-center text-text font-semibold">
 											Quantity
@@ -205,9 +211,7 @@ export const StockMovementsView = () => {
 													className="flex justify-start items-start font-semibold"
 													title={movement.product.name}
 												>
-													<span className="">
-														{movement.product.name}
-													</span>
+													<span className="">{movement.product.name}</span>
 												</div>
 												<div className="flex text-text gap-[0.5rem] opacity-60">
 													<span className="">Category:</span>
@@ -225,10 +229,14 @@ export const StockMovementsView = () => {
 											>
 												<span>
 													{formatCurrency(
-														Math.abs(movement.movement) *
-															(movement.product.price ?? 0)
+														Math.abs(movement.movement) * (movement.price ?? 0)
 													)}
 												</span>
+											</div>
+											<div
+												className={`flex w-1/10 justify-center items-center text-accent font-semibold text-lg`}
+											>
+												<span>{formatCurrency(movement.price ?? 0)}</span>
 											</div>
 											<div
 												className={`flex w-1/10 justify-center items-center ${
@@ -241,14 +249,15 @@ export const StockMovementsView = () => {
 											</div>
 											<div
 												className={`flex justify-center items-center w-3/20 text-text font-semibold ${
-													!movement.user.is_enabled ? "opacity-50 line-through" : ""
+													!movement.user.is_enabled
+														? "opacity-50 line-through"
+														: ""
 												}`}
 												title={`${movement.user.name}${
 													!movement.user.is_enabled ? " (Disabled)" : ""
 												}`}
 											>
 												<span className="truncate">{movement.user.name}</span>
-												
 											</div>
 											<div className="flex justify-center items-center text-text font-semibold">
 												{formatMovementDate(movement.created_at)}

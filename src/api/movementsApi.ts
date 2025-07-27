@@ -42,7 +42,10 @@ export const getStockMovementsPdf = async (
 			params.append("end_date", formatDateForBackend(endDate));
 		}
 
-		const response = await api.get(`/stock_movements.pdf?${params.toString()}`, { responseType: "blob" });
+		const response = await api.get(
+			`/stock_movements.pdf?${params.toString()}`,
+			{ responseType: "blob" }
+		);
 		return response;
 	} catch (error) {
 		console.log(error);
@@ -50,12 +53,11 @@ export const getStockMovementsPdf = async (
 	}
 };
 
-
 export const getStockMovements = async (
 	page: number = 1,
 	search: string = "",
 	categoryId: number = 0,
-	startDate : Date | null , 
+	startDate: Date | null,
 	endDate: Date | null
 ) => {
 	try {
@@ -81,6 +83,7 @@ export const getStockMovements = async (
 		const { data } = await api.get(`/stock_movements?${params.toString()}`);
 		const totalPages = data.metadata.pages;
 		const response = stockMovementsSchema.safeParse(data.data);
+
 		if (response.success) {
 			return { movements: response.data, totalPages };
 		} else {
@@ -92,10 +95,20 @@ export const getStockMovements = async (
 	}
 };
 
-export const useGetStockMovements = (page: number = 1, search: string = "", categoryId: number = 0, startDate : Date | null , endDate: Date | null) => {
+export const useGetStockMovements = (
+	page: number = 1,
+	search: string = "",
+	categoryId: number = 0,
+	startDate: Date | null,
+	endDate: Date | null
+) => {
 	const { data, isLoading, isError } = useQuery<PaginatedMovementResponse>({
-		queryKey: ["stockMovements", { page, search, categoryId , startDate, endDate }],
-		queryFn: () => getStockMovements(page, search, categoryId, startDate, endDate),
+		queryKey: [
+			"stockMovements",
+			{ page, search, categoryId, startDate, endDate },
+		],
+		queryFn: () =>
+			getStockMovements(page, search, categoryId, startDate, endDate),
 		staleTime: Infinity,
 		placeholderData: keepPreviousData,
 	});

@@ -1,4 +1,4 @@
-import { boolean, z } from "zod";
+import { z } from "zod";
 
 // +
 // + Products
@@ -12,6 +12,7 @@ export const productSchema = z.object({
 	category_id: z.number().int().min(1),
 	stock: z.number().int().min(0),
 	minimumQuantity: z.number().int().min(1),
+	is_enabled: z.boolean(),
 	image_url: z.string().url(),
 	created_at: z.string().datetime(),
 	updated_at: z.string().datetime(),
@@ -85,7 +86,7 @@ const movementUserSchema = z.object({
 	id: z.number(),
 	name: z.string(),
 	email: z.string(),
-	is_enabled : z.boolean()
+	is_enabled: z.boolean(),
 });
 
 // Schema para el objeto 'category' anidado dentro de 'product'
@@ -107,10 +108,11 @@ export const stockMovementSchema = z.object({
 	product_id: z.number(),
 	user_id: z.number(),
 	movement: z.number(),
+	price: z.number(),
 	created_at: z.string(),
 	updated_at: z.string(),
 	product: movementProductSchema, // <-- Añadido
-	user: movementUserSchema,       // <-- Añadido
+	user: movementUserSchema, // <-- Añadido
 });
 
 export type StockMovementType = z.infer<typeof stockMovementSchema>;

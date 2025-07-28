@@ -56,8 +56,6 @@ export const CategoriesView = () => {
 	// Lógica de ejemplo para los clics en los botones
 	const handleDetails = (category: CategoryType) =>
 		alert(`Viendo detalles de ${category.name}`);
-	const handleModify = (category: CategoryType) =>
-		alert(`Modificando a ${category.name}`);
 
 	return (
 		<div className="flex w-full h-full flex-col">

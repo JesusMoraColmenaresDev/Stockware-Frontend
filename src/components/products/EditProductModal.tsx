@@ -229,6 +229,7 @@ export const EditProductModal = () => {
 														className={`flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg ${
 															!dirtyFields.price && "opacity-40"
 														}`}
+														step="0.01"
 														placeholder="More or Equal to 0"
 														min={0}
 													/>

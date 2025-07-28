@@ -77,6 +77,31 @@ export const useGetAllCategories = () => {
 	return { categories, isLoadingCategories, isCategoriesError };
 };
 
+const getCategoryById = async (categoryId: CategoryType["id"]) => {
+	try {
+		const { data } = await api.get(`/categories/${categoryId}`);
+		const response = categorySchema.safeParse(data);
+		if (response.success) return response.data;
+		else throw new Error(response.error.message);
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+};
+
+export const useGetCategoryById = (categoryId: CategoryType["id"]) => {
+	const {
+		data: category,
+		isLoading: isLoadingCategory,
+		isError: isCategoryError,
+	} = useQuery<CategoryType>({
+		queryKey: ["categories", categoryId],
+		queryFn: () => getCategoryById(categoryId),
+		staleTime: Infinity,
+	});
+	return { category, isLoadingCategory, isCategoryError };
+};
+
 export const useCategoryDictionary = (categories: CategoryType[]) =>
 	useMemo<Record<number, string>>(
 		() =>

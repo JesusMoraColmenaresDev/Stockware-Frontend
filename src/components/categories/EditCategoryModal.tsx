@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { updateCategory, useGetAllCategories } from "../../api/categoriesApi";
+import { updateCategory, useGetCategoryById } from "../../api/categoriesApi";
 import { SearchField } from "../SearchField";
 import { useForm } from "react-hook-form";
 import { ModalBridge } from "../modals/ModalBridge";
@@ -17,8 +17,7 @@ export const EditCategoryModal = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const id = Number(searchParams.get("categoryId"));
 
-	const { categories } = useGetAllCategories();
-	const category = categories?.find((cat) => cat.id === id);
+	const { category } = useGetCategoryById(id);
 
 	const {
 		register,
@@ -74,43 +73,47 @@ export const EditCategoryModal = () => {
 			height="h-auto"
 		>
 			<div className="min-w-1/2 h-auto">
-				<form onSubmit={handleSubmit(handleSave)}>
-					<div className="flex flex-col gap-[2rem] p-[1rem]">
-						<div className="flex flex-col gap-[1rem]">
-							<h2 className="text-text text-xl font-semibold">Category Name</h2>
-							<div className="flex justify-start gap-[0.5rem]">
-								<SearchField
-									name="newCategoryName"
-									register={register}
-									reset={reset}
-									watch={watch}
-									defaultValues={defaultValues}
-									placeholder={
-										category?.name ?? "Insert a New Category Name . . ."
-									}
-								/>
+				{category && (
+					<form onSubmit={handleSubmit(handleSave)}>
+						<div className="flex flex-col gap-[2rem] p-[1rem]">
+							<div className="flex flex-col gap-[1rem]">
+								<h2 className="text-text text-xl font-semibold">
+									Category Name
+								</h2>
+								<div className="flex justify-start gap-[0.5rem]">
+									<SearchField
+										name="newCategoryName"
+										register={register}
+										reset={reset}
+										watch={watch}
+										defaultValues={defaultValues}
+										placeholder={
+											category?.name ?? "Insert a New Category Name . . ."
+										}
+									/>
+								</div>
+							</div>
+							<div className="flex justify-between text-2xl">
+								<button
+									type="submit"
+									disabled={!isDirty || isPending || !newCategoryName.length}
+									className="px-[2rem] py-[0.25rem] font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
+									onClick={() => handleSave({ newCategoryName })}
+								>
+									Save
+								</button>
+								<button
+									type="button"
+									onClick={handleCancel}
+									className="px-[2rem] py-[0.25rem] font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
+									disabled={isPending}
+								>
+									Cancel
+								</button>
 							</div>
 						</div>
-						<div className="flex justify-between text-2xl">
-							<button
-								type="submit"
-								disabled={!isDirty || isPending || !newCategoryName.length}
-								className="px-[2rem] py-[0.25rem] font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
-								onClick={() => handleSave({ newCategoryName })}
-							>
-								Save
-							</button>
-							<button
-								type="button"
-								onClick={handleCancel}
-								className="px-[2rem] py-[0.25rem] font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
-								disabled={isPending}
-							>
-								Cancel
-							</button>
-						</div>
-					</div>
-				</form>
+					</form>
+				)}
 			</div>
 		</ModalBridge>
 	);

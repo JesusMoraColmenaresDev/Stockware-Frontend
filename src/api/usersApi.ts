@@ -2,7 +2,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { usersSchema, type UserType } from "../types";
 import { api } from "./axiosConfig";
 
-const mockUsers: UserType[] = [
+/* const mockUsers: UserType[] = [
 	{
 		id: 1,
 		name: "Alice Smith",
@@ -35,7 +35,7 @@ const mockUsers: UserType[] = [
 		is_enabled: true,
 		created_at: "2024-05-19",
 	},
-];
+]; */
 
 export type PaginatedUserResponse = {
 	users: UserType[];
@@ -73,10 +73,9 @@ export const getUsers = async (page: number = 1, search: string = "") => {
 		else throw new Error(response.error.message);
 	} catch (error) {
 		console.log(error);
-		throw error
+		throw error;
 	}
 };
-
 
 export const useGetUsers = (page: number = 1, search: string = "") => {
 	const {
@@ -109,7 +108,6 @@ export const getAllUsers = async () => {
 		throw error;
 	}
 };
-
 
 export const useGetAllUsers = () => {
 	const {

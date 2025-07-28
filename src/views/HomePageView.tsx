@@ -60,7 +60,6 @@ export default function HomePageView() {
 		debouncedSearch,
 		categoryFilter
 	);
-	console.log("llamando a las categorias");
 	const { categories, isLoadingCategories } = useGetAllCategories();
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
 
@@ -110,7 +109,7 @@ export default function HomePageView() {
 									/>
 								</div>
 							</div>
-							<div className="flex  justify-end gap-[8px]">
+							<div className="flex flex-1/2 justify-end gap-[8px]">
 								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 									<CategoryDropDown
 										register={register}
@@ -151,9 +150,15 @@ export default function HomePageView() {
 							containerClassName="flex items-center justify-center p-4 gap-2 text-lg text-text"
 							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
 							pageLinkClassName="cursor-pointer w-full h-full flex items-center justify-center"
-							previousClassName="px-4 py-2 rounded-md"
-							nextClassName="px-4 py-2 rounded-md"
-							activeClassName="font-bold"
+							previousClassName={`px-4 py-2 rounded-md ${
+								currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+							}`}
+							nextClassName={`px-4 py-2 rounded-md ${
+								currentPage === totalPages
+									? "cursor-not-allowed"
+									: "cursor-pointer"
+							}`}
+							activeClassName="font-bold cursor-pointer"
 							disabledClassName="opacity-50 cursor-not-allowed"
 						/>
 					</>

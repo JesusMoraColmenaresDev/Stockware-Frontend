@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { ModalBridge } from "../modals/ModalBridge";
 import type { CategoryType, ProductType } from "../../types";
-import { getAllCategories, getCategories } from "../../api/categoriesApi";
+import { getAllCategories } from "../../api/categoriesApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createProduct } from "../../api/productsApi";
 import { ImageUploadField } from "../ImageUploadField";
@@ -165,6 +165,7 @@ export const CreateProductModal = () => {
 												id="price"
 												{...register("price")}
 												className="flex p-[1rem] justify-start text-text bg-bg-secondary backdrop-opacity-40 font-medium rounded-lg"
+												step="0.01"
 												placeholder="More or Equal to 0"
 												min={0}
 											/>

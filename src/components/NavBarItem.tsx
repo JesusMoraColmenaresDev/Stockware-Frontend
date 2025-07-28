@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { Transition } from "@headlessui/react";
 
 type NavBarItemProps = {
 	to: string;
 	title?: string;
 	icon: ReactNode;
+	hovered?: boolean;
 };
 
-export const NavBarItem = ({ to, icon, title }: NavBarItemProps) => {
+export const NavBarItem = ({ to, icon, title, hovered }: NavBarItemProps) => {
 	return (
 		<Link
 			to={to}
@@ -16,9 +18,18 @@ export const NavBarItem = ({ to, icon, title }: NavBarItemProps) => {
 			{icon}
 
 			{title && (
-				<span className="whitespace-nowrap opacity-0 w-0 translate-x-4 duration-0 ease-in group-hover:duration-400 group-hover:ease-out group-hover:opacity-100  group-hover:w-auto  group-hover:translate-x-0">
-					{title}
-				</span>
+				<Transition
+					show={hovered}
+					unmount={false}
+					enter="transition-all duration-200 ease-out"
+					enterFrom="opacity-0 translate-x-2"
+					enterTo="opacity-100 translate-x-0"
+					leave="transition-all duration-100 ease-in"
+					leaveFrom="opacity-100 translate-x-0"
+					leaveTo="opacity-0 translate-x-2"
+				>
+					<span className="whitespace-nowrap font-medium">{title}</span>
+				</Transition>
 			)}
 		</Link>
 	);

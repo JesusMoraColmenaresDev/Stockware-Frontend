@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { SearchField } from "../components/SearchField";
 import { UserItem } from "../components/users/UserItem";
-import { useGetUsers } from "../api/usersApi"; 
-import { useEffect, useState } from "react";
+import { useGetUsers } from "../api/usersApi";
+import { useEffect, useMemo, useState } from "react";
 import { ConfirmUserActionModal } from "../components/users/ConfirmActionModal";
 import ReactPaginate from "react-paginate";
 import { Spinner } from "../components/Spinner";
@@ -33,6 +33,28 @@ export default function UsersView() {
 		currentPage,
 		debouncedSearch
 	);
+
+	const enabledUsers = useMemo(() => {
+		return users?.filter((user) => user.is_enabled) || [];
+	}, [users]);
+
+	const { adminCount, userCount } = useMemo(() => {
+		if (!enabledUsers) {
+			return { adminCount: 0, userCount: 0 };
+		}
+
+		return enabledUsers.reduce(
+			(counts, user) => {
+				if (user.role === "admin" && user.is_enabled) {
+					counts.adminCount++;
+				} else if (user.is_enabled) {
+					counts.userCount++;
+				}
+				return counts;
+			},
+			{ adminCount: 0, userCount: 0 }
+		);
+	}, [enabledUsers]);
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
@@ -65,7 +87,18 @@ export default function UsersView() {
 				) : (
 					<>
 						<div className="flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem]">
-							<h2 className="flex text-2xl font-bold gap-[0.75rem]">Users</h2>
+							<h2 className="flex text-2xl font-bold gap-[0.75rem]">
+								Users{" "}
+								<span className="opacity-55"> {enabledUsers?.length}</span>
+							</h2>
+							<div className="flex w-1/2 gap-[48px] ">
+								<p className="text-xl font-extrabold text-bg-button-primary">
+									Admins<span className="ml-4 opacity-50">{adminCount}</span>
+								</p>
+								<p className="text-xl font-extrabold">
+									Users<span className="ml-4 opacity-50">{userCount}</span>
+								</p>
+							</div>
 							<div className="flex w-1/2 gap-[1rem]">
 								<div className="flex w-3/5">
 									<SearchField
@@ -82,7 +115,10 @@ export default function UsersView() {
 						<div className="flex-1 overflow-y-auto">
 							<div className="flex flex-col">
 								{users &&
-									users.map((user) => user.is_enabled && <UserItem key={user.id} user={user} />)}
+									users.map(
+										(user) =>
+											user.is_enabled && <UserItem key={user.id} user={user} />
+									)}
 							</div>
 						</div>
 						<ReactPaginate

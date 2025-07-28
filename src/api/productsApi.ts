@@ -164,18 +164,34 @@ export const getProductsPdf = async (
 	}
 };
 
-export const getProduct = async (id: number) => {
+export const getProduct = async (id: ProductType["id"]) => {
 	try {
 		const { data } = await api.get(`/products/${id}`);
 		const response = productSchema.safeParse(data);
-
 		if (response.success) return response.data;
-		else {
-			throw new Error(response.error.message);
-		}
+		else throw new Error(response.error.message);
 	} catch (error) {
 		console.log(error);
+		throw error;
 	}
+};
+
+export const useGetProductById = (id: ProductType["id"]) => {
+	const {
+		data: product,
+		isLoading: isProductLoading,
+		isError: isProductError,
+	} = useQuery<ProductType>({
+		queryKey: ["product", id],
+		queryFn: () => getProduct(id),
+		staleTime: Infinity,
+		placeholderData: keepPreviousData,
+	});
+	return {
+		product,
+		isProductLoading,
+		isProductError,
+	};
 };
 
 export const createProduct = async (data: unknown) => {

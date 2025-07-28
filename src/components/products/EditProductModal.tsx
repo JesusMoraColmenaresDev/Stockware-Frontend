@@ -3,7 +3,7 @@ import { ModalBridge } from "../modals/ModalBridge";
 import { Spinner } from "../Spinner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ProductType } from "../../types";
-import { updateProduct, useGetProducts } from "../../api/productsApi";
+import { updateProduct, useGetProductById } from "../../api/productsApi";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useGetAllCategories } from "../../api/categoriesApi";
@@ -22,11 +22,9 @@ export const EditProductModal = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const productId = Number(searchParams.get("productId"));
 
-	const { products } = useGetProducts();
-	const product = useMemo(
-		() => products?.find((prod) => prod.id === productId),
-		[products, productId]
-	);
+	console.log("productId", productId);
+
+	const { product } = useGetProductById(productId);
 
 	const { categories } = useGetAllCategories();
 

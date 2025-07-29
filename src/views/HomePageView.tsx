@@ -20,6 +20,7 @@ import ReactPaginate from "react-paginate";
 import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
 import GenerationReportButton from "../components/GenerationReportButton";
+import { useSearchParams } from "react-router-dom";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -166,7 +167,7 @@ export default function HomePageView() {
 			</div>
 			<CreateProductModal />
 			<ProductDetailsModal />
-			<EditProductModal />
+			<EditProductModal/>
 			<DeleteProductModal />
 			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />
 		</div>

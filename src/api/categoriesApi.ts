@@ -89,7 +89,7 @@ const getCategoryById = async (categoryId: CategoryType["id"]) => {
 	}
 };
 
-export const useGetCategoryById = (categoryId: CategoryType["id"]) => {
+export const useGetCategoryById = (categoryId: CategoryType["id"], enabled : boolean) => {
 	const {
 		data: category,
 		isLoading: isLoadingCategory,
@@ -98,6 +98,7 @@ export const useGetCategoryById = (categoryId: CategoryType["id"]) => {
 		queryKey: ["categories", categoryId],
 		queryFn: () => getCategoryById(categoryId),
 		staleTime: Infinity,
+		enabled: enabled
 	});
 	return { category, isLoadingCategory, isCategoryError };
 };

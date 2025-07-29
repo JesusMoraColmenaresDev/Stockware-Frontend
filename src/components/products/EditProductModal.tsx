@@ -24,7 +24,9 @@ export const EditProductModal = () => {
 
 	console.log("productId", productId);
 
-	const { product } = useGetProductById(productId);
+	// Se añade la opción 'enabled' para evitar que el hook se ejecute
+	// con un productId de 0 cuando se cierra el modal.
+	const { product } = useGetProductById(productId, productId > 0);
 
 	const { categories } = useGetAllCategories();
 
@@ -113,9 +115,9 @@ export const EditProductModal = () => {
 	};
 
 	const handleCancel = () => {
+		setSearchParams({}, { replace: true });
 		searchParams.delete("editProduct");
 		searchParams.delete("productId");
-		setSearchParams({}, { replace: true });
 		reset();
 	};
 

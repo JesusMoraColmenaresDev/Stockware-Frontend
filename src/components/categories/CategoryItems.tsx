@@ -9,7 +9,6 @@ type CategoryItemProps = {
 
 export const CategoryItem = ({
 	category,
-	onDetailsClick,
 }: CategoryItemProps) => {
 	const navigate = useNavigate();
 
@@ -39,13 +38,6 @@ export const CategoryItem = ({
 					</p>
 				</div>
 				<div className="flex items-center justify-end gap-2">
-					<button
-						onClick={() => onDetailsClick?.(category)}
-						className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-accent transition-colors"
-						title="Details"
-					>
-						<LuSearch size={20} />
-					</button>
 					<button
 						onClick={() =>
 							navigate(

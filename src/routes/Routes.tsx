@@ -36,7 +36,7 @@ const router = createBrowserRouter([
 	{
 		path: "/", //& Ya tiene el / , los hijos no lo requieren
 		element: <LeftSideBar />,
-		// loader: isNotAuthenticated,
+		loader: isNotAuthenticated,
 		children: [
 			{ index: true, element: <HomePageView /> },
 			{ path: "/categories", element: <CategoriesView /> },

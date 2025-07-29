@@ -17,7 +17,7 @@ export const EditCategoryModal = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const id = Number(searchParams.get("categoryId"));
 
-	const { category } = useGetCategoryById(id);
+	const { category } = useGetCategoryById(id, id > 0);
 
 	const {
 		register,

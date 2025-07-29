@@ -47,7 +47,7 @@ export const LeftSideBar = () => {
 							leaveTo="opacity-0 translate-y-1"
 						>
 							<h2 className="flex mt-[0.5rem] text-5xl font-semibold text-center">
-								<span className="text-[#26384D]">Stock</span>
+								<span className="text-bg-main">Stock</span>
 								<span className="text-[#1E75B0]">Ware</span>
 							</h2>
 						</Transition>

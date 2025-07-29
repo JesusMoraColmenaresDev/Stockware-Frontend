@@ -103,7 +103,6 @@ export const CategoriesView = () => {
 									<CategoryItem
 										key={category.id}
 										category={category}
-										onDetailsClick={handleDetails}
 									/>
 								))}
 							</div>

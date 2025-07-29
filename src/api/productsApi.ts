@@ -176,7 +176,7 @@ export const getProduct = async (id: ProductType["id"]) => {
 	}
 };
 
-export const useGetProductById = (id: ProductType["id"]) => {
+export const useGetProductById = (id: ProductType["id"], enabled : boolean) => {
 	const {
 		data: product,
 		isLoading: isProductLoading,
@@ -186,6 +186,7 @@ export const useGetProductById = (id: ProductType["id"]) => {
 		queryFn: () => getProduct(id),
 		staleTime: Infinity,
 		placeholderData: keepPreviousData,
+		enabled: enabled
 	});
 	return {
 		product,

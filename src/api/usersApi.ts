@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { usersSchema, type UserType } from "../types";
 import { api } from "./axiosConfig";
+import { isAxiosError } from "axios";
 
 /* const mockUsers: UserType[] = [
 	{
@@ -137,4 +138,38 @@ export const promoteUser = async (userId: string) => {
 		role: "admin",
 	});
 	return data;
+};
+
+export const createDBBackUp = async () => {
+	try {
+		const token = localStorage.getItem("jwt");
+		if (!token) throw new Error("No JWT token found in localStorage");
+		const response = await api.post<string>(
+			"/backup",
+			{},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			}
+		);
+
+		console.log(response);
+
+		if (response.status === 202) {
+			console.log(response.data);
+			return response.data; // Assuming the response contains the backup data or confirmation
+		} else {
+			throw new Error(
+				`Unexpected status code: ${response.status} with message: ${response.data}`
+			);
+		}
+	} catch (error) {
+		if (isAxiosError(error)) {
+			console.error("Error creating backup:", error.response?.data);
+		} else {
+			console.error("Unexpected error:", error);
+		}
+	}
 };

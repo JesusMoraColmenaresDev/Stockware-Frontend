@@ -5,7 +5,6 @@ import { useSearchParams } from "react-router-dom";
 import {
 	useCategoryDictionary,
 	useGetAllCategories,
-	useGetCategories,
 } from "../../api/categoriesApi";
 
 export const ProductDetailsModal = () => {

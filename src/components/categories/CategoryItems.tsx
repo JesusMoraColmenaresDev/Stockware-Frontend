@@ -1,4 +1,4 @@
-import { LuSearch, LuSquarePen, LuX } from "react-icons/lu";
+import { LuSquarePen, LuX } from "react-icons/lu";
 import type { CategoryType } from "../../types";
 import { useNavigate } from "react-router-dom";
 
@@ -7,9 +7,7 @@ type CategoryItemProps = {
 	onDetailsClick?: (category: CategoryType) => void;
 };
 
-export const CategoryItem = ({
-	category,
-}: CategoryItemProps) => {
+export const CategoryItem = ({ category }: CategoryItemProps) => {
 	const navigate = useNavigate();
 
 	return (

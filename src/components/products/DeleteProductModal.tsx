@@ -4,7 +4,17 @@ import { ModalButton } from "../modals/ModalButton";
 import { useSearchParams } from "react-router-dom";
 import { deleteProduct, useGetProducts } from "../../api/productsApi";
 
-export const DeleteProductModal = () => {
+type DeleteProductModalProps = {
+	page: number;
+	search: string;
+	categoryIdKey: number;
+};
+
+export const DeleteProductModal = ({
+	page = 1,
+	search = "",
+	categoryIdKey = 0,
+}: DeleteProductModalProps) => {
 	const [searchParams] = useSearchParams();
 	const id = Number(searchParams.get("productId"));
 
@@ -14,7 +24,9 @@ export const DeleteProductModal = () => {
 	const { mutate: deleteProductMutate } = useMutation({
 		mutationFn: deleteProduct,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["products"] });
+			queryClient.invalidateQueries({
+				queryKey: ["products", page, search, categoryIdKey],
+			});
 		},
 		onError: () => {},
 	});

@@ -6,6 +6,11 @@ import { ModalBridge } from "../modals/ModalBridge";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
+type EditCategoryModalProps = {
+	page: number;
+	search: string;
+};
+
 type ModifyCategoryModalProps = {
 	newCategoryName: string;
 };
@@ -13,7 +18,10 @@ const defaultValues: ModifyCategoryModalProps = {
 	newCategoryName: "",
 };
 
-export const EditCategoryModal = () => {
+export const EditCategoryModal = ({
+	page = 1,
+	search = "",
+}: EditCategoryModalProps) => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const id = Number(searchParams.get("categoryId"));
 
@@ -42,7 +50,7 @@ export const EditCategoryModal = () => {
 			return updateCategory(data.id, data.name);
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["categories"] });
+			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
 			handleCancel();
 		},
 		onError: () => {},

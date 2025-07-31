@@ -4,7 +4,15 @@ import { ModalBridge } from "../modals/ModalBridge";
 import { ModalButton } from "../modals/ModalButton";
 import { useSearchParams } from "react-router-dom";
 
-export const DeleteCategoryModal = () => {
+type DeleteCategoryModalProps = {
+	page: number;
+	search: string;
+};
+
+export const DeleteCategoryModal = ({
+	page = 1,
+	search = "",
+}: DeleteCategoryModalProps) => {
 	const [searchParams] = useSearchParams();
 	const id = Number(searchParams.get("categoryId"));
 
@@ -14,7 +22,7 @@ export const DeleteCategoryModal = () => {
 	const { mutate: deleteCategoryMutate } = useMutation({
 		mutationFn: deleteCategory,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["categories"] });
+			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
 		},
 		onError: () => {},
 	});

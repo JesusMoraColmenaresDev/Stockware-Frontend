@@ -6,15 +6,23 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "../../api/categoriesApi";
 import type { CategoryType } from "../../types";
 
-type CreateCategoryProps = {
+type CreateCategoryModalProps = {
+	page: number;
+	search: string;
+};
+
+type CreateCategoryFormProps = {
 	categoryName: string;
 };
-const defaultValues: CreateCategoryProps = {
+const defaultValues: CreateCategoryFormProps = {
 	categoryName: "",
 };
 
-export const CreateCategoryModal = () => {
-	const { register, watch, reset } = useForm<CreateCategoryProps>({
+export const CreateCategoryModal = ({
+	page = 1,
+	search = "",
+}: CreateCategoryModalProps) => {
+	const { register, watch, reset } = useForm<CreateCategoryFormProps>({
 		defaultValues,
 	});
 	const name = watch("categoryName");
@@ -23,7 +31,7 @@ export const CreateCategoryModal = () => {
 	const { mutate } = useMutation({
 		mutationFn: createCategory,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["categories"] });
+			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
 		},
 		onError: () => {},
 	});

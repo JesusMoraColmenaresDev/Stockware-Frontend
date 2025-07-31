@@ -2,7 +2,6 @@ import { useGetCategories } from "../api/categoriesApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import type { CategoryType } from "../types";
 import { ModalButton } from "../components/modals/ModalButton";
 import { SearchField } from "../components/SearchField";
 import { CreateCategoryModal } from "../components/categories/CreateCategoryModal";
@@ -53,10 +52,6 @@ export const CategoriesView = () => {
 		setCurrentPage(1);
 	}, [debouncedSearch]);
 
-	// Lógica de ejemplo para los clics en los botones
-	const handleDetails = (category: CategoryType) =>
-		alert(`Viendo detalles de ${category.name}`);
-
 	return (
 		<div className="flex w-full h-full flex-col">
 			<div className="bg-bg-main flex-1 px-[48px] py-2 flex flex-col min-w-0">
@@ -73,10 +68,12 @@ export const CategoriesView = () => {
 				) : (
 					<>
 						<div className="flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem]">
-							<h2 className="flex text-2xl font-bold gap-[0.75rem]">
+							{/* 
+								<h2 className="flex text-2xl font-bold gap-[0.75rem]">
 								Categories
 								<span className="opacity-55"> {categories.length}</span>
-							</h2>
+							</h2> 
+							*/}
 							<div className="flex w-1/2 gap-[1rem]">
 								<ModalButton
 									text="Create Category"
@@ -100,10 +97,7 @@ export const CategoriesView = () => {
 						<div className="flex-1 overflow-y-auto">
 							<div className="flex flex-col">
 								{categories.map((category) => (
-									<CategoryItem
-										key={category.id}
-										category={category}
-									/>
+									<CategoryItem key={category.id} category={category} />
 								))}
 							</div>
 						</div>
@@ -129,9 +123,9 @@ export const CategoriesView = () => {
 					</>
 				)}
 			</div>
-			<CreateCategoryModal />
-			<EditCategoryModal />
-			<DeleteCategoryModal />
+			<CreateCategoryModal page={currentPage} search={debouncedSearch} />
+			<EditCategoryModal page={currentPage} search={debouncedSearch} />
+			<DeleteCategoryModal page={currentPage} search={debouncedSearch} />
 		</div>
 	);
 };

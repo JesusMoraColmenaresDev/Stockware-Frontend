@@ -6,27 +6,38 @@ import { ChangePasswordModal } from "../components/users/ChangePasswordModal";
 import { DeleteAccountModal } from "../components/users/DeleteAccountModal";
 import { useGetProfileInfo } from "../api/profileApi";
 import { Spinner } from "../components/Spinner";
+import { createDBBackUp } from "../api/usersApi";
 
 export default function ProfileView() {
 	const navigate = useNavigate();
 
-	const { data: profile, isLoading, isError, error } = useGetProfileInfo()
+	const { data: profile, isLoading, isError, error } = useGetProfileInfo();
 
-  	if (isLoading) {
-    	return (
+	if (isLoading) {
+		return (
 			<div className="flex flex-col justify-center items-center min-h-screen">
 				<Spinner size="20rem" colorPrimary="#2C3E50" colorSecondary="#3498DB" />
 			</div>
 		);
-  	}
+	}
 
-  	if (isError) {
-    	return <div>Error al cargar el perfil: {error.message}</div>;
-  	}
+	if (isError) {
+		return <div>Error al cargar el perfil: {error.message}</div>;
+	}
 
 	return (
 		<>
 			<div className="flex w-full h-full flex-col items-center justify-start p-8 bg-bg-main gap-8">
+				{profile?.role === "admin" && (
+					<div className="flex items-end justify-end w-full">
+						<button
+							className="text-xl font-bold flex items-center gap-[0.5rem] py-[0.5rem] px-[1rem] rounded-md text-white bg-bg-button-primary hover:bg-bg-button-secondary"
+							onClick={() => createDBBackUp()}
+						>
+							Create BackUp
+						</button>
+					</div>
+				)}
 				<div className="flex flex-col items-center gap-2">
 					<LuUserCog size={120} strokeWidth={0.5} />
 					<p className="text-2xl font-bold text-text">{profile?.name}</p>
@@ -38,7 +49,7 @@ export default function ProfileView() {
 				<div className="w-full max-w-4xl bg-bg-secondary rounded-lg p-6 flex items-center justify-between">
 					<div>
 						<h3 className="text-2xl font-bold mb-4 border-b border-text/20 pb-2">
-							Personal information	
+							Personal information
 						</h3>
 						<div className="space-y-3">
 							<p>
@@ -79,7 +90,7 @@ export default function ProfileView() {
 				</div>
 			</div>
 			{profile && <EditProfileModal profile={profile} />}
-			{profile && <ChangePasswordModal/>}
+			{profile && <ChangePasswordModal />}
 			{profile && <DeleteAccountModal />}
 		</>
 	);

@@ -9,6 +9,12 @@ import { Spinner } from "../Spinner";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+type CreateProductModalProps = {
+	page: number;
+	search: string;
+	categoryIdKey: number;
+};
+
 type createProductForm = Pick<
 	ProductType,
 	"name" | "description" | "minimumQuantity" | "stock" | "price" | "category_id"
@@ -16,7 +22,11 @@ type createProductForm = Pick<
 	image_url: FileList;
 };
 
-export const CreateProductModal = () => {
+export const CreateProductModal = ({
+	page = 1,
+	search = "",
+	categoryIdKey = 0,
+}: CreateProductModalProps) => {
 	const queryClient = useQueryClient();
 	const [searchParams, setSearchParams] = useSearchParams();
 
@@ -41,7 +51,9 @@ export const CreateProductModal = () => {
 		mutationFn: createProduct,
 		mutationKey: ["newProduct", watch("name")],
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["products"] });
+			queryClient.invalidateQueries({
+				queryKey: ["products", page, search, categoryIdKey],
+			});
 			setSaved(true);
 			reset();
 		},

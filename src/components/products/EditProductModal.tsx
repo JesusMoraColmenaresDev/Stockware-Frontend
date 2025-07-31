@@ -9,6 +9,12 @@ import { useEffect, useMemo } from "react";
 import { useGetAllCategories } from "../../api/categoriesApi";
 import { ImageUploadField } from "../ImageUploadField";
 
+type EditProductModalProps = {
+	page: number;
+	search: string;
+	categoryIdKey: number;
+};
+
 type editProductForm = Pick<
 	ProductType,
 	"name" | "description" | "minimumQuantity" | "stock" | "price" | "category_id"
@@ -16,7 +22,11 @@ type editProductForm = Pick<
 	image_url?: FileList;
 };
 
-export const EditProductModal = () => {
+export const EditProductModal = ({
+	page = 1,
+	search = "",
+	categoryIdKey = 0,
+}: EditProductModalProps) => {
 	const queryClient = useQueryClient();
 
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -59,7 +69,9 @@ export const EditProductModal = () => {
 			updateProduct(data, productId),
 		mutationKey: ["editProduct", productId],
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["products"] });
+			queryClient.invalidateQueries({
+				queryKey: ["products", page, search, categoryIdKey],
+			});
 			searchParams.delete("editProduct");
 			searchParams.delete("productId");
 			setSearchParams({}, { replace: true });

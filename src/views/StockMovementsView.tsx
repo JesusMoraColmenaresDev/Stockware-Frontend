@@ -20,17 +20,20 @@ import GenerationReportButton from "../components/GenerationReportButton";
 
 type StockMovementsViewFormValues = {
 	searchProducts: string;
+	searchUsers: string;
 	categoryFilter: string;
 };
 
 const defaultValues: StockMovementsViewFormValues = {
 	searchProducts: "",
+	searchUsers: "",
 	categoryFilter: "0",
 };
 
 export const StockMovementsView = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [debouncedSearch, setDebouncedSearch] = useState("");
+	const [debouncedUserSearch, setDebouncedUserSearch] = useState("");
 
 	// Estado para la fecha de inicio del filtro
 	const [startDate, setStartDate] = useState<Date | null>(null);
@@ -44,12 +47,14 @@ export const StockMovementsView = () => {
 	});
 
 	const searchProduct = watch("searchProducts");
+	const searchUsers = watch("searchUsers");
 	const categoryFilter = Number(watch("categoryFilter"));
 
 	const { stockMovements, totalPages, isLoadingStockMovements } =
 		useGetStockMovements(
 			currentPage,
 			debouncedSearch,
+			debouncedUserSearch,
 			categoryFilter,
 			startDate,
 			endDate
@@ -61,7 +66,13 @@ export const StockMovementsView = () => {
 
 	const { isDownloading, downloadPdf } = usePdfDownloader(
 		() =>
-			getStockMovementsPdf(searchProduct, categoryFilter, startDate, endDate),
+			getStockMovementsPdf(
+				searchProduct,
+				searchUsers,
+				categoryFilter,
+				startDate,
+				endDate
+			),
 		`reporte-movimientos-${getFileTimestamp()}.pdf`
 	);
 
@@ -73,10 +84,17 @@ export const StockMovementsView = () => {
 		return () => clearTimeout(timer); // Limpia el temporizador si el usuario sigue escribiendo
 	}, [searchProduct]);
 
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedUserSearch(searchUsers);
+		}, 300);
+		return () => clearTimeout(timer);
+	}, [searchUsers]);
+
 	// Efecto para reiniciar la paginación cuando cambian los filtros
 	useEffect(() => {
 		setCurrentPage(1);
-	}, [debouncedSearch, categoryFilter]);
+	}, [debouncedSearch, debouncedUserSearch, categoryFilter]);
 
 	return (
 		<div className="flex w-full h-full ">
@@ -100,6 +118,14 @@ export const StockMovementsView = () => {
 									reset={reset}
 									defaultValues={defaultValues}
 									placeholder="Search Products . . ."
+								/>
+								<SearchField
+									name="searchUsers"
+									register={register}
+									watch={watch}
+									reset={reset}
+									defaultValues={defaultValues}
+									placeholder="Search Users . . ."
 								/>
 							</div>
 
@@ -131,6 +157,7 @@ export const StockMovementsView = () => {
 								</div>
 								<div className="flex min-w-1/4 justify-end gap-[8px]">
 									<div className="flex justify-end w-auto px-4 py-4 font-semibold border rounded-lg border-text bg-bg-secondary">
+										
 										<CategoryDropDown
 											register={register}
 											categories={categories ?? []}

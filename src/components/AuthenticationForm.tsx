@@ -12,54 +12,54 @@ export default function AuthenticationForm({errors, register, isSignUp = true} :
     return (
     <>  
             <div className="text-text text-[32px] font-bold text-center">
-                {isSignUp ? 'Create an account' : ' Login'}
+                {isSignUp ? 'Create Account' : ' Login'}
             </div>
             
             {isSignUp && (
                 <div className="flex flex-col">
-                    <label className="text-text text-[32px]"  htmlFor="name">Nombre completo</label>
+                    <label className="text-text text-[32px]"  htmlFor="name">Full name</label>
                     <input 
                         id="name"
                         type="text"
                         {...register('name', { required: isSignUp && 'El nombre es obligatorio' })} 
-                    className="bg-bg-secondary h-[36px] rounded-lg"
+                    className="bg-bg-secondary h-[36px] rounded-lg p-2"
                     />
                     {errors.name?.message && <p>{errors.name.message as string}</p>}
                 </div>
             )}
 
             <div className="flex flex-col">
-                <label className="text-text text-[32px]" htmlFor="email">Correo electrónico</label>
+                <label className="text-text text-[32px]" htmlFor="email">Email</label>
                 <input 
                     id="email"
                     type="email"
                     {...register('email', { required: 'El email es obligatorio' })} 
-                    className="bg-bg-secondary h-[36px] rounded-lg"
+                    className="bg-bg-secondary h-[36px] rounded-lg p-2"
                 />
                 {errors.email?.message && <p>{errors.email.message as string}</p>}
             </div>
 
             <div className="flex flex-col">
-                <label className="text-text text-[32px]"  htmlFor="password">Contraseña</label>
+                <label className="text-text text-[32px]"  htmlFor="password">Password</label>
                 <input 
                     id="password"
                     type="password"
                     {...register('password', { required: 'La contraseña es obligatoria' })} 
-                    className="bg-bg-secondary h-[36px] rounded-lg"
+                    className="bg-bg-secondary h-[36px] rounded-lg p-2"
                 />
                 {errors.password?.message && <p>{errors.password.message as string}</p>}
             </div>
 
             {isSignUp && (
                 <div className="flex flex-col">
-                    <label className="text-text text-[32px]" htmlFor="confirmPassword">Confirmar contraseña</label>
+                    <label className="text-text text-[32px]" htmlFor="confirmPassword">Confirm Password</label>
                     <input 
                         id="confirmPassword"
                         type="password"
                         {...register('confirmPassword', { 
                             required: isSignUp && 'La confirmación es obligatoria' 
                         })} 
-                    className="bg-bg-secondary h-[36px] rounded-lg"
+                    className="bg-bg-secondary h-[36px] rounded-lg p-2"
                     />
                     {errors.confirmPassword?.message && <p>{errors.confirmPassword.message as string}</p>}
                 </div>

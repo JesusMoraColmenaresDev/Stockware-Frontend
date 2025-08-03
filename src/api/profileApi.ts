@@ -97,6 +97,21 @@ export const useChangePassword = () => {
 	});
 };
 
+export type DisableAccountPayload = {
+	current_password: string;
+};
+
+// Creamos la función que hace la llamada a la API para deshabilitar la cuenta del propio usuario.
+export const disableOwnAccount = async (data: DisableAccountPayload) => {
+	try {
+		// El backend espera los datos dentro de un objeto 'user'
+		const { data: responseData } = await api.patch("/profile/disable", { user: data });
+		return responseData;
+	} catch (error) {
+		throw error; // Dejamos que React Query maneje el objeto de error.
+	}
+};
+
 export type DeleteAccountPayload = {
 	current_password?: string;
 };
@@ -120,6 +135,8 @@ export const useDeleteAccount = () => {
 		onSuccess: () => {
 			// Limpiamos toda la caché de React Query ya que el usuario ya no existe.
 			queryClient.clear();
+			// Eliminamos el token de autenticación del almacenamiento local.
+			localStorage.removeItem("jwt");
 		},
 	});
 };

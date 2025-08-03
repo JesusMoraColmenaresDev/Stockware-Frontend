@@ -1,41 +1,72 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+	Listbox,
+	ListboxButton,
+	ListboxOption,
+	ListboxOptions,
+} from "@headlessui/react";
+import { Controller, type Control, type FieldValues } from "react-hook-form";
 import type { CategoryType } from "../../types";
 import { Spinner } from "../Spinner";
-import type { UseFormRegister } from "react-hook-form";
-import { getCategories } from "../../api/categoriesApi";
-import type { HomePageViewFormValues } from "../../views/HomePageView";
+import { LuChevronDown } from "react-icons/lu";
 
-type CategoryDropDownProps = {
-	register: UseFormRegister<HomePageViewFormValues>;
-	categories : CategoryType[];
+export interface CategoryDropDownProps<TFormValues extends FieldValues> {
+	control: Control<TFormValues>;
+	fieldName: keyof TFormValues;
+	categories: CategoryType[];
 	isLoading: boolean;
-};
+}
 
-export const CategoryDropDown = ({ register , categories, isLoading}: CategoryDropDownProps) => {
-	if (isLoading)
+export const CategoryDropDown = <TFormValues extends FieldValues>({
+	control,
+	fieldName,
+	categories,
+	isLoading,
+}: CategoryDropDownProps<TFormValues>) => {
+	// If still loading, show spinner
+	if (isLoading) {
 		return (
 			<Spinner size="2rem" colorPrimary="#2C3E50" colorSecondary="#3498DB" />
 		);
+	}
+
 	return (
-		<select
-			id="categoryFilter"
-			{...register("categoryFilter")}
-			className="block w-full bg-bg-secondary truncate"
-		>
-			<option value="0" key={"0"} className="bg-bg-secondary">
-				All Categories
-			</option>
-			{categories &&
-				categories.map((cat) => (
-					<option
-						value={cat.id}
-						key={cat.id}
-						className="bg-bg-secondary truncate overflow-hidden flex-nowrap"
-						title={cat.name}
-					>
-						{cat.name}
-					</option>
-				))}
-		</select>
+		<Controller
+			control={control}
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			name={fieldName as any}
+			render={({ field: { value, onChange } }) => (
+				<div className="relative w-full">
+					<Listbox value={value} onChange={onChange}>
+						<ListboxButton className="w-full bg-bg-secondary truncate p-2 rounded flex flex-row items-center">
+							{categories.find((cat) => cat.id === Number(value))?.name ||
+								"All Categories"}
+							{""}
+							<LuChevronDown />
+						</ListboxButton>
+						<ListboxOptions className="absolute mt-1 w-full bg-bg-secondary max-h-60 overflow-auto rounded shadow-lg z-10">
+							<ListboxOption
+								key={0}
+								value={0}
+								className="p-2 truncate hover:bg-bg-hover flex flex-row items-center"
+								title="All Categories"
+							>
+								All Categories
+								<LuChevronDown />
+							</ListboxOption>
+							{categories.map((cat) => (
+								<ListboxOption
+									key={cat.id}
+									value={cat.id}
+									className="p-2 truncate hover:bg-bg-hover"
+									title={cat.name}
+								>
+									{cat.name}
+								</ListboxOption>
+							))}
+						</ListboxOptions>
+					</Listbox>
+				</div>
+			)}
+		/>
 	);
 };

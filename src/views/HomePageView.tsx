@@ -46,6 +46,7 @@ export default function HomePageView() {
 
 	const {
 		register,
+		control,
 		watch,
 		reset: resetSearch,
 	} = useForm<HomePageViewFormValues>({
@@ -109,10 +110,11 @@ export default function HomePageView() {
 									/>
 								</div>
 							</div>
-							<div className="flex flex-1/2 justify-end gap-[8px]">
-								<div className="flex justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
+							<div className="flex flex-[50%] justify-end gap-[8px]">
+								<div className="flex items-center text-left justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 									<CategoryDropDown
-										register={register}
+										fieldName="categoryFilter"
+										control={control}
 										categories={categories ?? []}
 										isLoading={isLoadingCategories}
 									/>

@@ -144,7 +144,7 @@ export const createDBBackUp = async () => {
 	try {
 		const token = localStorage.getItem("jwt");
 		if (!token) throw new Error("No JWT token found in localStorage");
-		const response = await api.post<string>(
+		const response = await api.post(
 			"/backup",
 			{},
 			{
@@ -155,11 +155,9 @@ export const createDBBackUp = async () => {
 			}
 		);
 
-		console.log(response);
-
+		// console.log(response);
 		if (response.status === 202) {
-			console.log(response.data);
-			return response.data; // Assuming the response contains the backup data or confirmation
+			return response.data.message; // Assuming the response contains the backup data or confirmation
 		} else {
 			throw new Error(
 				`Unexpected status code: ${response.status} with message: ${response.data}`

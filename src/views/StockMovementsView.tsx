@@ -42,9 +42,10 @@ export const StockMovementsView = () => {
 
 	const { categories, isLoadingCategories } = useGetAllCategories();
 
-	const { register, watch, reset } = useForm<StockMovementsViewFormValues>({
-		defaultValues,
-	});
+	const { register, watch, reset, control } =
+		useForm<StockMovementsViewFormValues>({
+			defaultValues,
+		});
 
 	const searchProduct = watch("searchProducts");
 	const searchUsers = watch("searchUsers");
@@ -157,9 +158,9 @@ export const StockMovementsView = () => {
 								</div>
 								<div className="flex min-w-1/4 justify-end gap-[8px]">
 									<div className="flex justify-end w-auto px-4 py-4 font-semibold border rounded-lg border-text bg-bg-secondary">
-										
 										<CategoryDropDown
-											register={register}
+											fieldName="categoryFilter"
+											control={control}
 											categories={categories ?? []}
 											isLoading={isLoadingCategories}
 										/>
@@ -188,8 +189,10 @@ export const StockMovementsView = () => {
 										<div className="flex w-1/10 justify-center items-center text-text font-semibold">
 											Value
 										</div>
-										<div className="flex w-1/10 justify-center items-center text-text font-semibold">
-											Historical Price
+										<div className="flex justify-center items-center w-1/10 text-text font-semibold">
+											<span className="text-center break-words">
+												Historical Price
+											</span>
 										</div>
 										<div className="flex w-1/10 justify-center items-center text-text font-semibold">
 											Quantity
@@ -198,7 +201,7 @@ export const StockMovementsView = () => {
 											User
 										</div>
 										<div className="flex justify-center items-center w-1/10 text-text font-semibold">
-											Date
+											<span className="text-center break-words">Date</span>
 										</div>
 									</div>
 								</div>
@@ -206,10 +209,11 @@ export const StockMovementsView = () => {
 								{stockMovements?.map((movement) => (
 									<div
 										key={movement.id}
-										className="px-[1rem] py-[0.5rem] border-b border-item/50 transition-all duration-200 hover:-translate-y-1"
+										className="px-[1rem] py-[0.5rem] border-b border-item/50"
 									>
 										<div className="flex gap-[1rem] items-center">
-											<div className="flex gap-[1rem] w-1/20 justify-center items-center">
+											{/* ID + Type */}
+											<div className="flex gap-[1rem] w-1/20 min-w-0 justify-center items-center">
 												<div className="flex items-center justify-center text-text opacity-40">
 													{movement.id}
 												</div>
@@ -233,22 +237,28 @@ export const StockMovementsView = () => {
 													)}
 												</div>
 											</div>
-											<div className="flex flex-col w-4/10  font-semibold gap-[0.5rem]">
+
+											{/* Product */}
+											<div className="flex flex-col w-4/10 min-w-0 font-semibold gap-[0.5rem]">
 												<div
-													className="flex justify-start items-start font-semibold"
+													className="flex justify-start items-start font-semibold min-w-0"
 													title={movement.product.name}
 												>
-													<span className="">{movement.product.name}</span>
+													<span className="truncate">
+														{movement.product.name}
+													</span>
 												</div>
 												<div className="flex text-text gap-[0.5rem] opacity-60">
-													<span className="">Category:</span>
+													<span>Category:</span>
 													<span className="truncate">
 														{movement.product.category?.name ?? "N/A"}
 													</span>
 												</div>
 											</div>
+
+											{/* Value */}
 											<div
-												className={`flex w-1/10 justify-center items-center ${
+												className={`flex w-1/10 min-w-0 justify-center items-center ${
 													movement.movement > 0
 														? "text-green-500"
 														: "text-red-500"
@@ -260,13 +270,15 @@ export const StockMovementsView = () => {
 													)}
 												</span>
 											</div>
-											<div
-												className={`flex w-1/10 justify-center items-center text-accent font-semibold text-lg`}
-											>
+
+											{/* Historical Price */}
+											<div className="flex w-1/10 min-w-0 justify-center items-center text-accent font-semibold text-lg">
 												<span>{formatCurrency(movement.price ?? 0)}</span>
 											</div>
+
+											{/* Quantity */}
 											<div
-												className={`flex w-1/10 justify-center items-center ${
+												className={`flex w-1/10 min-w-0 justify-center items-center ${
 													movement.movement > 0
 														? "text-green-500"
 														: "text-red-500"
@@ -274,8 +286,10 @@ export const StockMovementsView = () => {
 											>
 												<span>{movement.movement}</span>
 											</div>
+
+											{/* User */}
 											<div
-												className={`flex justify-center items-center w-3/20 text-text font-semibold ${
+												className={`flex justify-center items-center w-3/20 min-w-0 text-text font-semibold ${
 													!movement.user.is_enabled
 														? "opacity-50 line-through"
 														: ""
@@ -286,8 +300,12 @@ export const StockMovementsView = () => {
 											>
 												<span className="truncate">{movement.user.name}</span>
 											</div>
-											<div className="flex justify-center items-center text-text font-semibold">
-												{formatMovementDate(movement.created_at)}
+
+											{/* Date */}
+											<div className="flex justify-center items-center w-1/10 min-w-0 text-text font-semibold">
+												<span className="text-center break-words">
+													{formatMovementDate(movement.created_at)}
+												</span>
 											</div>
 										</div>
 									</div>

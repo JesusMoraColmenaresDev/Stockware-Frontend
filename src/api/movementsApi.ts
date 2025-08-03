@@ -19,6 +19,7 @@ const formatDateForBackend = (date: Date): string => {
 
 export const getStockMovementsPdf = async (
 	search: string = "",
+	userSearch: string = "",
 	categoryId: number = 0,
 	startDate: Date | null,
 	endDate: Date | null
@@ -28,6 +29,10 @@ export const getStockMovementsPdf = async (
 
 		if (search) {
 			params.append("search", search);
+		}
+
+		if (userSearch) {
+			params.append("user_search", userSearch);
 		}
 
 		if (categoryId > 0) {
@@ -56,6 +61,7 @@ export const getStockMovementsPdf = async (
 export const getStockMovements = async (
 	page: number = 1,
 	search: string = "",
+	userSearch: string = "",
 	categoryId: number = 0,
 	startDate: Date | null,
 	endDate: Date | null
@@ -66,6 +72,10 @@ export const getStockMovements = async (
 
 		if (search) {
 			params.append("search", search);
+		}
+
+		if (userSearch) {
+			params.append("user_search", userSearch);
 		}
 
 		if (categoryId > 0) {
@@ -98,6 +108,7 @@ export const getStockMovements = async (
 export const useGetStockMovements = (
 	page: number = 1,
 	search: string = "",
+	userSearch: string = "",
 	categoryId: number = 0,
 	startDate: Date | null,
 	endDate: Date | null
@@ -105,10 +116,10 @@ export const useGetStockMovements = (
 	const { data, isLoading, isError } = useQuery<PaginatedMovementResponse>({
 		queryKey: [
 			"stockMovements",
-			{ page, search, categoryId, startDate, endDate },
+			{ page, search, userSearch, categoryId, startDate, endDate },
 		],
 		queryFn: () =>
-			getStockMovements(page, search, categoryId, startDate, endDate),
+			getStockMovements(page, search, userSearch, categoryId, startDate, endDate),
 		staleTime: Infinity,
 		placeholderData: keepPreviousData,
 	});

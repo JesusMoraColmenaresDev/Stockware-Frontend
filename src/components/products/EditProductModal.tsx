@@ -72,6 +72,9 @@ export const EditProductModal = ({
 			queryClient.invalidateQueries({
 				queryKey: ["products", page, search, categoryIdKey],
 			});
+			queryClient.invalidateQueries({
+				queryKey: ["product", productId],
+			});
 			searchParams.delete("editProduct");
 			searchParams.delete("productId");
 			setSearchParams({}, { replace: true });
@@ -155,7 +158,7 @@ export const EditProductModal = ({
 	if (product)
 		return (
 			<ModalBridge
-				title="New Product"
+				title="Edit Product"
 				titleColor="text-text"
 				height="h-auto"
 				width="w-2/5"

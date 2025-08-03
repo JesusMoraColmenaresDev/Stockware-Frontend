@@ -1,17 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
 import type { CategoryType } from "../../types";
 import { Spinner } from "../Spinner";
 import type { UseFormRegister } from "react-hook-form";
-import { getCategories } from "../../api/categoriesApi";
 import type { HomePageViewFormValues } from "../../views/HomePageView";
 
 type CategoryDropDownProps = {
 	register: UseFormRegister<HomePageViewFormValues>;
-	categories : CategoryType[];
+	categories: CategoryType[];
 	isLoading: boolean;
 };
 
-export const CategoryDropDown = ({ register , categories, isLoading}: CategoryDropDownProps) => {
+export const CategoryDropDown = ({
+	register,
+	categories,
+	isLoading,
+}: CategoryDropDownProps) => {
 	if (isLoading)
 		return (
 			<Spinner size="2rem" colorPrimary="#2C3E50" colorSecondary="#3498DB" />

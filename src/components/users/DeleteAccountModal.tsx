@@ -65,7 +65,7 @@ export const DeleteAccountModal = () => {
 					<input type="password" {...register("current_password", { required: "Password is required to disable your account" })} className="w-full px-4 py-2 bg-bg-secondary rounded-md" />
 					{errors.current_password && <p className="text-red-500 text-sm mt-1">{errors.current_password.message}</p>}
 				</div>
-				<div className="flex justify-between items-center gap-4 mt-4">
+				<div className="flex justify-between items-center gap-4 mt-4 max-md:flex-col max-md:gap-2">
 					<input type="submit" value={isPending ? "Disabling..." : "Disable My Account"} disabled={disableButton} className="px-8 py-2 rounded-md text-2xl text-white font-bold cursor-pointer bg-bg-button-delete hover:bg-bg-button-delete-hover disabled:opacity-50 disabled:cursor-not-allowed" />
 					<button type="button" onClick={handleCancel} disabled={isPending} className="px-8 py-2 rounded-md text-2xl text-white font-bold cursor-pointer bg-bg-button-primary hover:bg-bg-button-secondary disabled:opacity-50">
 						Cancel

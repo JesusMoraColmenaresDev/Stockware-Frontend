@@ -1,7 +1,7 @@
 import { getProductsPdf, useGetProducts } from "../api/productsApi";
 import { Spinner } from "../components/Spinner";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { CategoryDropDown } from "../components/categories/CategoryDropDown";
 import {
@@ -17,6 +17,8 @@ import { ProductItem } from "../components/products/ProductItem";
 import { EditProductModal } from "../components/products/EditProductModal";
 import { ProductDetailsModal } from "../components/products/ProductDetailsModal";
 import ReactPaginate from "react-paginate";
+import { Transition } from "@headlessui/react";
+import { LuPanelRight } from "react-icons/lu";
 import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
 import GenerationReportButton from "../components/GenerationReportButton";
@@ -34,6 +36,7 @@ const defaultValues: HomePageViewFormValues = {
 export default function HomePageView() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [debouncedSearch, setDebouncedSearch] = useState("");
+	const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
@@ -78,8 +81,20 @@ export default function HomePageView() {
 	}, [debouncedSearch, categoryFilter]);
 
 	return (
-		<div className="flex w-full h-full ">
-			<div className="bg-bg-main flex-1 px-[48px] py-2 flex flex-col min-w-0">
+		<div className="flex w-full min-h-screen relative">
+			{/* Botón para abrir RightSideBar en móvil */}
+			<div className="md:hidden absolute top-8 right-4 z-20">
+				<button
+					onClick={() => setIsRightSidebarOpen(true)}
+					className="p-2 rounded-md bg-bg-nav text-white shadow-lg"
+					aria-label="Abrir barra lateral de notificaciones"
+				>
+					<LuPanelRight size={24} />
+				</button>
+			</div>
+
+			{/* Contenido Principal */}
+			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0">
 				{isLoadingProducts ? (
 					<div className="flex items-center justify-center min-h-screen">
 						<Spinner
@@ -90,16 +105,16 @@ export default function HomePageView() {
 					</div>
 				) : (
 					<>
-						<div className="flex pb-[1rem] pt-[1.5rem]">
-							<div className="flex w-3/4 gap-[1rem]">
+						<div className="flex pb-[1rem] pt-[1.5rem] gap-[8px] max-md:mt-18 max-md:flex-col">
+							<div className="flex w-3/4 gap-[8px] max-md:justify-between max-md:w-full max-md:flex-col ">
 								<ModalButton
 									text="Create Product"
 									searchParam={"newProduct"}
 									openModal={true}
-									classNameInyect="px-[2rem] py-[1rem] text-lg font-bold"
+									classNameInyect="max-md:text-sm max-md:px-[1rem] max-md:py-[0.5rem] px-[2rem] py-[1rem] text-lg font-bold"
 									disabled={false}
 								/>
-								<div className="flex w-3/5">
+								<div className="flex w-3/5 max-md:w-full">
 									<SearchField
 										name="searchProducts"
 										register={register}
@@ -110,7 +125,7 @@ export default function HomePageView() {
 									/>
 								</div>
 							</div>
-							<div className="flex flex-[50%] justify-end gap-[8px]">
+							<div className="flex flex-[50%] max-md:justify-between justify-end gap-[8px]">
 								<div className="flex items-center text-left justify-end w-auto px-[1rem] py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 									<CategoryDropDown
 										fieldName="categoryFilter"
@@ -182,7 +197,50 @@ export default function HomePageView() {
 				search={debouncedSearch}
 				categoryIdKey={categoryFilter}
 			/>
-			<RightSideBar products={products} isLoadingProducts={isLoadingProducts} />
+
+			{/* Right Sidebar para Desktop */}
+			<div className="hidden md:block">
+				<RightSideBar
+					products={products}
+					isLoadingProducts={isLoadingProducts}
+				/>
+			</div>
+
+			{/* Right Sidebar para Móvil*/}
+			<Transition show={isRightSidebarOpen} as={Fragment}>
+				{/* Overlay */}
+				<Transition.Child
+					as={Fragment}
+					enter="transition-opacity ease-linear duration-200"
+					enterFrom="opacity-0"
+					enterTo="opacity-100"
+					leave="transition-opacity ease-linear duration-200"
+					leaveFrom="opacity-100"
+					leaveTo="opacity-0"
+				>
+					<div
+						className="fixed inset-0 bg-black/50 z-40 md:hidden"
+						onClick={() => setIsRightSidebarOpen(false)}
+					/>
+				</Transition.Child>
+
+				{/* Sidebar */}
+				<Transition.Child
+					as="div"
+					className="fixed top-0 right-0 h-full z-50 md:hidden"
+					enter="transition ease-in-out duration-200 transform"
+					enterFrom="translate-x-full"
+					enterTo="translate-x-0"
+					leave="transition ease-in-out duration-200 transform"
+					leaveFrom="translate-x-0"
+					leaveTo="translate-x-full"
+				>
+					<RightSideBar
+						products={products}
+						isLoadingProducts={isLoadingProducts}
+					/>
+				</Transition.Child>
+			</Transition>
 		</div>
 	);
 }

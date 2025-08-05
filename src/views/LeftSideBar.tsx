@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import {
 	LuWarehouse,
 	LuUserRound,
@@ -6,19 +6,42 @@ import {
 	LuSquareMenu,
 	LuLogOut,
 	LuSendToBack,
+	LuMenu,
 } from "react-icons/lu";
 import { NavBarItem } from "../components/NavBarItem";
-import { useState } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Transition } from "@headlessui/react";
 
 export const LeftSideBar = () => {
 	const [hovered, setHovered] = useState(false);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const location = useLocation();
+
+	// Cierra el menú móvil al cambiar de ruta para mejorar la UX
+	useEffect(() => {
+		setIsMobileMenuOpen(false);
+	}, [location.pathname]);
+
+	const isExpanded = hovered || isMobileMenuOpen;
 
 	return (
 		<>
 			<div className="flex">
+				{/* Botón de Menú Hamburguesa (Solo para Móviles) */}
+				<div className="md:hidden">
+					<button
+						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+						className="fixed top-8 left-4 z-50 p-2 rounded-md bg-bg-nav text-white"
+						aria-label="Abrir menú"
+					>
+						<LuMenu size={24} />
+					</button>
+				</div>
+
 				<aside
-					className="fixed peer bg-bg-nav min-h-screen w-sidebar-collapsed flex flex-col overflow-hidden group hover:w-sidebar-expanded text-white transition-all duration-150 ease-in hover:duration-200 hover:ease-out"
+					className={`fixed peer bg-bg-nav min-h-screen w-sidebar-expanded flex flex-col overflow-hidden group text-white transition-all duration-200 ease-in-out z-40
+            ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+            md:w-sidebar-collapsed md:translate-x-0 md:hover:w-sidebar-expanded`}
 					onMouseEnter={() => setHovered(true)}
 					onMouseLeave={() => setHovered(false)}
 				>
@@ -31,13 +54,13 @@ export const LeftSideBar = () => {
 								src="/StockWare_Icon.png"
 								alt="StockWare Icon"
 								className={`p-1 transition-transform duration-200 ease-out ${
-									hovered ? "scale-150" : "scale-100"
+									isExpanded ? "scale-150" : "scale-100"
 								} w-16 h-16 object-contain`}
 							/>
 						</div>
 
 						<Transition
-							show={hovered}
+							show={isExpanded}
 							unmount={false}
 							enter="transition-all duration-200 ease-out"
 							enterFrom="opacity-0 translate-y-1"
@@ -55,35 +78,35 @@ export const LeftSideBar = () => {
 
 					<div className="flex flex-1 flex-col justify-center text-3xl p-[1rem]">
 						<NavBarItem
-							hovered={hovered}
+							hovered={isExpanded}
 							title="Products"
 							to="/"
 							key={"/"}
 							icon={<LuWarehouse focusable={"false"} />}
 						/>
 						<NavBarItem
-							hovered={hovered}
+							hovered={isExpanded}
 							title="Categories"
 							to="/categories"
 							key={"/categories"}
 							icon={<LuSquareMenu focusable={"false"} />}
 						/>
 						<NavBarItem
-							hovered={hovered}
+							hovered={isExpanded}
 							title="Movements"
 							to="/stock_movements"
 							key={"/stock_movements"}
 							icon={<LuSendToBack focusable={"false"} />}
 						/>
 						<NavBarItem
-							hovered={hovered}
+							hovered={isExpanded}
 							title="Users"
 							to="/users"
 							key={"/users"}
 							icon={<LuUserRound focusable={"false"} />}
 						/>
 						<NavBarItem
-							hovered={hovered}
+							hovered={isExpanded}
 							title="Profile"
 							to="/profile"
 							key={"/Profile"}
@@ -101,7 +124,24 @@ export const LeftSideBar = () => {
 					</h1>
 				</aside>
 
-				<main className="flex-1 ml-sidebar-collapsed peer-hover:ml-sidebar-expanded transition-all duration-150 ease-in hover:duration-200 hover:ease-out">
+				{/* Overlay para el menú móvil */}
+				<Transition
+					show={isMobileMenuOpen}
+					as={Fragment}
+					enter="transition-opacity duration-200"
+					enterFrom="opacity-0"
+					enterTo="opacity-100"
+					leave="transition-opacity duration-200"
+					leaveFrom="opacity-100"
+					leaveTo="opacity-0"
+				>
+					<div
+						className="fixed inset-0 bg-black/50 z-30 md:hidden"
+						onClick={() => setIsMobileMenuOpen(false)}
+					/>
+				</Transition>
+
+				<main className="flex-1 transition-all duration-200 ease-in-out md:ml-sidebar-collapsed md:peer-hover:ml-sidebar-expanded">
 					<Outlet />
 				</main>
 			</div>

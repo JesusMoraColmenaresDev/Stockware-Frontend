@@ -37,7 +37,7 @@ export const CategoryDropDown = <TFormValues extends FieldValues>({
 			render={({ field: { value, onChange } }) => (
 				<div className="relative w-full">
 					<Listbox value={value} onChange={onChange}>
-						<ListboxButton className="w-full bg-bg-secondary truncate p-2 rounded flex flex-row items-center">
+						<ListboxButton className="w-full max-md:text-sm bg-bg-secondary truncate p-2 rounded flex flex-row items-center">
 							{categories.find((cat) => cat.id === Number(value))?.name ||
 								"All Categories"}
 							{""}

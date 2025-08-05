@@ -145,7 +145,7 @@ export const CreateProductModal = ({
 								<div className="flex flex-row gap-[2rem]">
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2>Minimum Quantity</h2>
+											<h2 className="text-sm">Minimum Quantity</h2>
 											<input
 												type="number"
 												id="minimumQuantity"
@@ -157,12 +157,12 @@ export const CreateProductModal = ({
 									</div>
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2>Quantity</h2>
+											<h2  className="text-sm">Quantity</h2>
 											<input
 												type="number"
 												id="stock"
 												{...register("stock")}
-												className="flex p-[1rem] justify-start text-text bg-bg-secondary backdrop-opacity-40 font-medium rounded-lg"
+												className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary backdrop-opacity-40 font-medium rounded-lg"
 												min={0}
 											/>
 										</div>
@@ -171,7 +171,7 @@ export const CreateProductModal = ({
 								<div className="flex flex-row gap-[2rem]">
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2>Price</h2>
+											<h2  className="text-sm">Price</h2>
 											<input
 												type="number"
 												id="price"
@@ -185,9 +185,9 @@ export const CreateProductModal = ({
 									</div>
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2>Category</h2>
+											<h2  className="text-sm">Category</h2>
 											<div className="p-[1rem] bg-bg-secondary">
-												<select id="category_id" {...register("category_id")}>
+												<select id="category_id" className="w-full" {...register("category_id")}>
 													<option
 														value="0"
 														key={"0"}
@@ -226,18 +226,18 @@ export const CreateProductModal = ({
 										</span>
 									</div>
 								)}
-								<div className="flex justify-between w-full mt-4">
+								<div className="flex justify-between w-full mt-4 max-md:flex-col max-md:gap-2">
 									<button
 										type="submit"
 										disabled={!allDirty}
-										className="w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
+										className="w-2/10 max-md:w-full h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
 									>
 										Create
 									</button>
 									<button
 										type="button"
 										onClick={handleCancel}
-										className="w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
+										className="w-2/10 h-[2rem] max-md:w-full text-2xl font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
 										disabled={isPending}
 									>
 										Cancel

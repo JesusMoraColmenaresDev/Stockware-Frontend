@@ -74,8 +74,8 @@ export default function UsersView() {
 	}, [debouncedSearch]);
 
 	return (
-		<div className="flex w-full h-full flex-col">
-			<div className="bg-bg-main flex-1 px-[48px] py-2 flex flex-col min-w-0">
+		<div className="flex w-full min-h-screen flex-col">
+			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0 max-md:mt-18">
 				{isLoadingUsers ? (
 					<div className="flex items-center justify-center h-full">
 						<Spinner
@@ -86,12 +86,12 @@ export default function UsersView() {
 					</div>
 				) : (
 					<>
-						<div className="flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem]">
+						<div className=" flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem] max-md:items-center">
 							<h2 className="flex text-2xl font-bold gap-[0.75rem]">
 								Users{" "}
 								<span className="opacity-55"> {enabledUsers?.length}</span>
 							</h2>
-							<div className="flex w-1/2 gap-[48px] ">
+							<div className="flex w-1/2 max-md:w-full gap-[48px] max-md:justify-between ">
 								<p className="text-xl font-extrabold text-bg-button-primary">
 									Admins<span className="ml-4 opacity-50">{adminCount}</span>
 								</p>
@@ -99,8 +99,8 @@ export default function UsersView() {
 									Users<span className="ml-4 opacity-50">{userCount}</span>
 								</p>
 							</div>
-							<div className="flex w-1/2 gap-[1rem]">
-								<div className="flex w-3/5">
+							<div className="flex w-1/2 gap-[1rem] max-md:w-full">
+								<div className="flex w-3/5 max-md:w-full">
 									<SearchField
 										name="searchUser"
 										register={register}

@@ -41,7 +41,7 @@ export default function ProfileView() {
 
 	return (
 		<>
-			<div className="flex w-full h-full flex-col items-center justify-start p-8 bg-bg-main gap-8">
+			<div className="flex w-full min-h-screen flex-col items-center justify-start p-8 bg-bg-main gap-8 max-md:mt-18">
 				{profile?.role === "admin" && (
 					<div className="flex items-center w-full relative ">
 						<div
@@ -65,7 +65,7 @@ export default function ProfileView() {
 					</p>
 				</div>
 
-				<div className="w-full max-w-4xl bg-bg-secondary rounded-lg p-6 flex items-center justify-between">
+				<div className="w-full max-w-4xl bg-bg-secondary rounded-lg p-6 flex max-md:flex-col max-md:gap-8 items-center justify-between">
 					<div>
 						<h3 className="text-2xl font-bold mb-4 border-b border-text/20 pb-2">
 							Personal information

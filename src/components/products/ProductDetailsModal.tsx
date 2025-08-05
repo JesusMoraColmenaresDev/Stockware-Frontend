@@ -46,24 +46,31 @@ export const ProductDetailsModal = () => {
 				<div className="min-w-1/2 h-auto">
 					<div className="flex flex-col gap-[2rem] p-[1rem]">
 						<div className="flex flex-col gap-[1rem]">
-							<h2>Name</h2>
-							<div
-								className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg"
-								title={product.name}
-							>
-								{product.name}
+
+							<div>
+								<h2 className="text-sm">Name</h2>
+								<div
+									className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg"
+									title={product.name}
+								>
+									{product.name}
+								</div>
 							</div>
-							<h2>Description</h2>
-							<p
-								className="w-full h-20 overflow-y-auto resize-none p-[1rem] text-text bg-bg-secondary font-medium rounded-lg"
-								title={product.description}
-							>
-								{product.description}
-							</p>
+
+							<div>
+								<h2 className="text-sm">Description</h2>
+								<p
+									className="w-full max-md:sm h-20 overflow-y-auto resize-none p-[1rem] text-text bg-bg-secondary font-medium rounded-lg"
+									title={product.description}
+								>
+									{product.description}
+								</p>
+							</div>
+
 							<div className="flex flex-row gap-[2rem]">
 								<div className="w-1/2">
 									<div className="flex flex-col">
-										<h2>Minimum Quantity</h2>
+										<h2 className="text-sm">Minimum Quantity</h2>
 										<div className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg">
 											<span className="font-bold">
 												{product.minimumQuantity}
@@ -73,7 +80,7 @@ export const ProductDetailsModal = () => {
 								</div>
 								<div className="w-1/2">
 									<div className="flex flex-col">
-										<h2>Quantity</h2>
+										<h2 className="text-sm">Quantity</h2>
 										<div className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg">
 											<span className="font-bold">{product.stock}</span>
 										</div>
@@ -83,7 +90,7 @@ export const ProductDetailsModal = () => {
 							<div className="flex flex-row gap-[2rem]">
 								<div className="w-1/2">
 									<div className="flex flex-col">
-										<h2>Price</h2>
+										<h2 className="text-sm">Price</h2>
 										<div className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg">
 											<span className="font-bold">{product.price}</span>
 										</div>
@@ -91,7 +98,7 @@ export const ProductDetailsModal = () => {
 								</div>
 								<div className="w-1/2">
 									<div className="flex flex-col">
-										<h2>Category</h2>
+										<h2 className="text-sm">Category</h2>
 										<div
 											className="w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg"
 											title={categoryDictionary[product.category_id]}
@@ -110,18 +117,18 @@ export const ProductDetailsModal = () => {
 									className="max-h-[7rem] w-auto object-contain rounded-xl"
 								/>
 							</div>
-							<div className="flex justify-between w-full mt-4">
+							<div className="flex justify-between w-full mt-4 max-md:flex-col max-md:gap-2">
 								<button
 									type="submit"
 									onClick={goToEditProduct}
-									className="w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
+									className="max-md:w-full w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
 								>
 									Edit
 								</button>
 								<button
 									type="button"
 									onClick={handleCancel}
-									className="w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
+									className="max-md:w-full w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
 								>
 									Cancel
 								</button>

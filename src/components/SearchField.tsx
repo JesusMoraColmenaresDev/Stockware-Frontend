@@ -37,7 +37,7 @@ export const SearchField = <T extends FieldValues>({
 				id={name}
 				{...register(name)}
 				placeholder={placeholder}
-				className="flex px-[1rem] w-full py-[1rem] justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
+				className="flex px-[1rem] w-full py-[1rem] max-md:py-0.5 max-md:w-full justify-start bg-bg-secondary text-text backdrop-opacity-40 font-medium rounded-lg"
 			/>
 			{value && reset && (
 				<button

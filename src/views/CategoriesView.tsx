@@ -53,8 +53,8 @@ export const CategoriesView = () => {
 	}, [debouncedSearch]);
 
 	return (
-		<div className="flex w-full h-full flex-col">
-			<div className="bg-bg-main flex-1 px-[48px] py-2 flex flex-col min-w-0">
+		<div className="flex w-full h-screen flex-col">
+			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0">
 				{isLoadingCategories ? (
 					<div className="flex items-center justify-center h-full">
 						<Spinner
@@ -74,15 +74,15 @@ export const CategoriesView = () => {
 								<span className="opacity-55"> {categories.length}</span>
 							</h2> 
 							*/}
-							<div className="flex w-1/2 gap-[1rem]">
+							<div className="flex w-1/2 gap-[1rem] max-md:mt-18 max-md:flex-col max-md:justify-between max-md:w-full">
 								<ModalButton
 									text="Create Category"
 									searchParam={"newCategory"}
 									openModal={true}
-									classNameInyect="px-[2rem] py-[1rem] text-lg font-bold"
+									classNameInyect="max-md:text-sm max-md:px-[1rem] max-md:py-[0.5rem] px-[2rem] py-[1rem] text-lg font-bold"
 									disabled={false}
 								/>
-								<div className="flex w-3/5">
+								<div className="flex w-3/5 max-md:w-full">
 									<SearchField
 										name="searchCategory"
 										register={register}

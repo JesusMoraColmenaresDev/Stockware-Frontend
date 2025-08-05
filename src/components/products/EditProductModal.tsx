@@ -225,7 +225,7 @@ export const EditProductModal = ({
 														type="number"
 														id="stock"
 														{...register("stock")}
-														className={`flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg ${
+														className={`w-full flex p-[1rem] justify-start text-text bg-bg-secondary font-medium rounded-lg ${
 															!dirtyFields.stock && "opacity-40"
 														}`}
 														min={0}
@@ -254,7 +254,7 @@ export const EditProductModal = ({
 												<div className="flex flex-col">
 													<h2>Category</h2>
 													<div
-														className={`p-[1rem] bg-bg-secondary ${
+														className={`w-full p-[1rem] bg-bg-secondary ${
 															!dirtyFields.category_id &&
 															categoryId !== 0 &&
 															"opacity-40"
@@ -263,6 +263,7 @@ export const EditProductModal = ({
 														<select
 															id="category_id"
 															{...register("category_id")}
+															className="w-full"
 														>
 															<option
 																value="0"
@@ -306,18 +307,18 @@ export const EditProductModal = ({
 												</span>
 											</div>
 										)}
-										<div className="flex justify-between w-full mt-4">
+										<div className="flex justify-between w-full mt-4 max-md:flex-col max-md:gap-2">
 											<button
 												type="submit"
 												disabled={disableButton}
-												className="w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
+												className="w-2/10 max-md:w-full h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
 											>
 												Save
 											</button>
 											<button
 												type="button"
 												onClick={handleCancel}
-												className="w-2/10 h-[2rem] text-2xl font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
+												className="w-2/10 h-[2rem] max-md:w-full text-2xl font-semibold rounded-lg bg-bg-button-delete hover:bg-bg-button-delete-hover text-bg-secondary"
 											>
 												Cancel
 											</button>

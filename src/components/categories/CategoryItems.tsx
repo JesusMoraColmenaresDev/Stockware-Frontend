@@ -14,11 +14,11 @@ export const CategoryItem = ({ category }: CategoryItemProps) => {
 		<div className="px-6 py-4 flex items-center justify-between border-b border-item/50 transition-all duration-200 hover:-translate-y-1">
 			{/* Lado izquierdo: Información de la categoría */}
 			<div className="flex items-center gap-4 flex-1 min-w-0">
-				<div className="text-sm font-mono opacity-50 w-8 text-center">
+				<div className="text-sm font-mono opacity-50 w-8 text-center max-md:hidden">
 					{category.id}
 				</div>
 				<div className="min-w-0 flex-1">
-					<h3 className="text-lg font-semibold truncate" title={category.name}>
+					<h3 className="text-lg max-md:text-sm font-semibold break-words line-clamp-2" title={category.name}>
 						{category.name}
 					</h3>
 				</div>

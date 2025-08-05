@@ -31,7 +31,7 @@ export const UserItem = ({
 
 			{/* Lado derecho: Fecha y Acciones */}
 			<div className="flex items-center gap-8">
-				<div className="text-center">
+				<div className="text-center  max-md:hidden">
 					<p className="text-xs opacity-50">Date Added</p>
 					<p className="text-sm font-medium opacity-80">
 						{parseCreatedAtDate(user.created_at)}

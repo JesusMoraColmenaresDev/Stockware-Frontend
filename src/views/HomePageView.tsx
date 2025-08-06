@@ -16,12 +16,12 @@ import { CreateProductModal } from "../components/products/CreateProductModal";
 import { ProductItem } from "../components/products/ProductItem";
 import { EditProductModal } from "../components/products/EditProductModal";
 import { ProductDetailsModal } from "../components/products/ProductDetailsModal";
-import ReactPaginate from "react-paginate";
 import { Transition } from "@headlessui/react";
 import { LuPanelRight } from "react-icons/lu";
 import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
 import GenerationReportButton from "../components/GenerationReportButton";
+import PaginateComponent from "../components/PaginateComponent";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -154,30 +154,7 @@ export default function HomePageView() {
 							</div>
 						)}
 
-						<ReactPaginate
-							breakLabel="..."
-							nextLabel="Siguiente >"
-							onPageChange={handlePageClick}
-							pageRangeDisplayed={3}
-							marginPagesDisplayed={2}
-							pageCount={totalPages ?? 0}
-							forcePage={currentPage - 1}
-							previousLabel="< Anterior"
-							renderOnZeroPageCount={null}
-							containerClassName="flex items-center justify-center p-4 gap-2 text-lg text-text"
-							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
-							pageLinkClassName="cursor-pointer w-full h-full flex items-center justify-center"
-							previousClassName={`px-4 py-2 rounded-md ${
-								currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-							}`}
-							nextClassName={`px-4 py-2 rounded-md ${
-								currentPage === totalPages
-									? "cursor-not-allowed"
-									: "cursor-pointer"
-							}`}
-							activeClassName="font-bold cursor-pointer"
-							disabledClassName="opacity-50 cursor-not-allowed"
-						/>
+						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
 					</>
 				)}
 			</div>

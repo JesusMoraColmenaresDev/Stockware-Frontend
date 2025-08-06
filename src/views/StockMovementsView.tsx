@@ -158,7 +158,7 @@ export const StockMovementsView = () => {
 										dateFormat="dd/MM/yyyy"
 									/>
 								</div>
-								<div className="flex min-w-1/4 max-md:justify-between justify-end gap-[8px]">
+								<div className="flex min-w-1/4 max-md:justify-between justify-end gap-[8px] z-20">
 									<div className="flex justify-end w-auto py-[0.2rem] font-semibold border rounded-lg border-text bg-bg-secondary">
 										<CategoryDropDown
 											fieldName="categoryFilter"
@@ -172,7 +172,7 @@ export const StockMovementsView = () => {
 							</div>
 						</div>
 
-						<div className="flex-1 overflow-y-auto">
+						<div className="flex-1 overflow-y-auto z-10">
 							<div className="flex flex-col">
 								{/* Titulos */}
 								<div className="px-[1rem] py-[0.5rem] sticky top-0 bg-bg-main z-10">
@@ -349,10 +349,10 @@ export const StockMovementsView = () => {
 							forcePage={currentPage - 1}
 							previousLabel="< Anterior"
 							renderOnZeroPageCount={null}
-							containerClassName="flex items-center justify-center p-4 gap-2 text-lg text-text"
+							containerClassName=" flex items-center justify-center p-4 gap-2 text-lg max-md:text-sm text-text"
 							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
-							pageLinkClassName="cursor-pointer w-full h-full flex items-center justify-center"
-							previousClassName="px-4 py-2 rounded-md"
+							pageLinkClassName="cursor-pointer max-md:text-sm w-full h-full flex items-center justify-center"
+							previousClassName="px-4 py-2 rounded-md max-md:text-sm"
 							nextClassName="px-4 py-2 rounded-md"
 							activeClassName="font-bold"
 							disabledClassName="opacity-50 cursor-not-allowed"

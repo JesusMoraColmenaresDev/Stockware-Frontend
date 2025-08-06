@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
-import ReactPaginate from "react-paginate";
 import { useGetAllCategories } from "../api/categoriesApi";
 import {
 	formatMovementDate,
@@ -340,8 +339,11 @@ export const StockMovementsView = () => {
 							</div>
 						</div>
 
-						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
-						
+						<PaginateComponent
+							totalPages={totalPages}
+							currentPage={currentPage}
+							handlePageClick={handlePageClick}
+						></PaginateComponent>
 					</>
 				)}
 			</div>

@@ -38,7 +38,7 @@ export default function SignUpView() {
 			<div className="bg-bg-secondary h-screen w-screen flex flex-col gap-8 items-center justify-center">
 				<div className="relative">
 					<img
-						src="/public/Stockware_logo.png"
+						src="/public/StockWare_Logo.png"
 						className="max-w-[9rem] object-contain absolute bottom-full left-1/2 -translate-x-1/2 mb-4"
 						alt="Stockware Logo"
 					/>
@@ -46,7 +46,6 @@ export default function SignUpView() {
 						onSubmit={handleSubmit(onSubmit)}
 						className="bg-bg-main  w-[28rem] flex flex-col px-8 py-8 gap-8 rounded-lg "
 					>
-
 						<AuthenticationForm
 							errors={errors}
 							register={register}
@@ -55,12 +54,14 @@ export default function SignUpView() {
 					</form>
 					<p className="text-center mt-4 text-text">
 						Already have an account?{" "}
-						<Link to="/login" className="font-bold text-bg-button-primary hover:underline">
+						<Link
+							to="/login"
+							className="font-bold text-bg-button-primary hover:underline"
+						>
 							Sign in
 						</Link>
 					</p>
 				</div>
-
 			</div>
 		</>
 	);

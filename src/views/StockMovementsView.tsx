@@ -118,7 +118,7 @@ export const StockMovementsView = () => {
 									watch={watch}
 									reset={reset}
 									defaultValues={defaultValues}
-									placeholder="Search Products . . ."
+									placeholder="Search By Products . . ."
 								/>
 								<SearchField
 									name="searchUsers"
@@ -126,7 +126,7 @@ export const StockMovementsView = () => {
 									watch={watch}
 									reset={reset}
 									defaultValues={defaultValues}
-									placeholder="Search Users . . ."
+									placeholder="Search By Users . . ."
 								/>
 							</div>
 
@@ -259,9 +259,7 @@ export const StockMovementsView = () => {
 											</div>
 
 											{/* Value */}
-											<div
-												className="flex gap-1 max-md:w-full max-md:justify-between w-1/10 min-w-0 justify-center items-center max-md:text-sm font-semibold text-lg"
-											>
+											<div className="flex gap-1 max-md:w-full max-md:justify-between w-1/10 min-w-0 justify-center items-center max-md:text-sm font-semibold text-lg">
 												<span className="md:hidden font-bold opacity-70">
 													Value:
 												</span>
@@ -289,9 +287,7 @@ export const StockMovementsView = () => {
 											</div>
 
 											{/* Quantity */}
-											<div
-												className="flex gap-1 w-1/10 max-md:justify-between max-md:w-full min-w-0 max-md:text-sm justify-center items-center font-semibold text-lg"
-											>
+											<div className="flex gap-1 w-1/10 max-md:justify-between max-md:w-full min-w-0 max-md:text-sm justify-center items-center font-semibold text-lg">
 												<span className="md:hidden font-bold opacity-70">
 													Quantity:
 												</span>
@@ -316,11 +312,15 @@ export const StockMovementsView = () => {
 												<span className="md:hidden font-bold opacity-70">
 													User:
 												</span>
-												<span className={`truncate max-md:text-sm ${
-													!movement.user.is_enabled
-														? "opacity-50 line-through"
-														: ""
-												}`}>{movement.user.name}</span>
+												<span
+													className={`truncate max-md:text-sm ${
+														!movement.user.is_enabled
+															? "opacity-50 line-through"
+															: ""
+													}`}
+												>
+													{movement.user.name}
+												</span>
 											</div>
 
 											{/* Date */}
@@ -328,7 +328,7 @@ export const StockMovementsView = () => {
 												<span className="md:hidden font-bold opacity-70">
 													Date:
 												</span>
-												
+
 												<span className="text-center break-words max-md:text-sm">
 													{formatMovementDate(movement.created_at)}
 												</span>

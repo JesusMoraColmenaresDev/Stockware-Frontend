@@ -9,6 +9,7 @@ import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModa
 import { CategoryItem } from "../components/categories/CategoryItems";
 import ReactPaginate from "react-paginate";
 import { EditCategoryModal } from "../components/categories/EditCategoryModal";
+import PaginateComponent from "../components/PaginateComponent";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -102,24 +103,8 @@ export const CategoriesView = () => {
 							</div>
 						</div>
 
-						<ReactPaginate
-							breakLabel="..."
-							nextLabel="Siguiente >"
-							onPageChange={handlePageClick}
-							pageRangeDisplayed={3}
-							marginPagesDisplayed={2}
-							pageCount={totalPages ?? 0}
-							forcePage={currentPage - 1}
-							previousLabel="< Anterior"
-							renderOnZeroPageCount={null}
-							containerClassName="flex items-center justify-center p-4 gap-2 text-lg text-text"
-							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
-							pageLinkClassName="cursor-pointer w-full h-full flex items-center justify-center"
-							previousClassName="px-4 py-2 rounded-md"
-							nextClassName="px-4 py-2 rounded-md"
-							activeClassName="font-bold"
-							disabledClassName="opacity-50 cursor-not-allowed"
-						/>
+						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
+						
 					</>
 				)}
 			</div>

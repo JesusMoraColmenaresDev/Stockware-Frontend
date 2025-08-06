@@ -17,6 +17,7 @@ import DatePicker from "react-datepicker";
 import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
 import GenerationReportButton from "../components/GenerationReportButton";
+import PaginateComponent from "../components/PaginateComponent";
 
 type StockMovementsViewFormValues = {
 	searchProducts: string;
@@ -339,24 +340,8 @@ export const StockMovementsView = () => {
 							</div>
 						</div>
 
-						<ReactPaginate
-							breakLabel="..."
-							nextLabel="Siguiente >"
-							onPageChange={handlePageClick}
-							pageRangeDisplayed={3}
-							marginPagesDisplayed={2}
-							pageCount={totalPages ?? 0}
-							forcePage={currentPage - 1}
-							previousLabel="< Anterior"
-							renderOnZeroPageCount={null}
-							containerClassName=" flex items-center justify-center p-4 gap-2 text-lg max-md:text-sm text-text"
-							pageClassName="w-10 h-10  flex items-center justify-center rounded-md"
-							pageLinkClassName="cursor-pointer max-md:text-sm w-full h-full flex items-center justify-center"
-							previousClassName="px-4 py-2 rounded-md max-md:text-sm"
-							nextClassName="px-4 py-2 rounded-md"
-							activeClassName="font-bold"
-							disabledClassName="opacity-50 cursor-not-allowed"
-						/>
+						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
+						
 					</>
 				)}
 			</div>

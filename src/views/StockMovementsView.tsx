@@ -98,7 +98,7 @@ export const StockMovementsView = () => {
 	}, [debouncedSearch, debouncedUserSearch, categoryFilter]);
 
 	return (
-		<div className="flex w-full min-h-screen ">
+		<div className="flex h-full w-full flex-col">
 			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0 max-md:mt-18">
 				{isLoadingStockMovements && !stockMovements ? (
 					<div className="flex items-center justify-center h-full">
@@ -140,7 +140,7 @@ export const StockMovementsView = () => {
 										endDate={endDate}
 										isClearable
 										placeholderText="Start date"
-										className="font-medium max-md:text-sm border border-gray-300 rounded-md bg-bg-secondary text-text"
+										className="font-medium w-full max-md:text-sm border border-gray-300 rounded-md bg-bg-secondary text-text"
 										popperPlacement="bottom-end"
 										dateFormat="dd/MM/yyyy"
 									/>
@@ -153,7 +153,7 @@ export const StockMovementsView = () => {
 										minDate={startDate ?? undefined} // No se puede elegir una fecha final anterior a la de inicio
 										isClearable
 										placeholderText="End date"
-										className=" border max-md:text-sm font-medium border-gray-300 rounded-md bg-bg-secondary text-text"
+										className=" border w-full max-md:text-sm font-medium border-gray-300 rounded-md bg-bg-secondary text-text"
 										popperPlacement="bottom-end"
 										dateFormat="dd/MM/yyyy"
 									/>

@@ -35,16 +35,16 @@ export default function SignUpView() {
 
 	return (
 		<>
-			<div className="bg-bg-secondary h-screen w-screen flex flex-col gap-8 items-center justify-center">
-				<div className="relative">
+			<div className="bg-bg-secondary min-h-screen w-screen flex flex-col gap-8 items-center justify-center p-4">
+				<div className="relative w-full max-w-md">
 					<img
 						src="/public/StockWare_Logo.png"
-						className="max-w-[9rem] object-contain absolute bottom-full left-1/2 -translate-x-1/2 mb-4"
+						className="max-w-[9rem] max-md:max-w-[6rem] object-contain absolute bottom-full left-1/2 -translate-x-1/2 mb-4"
 						alt="Stockware Logo"
 					/>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className="bg-bg-main  w-[28rem] flex flex-col px-8 py-8 gap-8 rounded-lg "
+						className="bg-bg-main w-full flex flex-col px-8 py-8 max-md:gap-4 max-md:py-4 gap-8 rounded-lg"
 					>
 						<AuthenticationForm
 							errors={errors}

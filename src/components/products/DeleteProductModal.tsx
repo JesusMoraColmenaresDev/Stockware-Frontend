@@ -2,23 +2,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ModalBridge } from "../modals/ModalBridge";
 import { ModalButton } from "../modals/ModalButton";
 import { useSearchParams } from "react-router-dom";
-import { deleteProduct, useGetProducts } from "../../api/productsApi";
+import { deleteProduct, useGetProductById } from "../../api/productsApi";
 
 type DeleteProductModalProps = {
 	page: number;
 	search: string;
 	categoryIdKey: number;
+	setCurrentPage: React.Dispatch<React.SetStateAction<number>>
 };
 
 export const DeleteProductModal = ({
 	page = 1,
 	search = "",
 	categoryIdKey = 0,
+	setCurrentPage
 }: DeleteProductModalProps) => {
 	const [searchParams] = useSearchParams();
 	const id = Number(searchParams.get("productId"));
 
-	const product = useGetProducts().products?.find((prod) => prod.id === id);
+	// Usamos el hook específico para obtener un solo producto por su ID.
+	// El segundo argumento (id > 0) evita que se ejecute la consulta si el ID no es válido.
+	const { product } = useGetProductById(id, id > 0);
 
 	const queryClient = useQueryClient();
 	const { mutate: deleteProductMutate } = useMutation({
@@ -32,8 +36,17 @@ export const DeleteProductModal = ({
 	});
 
 	const deleteFn = () => {
-		if (product) deleteProductMutate(product.id);
+		if (product) {
+			setCurrentPage(1);
+			deleteProductMutate(product.id);
+			
+		}
 	};
+
+	// Si el producto aún no se ha cargado o no existe, no renderizamos nada o un spinner.
+	if (!product) {
+		return null; // O un componente de carga
+	}
 
 	return (
 		<ModalBridge

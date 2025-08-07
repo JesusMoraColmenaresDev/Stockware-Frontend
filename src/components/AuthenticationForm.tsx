@@ -11,13 +11,13 @@ type AuthenticationFormProps = {
 export default function AuthenticationForm({errors, register, isSignUp = true} : AuthenticationFormProps) {
     return (
     <>  
-            <div className="text-text text-[32px] font-bold text-center">
+            <div className="text-text text-[32px] max-md:text-2xl font-bold text-center">
                 {isSignUp ? 'Create Account' : ' Login'}
             </div>
             
             {isSignUp && (
                 <div className="flex flex-col">
-                    <label className="text-text text-[32px]"  htmlFor="name">Full name</label>
+                    <label className="text-text text-[32px] max-md:text-2xl"  htmlFor="name">Full name</label>
                     <input 
                         id="name"
                         type="text"
@@ -29,7 +29,7 @@ export default function AuthenticationForm({errors, register, isSignUp = true} :
             )}
 
             <div className="flex flex-col">
-                <label className="text-text text-[32px]" htmlFor="email">Email</label>
+                <label className="text-text text-[32px] max-md:text-2xl" htmlFor="email">Email</label>
                 <input 
                     id="email"
                     type="email"
@@ -40,7 +40,7 @@ export default function AuthenticationForm({errors, register, isSignUp = true} :
             </div>
 
             <div className="flex flex-col">
-                <label className="text-text text-[32px]"  htmlFor="password">Password</label>
+                <label className="text-text text-[32px] max-md:text-2xl"  htmlFor="password">Password</label>
                 <input 
                     id="password"
                     type="password"
@@ -52,7 +52,7 @@ export default function AuthenticationForm({errors, register, isSignUp = true} :
 
             {isSignUp && (
                 <div className="flex flex-col">
-                    <label className="text-text text-[32px]" htmlFor="confirmPassword">Confirm Password</label>
+                    <label className="text-text text-[32px] max-md:text-2xl" htmlFor="confirmPassword">Confirm Password</label>
                     <input 
                         id="confirmPassword"
                         type="password"

@@ -215,6 +215,7 @@ export const updateProduct = async (data: unknown, id: number) => {
 
 export const deleteProduct = async (id: number) => {
 	try {
+		console.log("eo")
 		const { data } = await api.delete<string>(`/products/${id}`);
 		return data;
 	} catch (error) {

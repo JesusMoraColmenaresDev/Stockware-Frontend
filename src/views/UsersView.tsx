@@ -75,7 +75,7 @@ export default function UsersView() {
 	}, [debouncedSearch]);
 
 	return (
-		<div className="flex w-full min-h-screen flex-col">
+		<div className="flex h-full w-full flex-col">
 			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0 max-md:mt-18">
 				{isLoadingUsers ? (
 					<div className="flex items-center justify-center h-full">

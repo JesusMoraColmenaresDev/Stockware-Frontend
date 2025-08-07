@@ -54,7 +54,7 @@ export const CategoriesView = () => {
 	}, [debouncedSearch]);
 
 	return (
-		<div className="flex w-full h-screen flex-col">
+		<div className="flex h-full w-full flex-col">
 			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0">
 				{isLoadingCategories ? (
 					<div className="flex items-center justify-center h-full">
@@ -110,7 +110,11 @@ export const CategoriesView = () => {
 			</div>
 			<CreateCategoryModal page={currentPage} search={debouncedSearch} />
 			<EditCategoryModal page={currentPage} search={debouncedSearch} />
-			<DeleteCategoryModal page={currentPage} search={debouncedSearch} />
+			<DeleteCategoryModal
+				page={currentPage}
+				search={debouncedSearch}
+				setCurrentPage={setCurrentPage}
+			/>
 		</div>
 	);
 };

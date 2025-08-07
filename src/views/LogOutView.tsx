@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/authService";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function LogOutView() {
 	const navigate = useNavigate();
-
+	const queryClient = useQueryClient();
+	
 	/*useEffect(() => {
         // 1. Define una función asíncrona dentro del useEffect.
         const performLogout = async () => {
@@ -28,13 +30,14 @@ export default function LogOutView() {
 		} catch (error) {
 			console.error("Error al cerrar sesión:", error);
 		} finally {
+			queryClient.clear(); // Limpia toda la caché de React Query
 			navigate("/login");
 		}
 	};
 
 	return (
-		<div className="bg-bg-secondary h-screen w-screen flex items-center justify-center">
-			<div className="bg-bg-main min-w-1/3 flex flex-col px-[36px] py-[48px] gap-[48px] rounded-lg">
+		<div className="bg-bg-secondary min-h-screen w-screen flex items-center justify-center p-4">
+			<div className="bg-bg-main w-full max-w-md flex flex-col px-8 py-12 gap-12 rounded-lg">
 				<div className="text-text text-[32px] font-bold text-center">
 					warning
 				</div>

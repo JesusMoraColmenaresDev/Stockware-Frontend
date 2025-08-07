@@ -81,7 +81,7 @@ export default function HomePageView() {
 	}, [debouncedSearch, categoryFilter]);
 
 	return (
-		<div className="flex w-full min-h-screen relative">
+		<div className="flex w-full h-full relative">
 			{/* Botón para abrir RightSideBar en móvil */}
 			<div className="md:hidden absolute top-8 right-4 z-20">
 				<button
@@ -173,6 +173,7 @@ export default function HomePageView() {
 				page={currentPage}
 				search={debouncedSearch}
 				categoryIdKey={categoryFilter}
+				setCurrentPage ={setCurrentPage}
 			/>
 
 			{/* Right Sidebar para Desktop */}

@@ -1,5 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCategory, useGetCategories } from "../../api/categoriesApi";
+import {
+	deleteCategory,
+	useGetCategoryById,
+} from "../../api/categoriesApi";
 import { ModalBridge } from "../modals/ModalBridge";
 import { ModalButton } from "../modals/ModalButton";
 import { useSearchParams } from "react-router-dom";
@@ -7,19 +10,21 @@ import { useSearchParams } from "react-router-dom";
 type DeleteCategoryModalProps = {
 	page: number;
 	search: string;
+	setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const DeleteCategoryModal = ({
 	page = 1,
 	search = "",
+	setCurrentPage,
 }: DeleteCategoryModalProps) => {
 	const [searchParams] = useSearchParams();
 	const id = Number(searchParams.get("categoryId"));
 
-	const category = useGetCategories().categories?.find((cat) => cat.id === id);
+	const { category } = useGetCategoryById(id, id > 0);
 
 	const queryClient = useQueryClient();
-	const { mutate: deleteCategoryMutate } = useMutation({
+	const { mutate: deleteCategoryMutate, isPending } = useMutation({
 		mutationFn: deleteCategory,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
@@ -28,8 +33,16 @@ export const DeleteCategoryModal = ({
 	});
 
 	const deleteFn = () => {
-		if (category) deleteCategoryMutate(category.id);
+		if (category) {
+			setCurrentPage(1);
+			deleteCategoryMutate(category.id);
+		}
 	};
+
+	// Si la categoría aún no se ha cargado o no existe, no renderizamos nada.
+	if (!category) {
+		return null;
+	}
 
 	return (
 		<ModalBridge
@@ -55,13 +68,7 @@ export const DeleteCategoryModal = ({
 							openModal={false}
 							classNameInyect="px-[2rem] py-[0.25rem] font-semibold"
 							clickFn={deleteFn}
-							disabled={false}
-						/>
-						<ModalButton
-							text="Cancel"
-							openModal={true}
-							classNameInyect="px-[2rem] py-[0.25rem] font-semibold"
-							disabled={false}
+							disabled={isPending}
 						/>
 					</div>
 				</div>

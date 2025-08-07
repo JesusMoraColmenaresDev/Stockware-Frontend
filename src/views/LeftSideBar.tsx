@@ -11,10 +11,12 @@ import {
 import { NavBarItem } from "../components/NavBarItem";
 import { useState, useEffect, Fragment } from "react";
 import { Transition } from "@headlessui/react";
+import { useGetProfileInfo } from "../api/profileApi";
 
 export const LeftSideBar = () => {
 	const [hovered, setHovered] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+	const { data: profile, isLoading, isError, error } = useGetProfileInfo();
 	const location = useLocation();
 
 	// Cierra el menú móvil al cambiar de ruta para mejorar la UX
@@ -26,12 +28,12 @@ export const LeftSideBar = () => {
 
 	return (
 		<>
-			<div className="flex">
+			<div className="flex relative">
 				{/* Botón de Menú Hamburguesa (Solo para Móviles) */}
 				<div className="md:hidden">
 					<button
 						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-						className="fixed top-8 left-4 z-50 p-2 rounded-md bg-bg-nav text-white"
+						className="absolute top-8 left-4 z-10 p-2 rounded-md bg-bg-nav text-white"
 						aria-label="Abrir menú"
 					>
 						<LuMenu size={24} />
@@ -98,13 +100,18 @@ export const LeftSideBar = () => {
 							key={"/stock_movements"}
 							icon={<LuSendToBack focusable={"false"} />}
 						/>
-						<NavBarItem
-							hovered={isExpanded}
-							title="Users"
-							to="/users"
-							key={"/users"}
-							icon={<LuUserRound focusable={"false"} />}
-						/>
+
+						{profile?.role === "admin" && 
+							<NavBarItem
+								hovered={isExpanded}
+								title="Users"
+								to="/users"
+								key={"/users"}
+								icon={<LuUserRound focusable={"false"} />}
+							/>
+						}
+
+
 						<NavBarItem
 							hovered={isExpanded}
 							title="Profile"
@@ -141,7 +148,7 @@ export const LeftSideBar = () => {
 					/>
 				</Transition>
 
-				<main className="flex-1 transition-all duration-200 ease-in-out md:ml-sidebar-collapsed md:peer-hover:ml-sidebar-expanded">
+				<main className="flex-1 min-w-0 transition-all duration-200 ease-in-out md:ml-sidebar-collapsed md:peer-hover:ml-sidebar-expanded">
 					<Outlet />
 				</main>
 			</div>

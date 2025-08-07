@@ -11,6 +11,7 @@ import LogOutView from "../views/LogOutView";
 import { LeftSideBar } from "../views/LeftSideBar";
 import { CategoriesView } from "../views/CategoriesView";
 import UsersView from "../views/UsersView";
+import { AdminRouteGuard } from "../components/users/AdminRouteGuard";
 import ProfileView from "../views/ProfileView";
 import { StockMovementsView } from "../views/StockMovementsView";
 
@@ -39,10 +40,17 @@ const router = createBrowserRouter([
 		loader: isNotAuthenticated,
 		children: [
 			{ index: true, element: <HomePageView /> },
-			{ path: "/categories", element: <CategoriesView /> },
-			{ path: "/users", element: <UsersView /> },
-			{ path: "/profile", element: <ProfileView /> },
-			{ path: "/stock_movements", element: <StockMovementsView /> },
+			{ path: "categories", element: <CategoriesView /> },
+			{
+				// Esta es la ruta "guardia". No tiene path.
+				element: <AdminRouteGuard />,
+				children: [
+					// Todas las rutas que pongas aquí adentro estarán protegidas.
+					{ path: "users", element: <UsersView /> },
+				],
+			},
+			{ path: "profile", element: <ProfileView /> },
+			{ path: "stock_movements", element: <StockMovementsView /> },
 		],
 	},
 	{

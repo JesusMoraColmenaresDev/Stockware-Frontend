@@ -1,5 +1,10 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { usersSchema, type UserType } from "../types";
+import {
+	usersCountSchema,
+	usersSchema,
+	type UserType,
+	type UsersCountResponse,
+} from "../types";
 import { api } from "./axiosConfig";
 import { isAxiosError } from "axios";
 
@@ -122,6 +127,35 @@ export const useGetAllUsers = () => {
 	});
 
 	return { users, isLoadingUsers, isUsersError };
+};
+
+export const getUsersCount = async () => {
+	try {
+		const { data } = await api.get("/users/count");
+		const result = usersCountSchema.safeParse(data);
+		if (result.success) {
+			return result.data;
+		}
+		throw new Error("Invalid user count data from server");
+	} catch (error) {
+		console.error("Could not fetch users count:", error);
+		throw error;
+	}
+};
+
+export const useGetUsersCount = () => {
+	const {
+		data: usersCount,
+		isLoading: isLoadingUsersCount,
+		isError: isErrorUsersCount,
+	} = useQuery<UsersCountResponse>({
+		// A simple, unique key for this global count
+		queryKey: ["users", "count"],
+		queryFn: getUsersCount,
+		staleTime: Infinity, // This data is stable and will only be refetched on invalidation
+	});
+
+	return { usersCount, isLoadingUsersCount, isErrorUsersCount };
 };
 
 export const disableUser = async (userId: string) => {

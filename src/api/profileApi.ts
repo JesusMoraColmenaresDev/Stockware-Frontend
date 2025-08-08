@@ -103,9 +103,12 @@ export type DisableAccountPayload = {
 
 // Creamos la función que hace la llamada a la API para deshabilitar la cuenta del propio usuario.
 export const disableOwnAccount = async (data: DisableAccountPayload) => {
+	// eslint-disable-next-line no-useless-catch
 	try {
 		// El backend espera los datos dentro de un objeto 'user'
-		const { data: responseData } = await api.patch("/profile/disable", { user: data });
+		const { data: responseData } = await api.patch("/profile/disable", {
+			user: data,
+		});
 		return responseData;
 	} catch (error) {
 		throw error; // Dejamos que React Query maneje el objeto de error.

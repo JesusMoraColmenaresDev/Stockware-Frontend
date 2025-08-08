@@ -1,5 +1,4 @@
-import { useMemo } from "react";
-import { useGetProducts } from "../../api/productsApi";
+import { useGetProductById } from "../../api/productsApi";
 import { ModalBridge } from "../modals/ModalBridge";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -11,11 +10,9 @@ export const ProductDetailsModal = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const productId = Number(searchParams.get("productId"));
 
-	const { products } = useGetProducts();
-	const product = useMemo(
-		() => products?.find((prod) => prod.id === productId),
-		[products, productId]
-	);
+	// console.log("productId", productId);
+
+	const { product } = useGetProductById(productId, productId > 0);
 
 	const { categories } = useGetAllCategories();
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
@@ -46,7 +43,6 @@ export const ProductDetailsModal = () => {
 				<div className="min-w-1/2 h-auto">
 					<div className="flex flex-col gap-[2rem] p-[1rem]">
 						<div className="flex flex-col gap-[1rem]">
-
 							<div>
 								<h2 className="text-sm">Name</h2>
 								<div

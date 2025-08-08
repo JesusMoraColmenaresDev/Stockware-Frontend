@@ -79,6 +79,13 @@ export const usersSchema = z.array(userSchema);
 
 export type UserType = z.infer<typeof userSchema>;
 
+export const usersCountSchema = z.object({
+	total_count: z.number(),
+	admin_count: z.number(),
+	user_count: z.number(),
+});
+export type UsersCountResponse = z.infer<typeof usersCountSchema>;
+
 // +
 // + Movements
 // +

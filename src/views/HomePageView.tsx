@@ -16,7 +16,7 @@ import { CreateProductModal } from "../components/products/CreateProductModal";
 import { ProductItem } from "../components/products/ProductItem";
 import { EditProductModal } from "../components/products/EditProductModal";
 import { ProductDetailsModal } from "../components/products/ProductDetailsModal";
-import { Transition } from "@headlessui/react";
+import { Transition, TransitionChild } from "@headlessui/react";
 import { LuPanelRight } from "react-icons/lu";
 import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
@@ -154,7 +154,11 @@ export default function HomePageView() {
 							</div>
 						)}
 
-						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
+						<PaginateComponent
+							totalPages={totalPages}
+							currentPage={currentPage}
+							handlePageClick={handlePageClick}
+						></PaginateComponent>
 					</>
 				)}
 			</div>
@@ -173,7 +177,7 @@ export default function HomePageView() {
 				page={currentPage}
 				search={debouncedSearch}
 				categoryIdKey={categoryFilter}
-				setCurrentPage ={setCurrentPage}
+				setCurrentPage={setCurrentPage}
 			/>
 
 			{/* Right Sidebar para Desktop */}
@@ -187,7 +191,7 @@ export default function HomePageView() {
 			{/* Right Sidebar para Móvil*/}
 			<Transition show={isRightSidebarOpen} as={Fragment}>
 				{/* Overlay */}
-				<Transition.Child
+				<TransitionChild
 					as={Fragment}
 					enter="transition-opacity ease-linear duration-200"
 					enterFrom="opacity-0"
@@ -200,10 +204,10 @@ export default function HomePageView() {
 						className="fixed inset-0 bg-black/50 z-40 md:hidden"
 						onClick={() => setIsRightSidebarOpen(false)}
 					/>
-				</Transition.Child>
+				</TransitionChild>
 
 				{/* Sidebar */}
-				<Transition.Child
+				<TransitionChild
 					as="div"
 					className="fixed top-0 right-0 h-full z-50 md:hidden"
 					enter="transition ease-in-out duration-200 transform"
@@ -217,7 +221,7 @@ export default function HomePageView() {
 						products={products}
 						isLoadingProducts={isLoadingProducts}
 					/>
-				</Transition.Child>
+				</TransitionChild>
 			</Transition>
 		</div>
 	);

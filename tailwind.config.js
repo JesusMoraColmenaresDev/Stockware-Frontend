@@ -23,7 +23,7 @@ export default {
 					deleteHover: "#C0392B",
 				},
 				text: "#34495E",
-				sucess: "#27AE60",
+				success: "#27AE60",
 				item: "#A5A8A9",
 				accent: "#F59E0B",
 			},

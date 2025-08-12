@@ -7,7 +7,7 @@ import { updateProduct, useGetProductById } from "../../api/productsApi";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useGetAllCategories } from "../../api/categoriesApi";
-import { ImageUploadField } from "../ImageUploadField";
+import { ImageUploadField } from "../modals/ImageUploadField";
 
 type EditProductModalProps = {
 	page: number;

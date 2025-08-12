@@ -1,7 +1,12 @@
-import { LuCircleArrowUp, LuSearch, LuSquarePen, LuUserX } from "react-icons/lu";
+import {
+	LuCircleArrowUp,
+	LuSearch,
+	LuSquarePen,
+	LuUserX,
+} from "react-icons/lu";
 import type { UserType } from "../../types";
 import { useNavigate } from "react-router-dom";
-import { parseCreatedAtDate } from "../../api/usersApi";  
+import { parseCreatedAtDate } from "../../api/usersApi";
 
 type UserItemProps = {
 	user: UserType;
@@ -9,9 +14,7 @@ type UserItemProps = {
 	onModifyClick?: (user: UserType) => void;
 };
 
-export const UserItem = ({
-	user
-}: UserItemProps) => {
+export const UserItem = ({ user }: UserItemProps) => {
 	const navigate = useNavigate();
 
 	return (
@@ -22,7 +25,9 @@ export const UserItem = ({
 					<h3 className="text-lg truncate">{user.name}</h3>
 					<p className="text-sm opacity-60">{user.email}</p>
 					<p
-						className={`text-sm  ${user.role === "admin" ? "text-bg-button-primary" : "text-text"} font-semibold`}
+						className={`text-sm  ${
+							user.role === "admin" ? "text-bg-button-primary" : "text-text"
+						} font-semibold`}
 					>
 						{user.role}
 					</p>
@@ -42,15 +47,16 @@ export const UserItem = ({
 						<>
 							<button
 								onClick={() =>
-									navigate(location.pathname + `?action=promote&userId=${user.id}`)
+									navigate(
+										location.pathname + `?action=promote&userId=${user.id}`
+									)
 								}
-									className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-sucess transition-colors"
-									title="Promote to Admin"
-								>
-									<LuCircleArrowUp size={20} />
-							</button>	
+								className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-white/10 hover:text-success transition-colors"
+								title="Promote to Admin"
+							>
+								<LuCircleArrowUp size={20} />
+							</button>
 						</>
-
 					)}
 					<button
 						onClick={() =>

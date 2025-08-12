@@ -37,7 +37,7 @@ export const RightSideBar = ({
 					<Spinner colorPrimary="#2C3E50" colorSecondary="#3498DB" />
 				</div>
 			) : outOfStockCount === 0 && lowStockCount === 0 ? (
-				<div className="flex flex-col h-full w-full items-center text-sucess gap-[2rem] p-[0.5rem]">
+				<div className="flex flex-col h-full w-full items-center text-success gap-[2rem] p-[0.5rem]">
 					<LuBadgeCheck className="w-[10rem] h-auto" />
 					<span className="text-center text-3xl font-semibold">
 						Todos los Productos Tienen Suficiente Stock!

@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
 import { SearchField } from "../components/SearchField";
 import { UserItem } from "../components/users/UserItem";
-import { useGetUsers } from "../api/usersApi";
-import { useEffect, useMemo, useState } from "react";
+import { useGetUsers, useGetUsersCount } from "../api/usersApi";
+import { useEffect, useState } from "react";
 import { ConfirmUserActionModal } from "../components/users/ConfirmActionModal";
-import ReactPaginate from "react-paginate";
 import { Spinner } from "../components/Spinner";
 import PaginateComponent from "../components/PaginateComponent";
 
@@ -30,32 +29,13 @@ export default function UsersView() {
 
 	const searchUser = watch("searchUser");
 
-	const { users, isLoadingUsers, totalPages } = useGetUsers(
-		currentPage,
-		debouncedSearch
-	);
+	const {
+		users: usersPaginated,
+		isLoadingUsers,
+		totalPages,
+	} = useGetUsers(currentPage, debouncedSearch);
 
-	const enabledUsers = useMemo(() => {
-		return users?.filter((user) => user.is_enabled) || [];
-	}, [users]);
-
-	const { adminCount, userCount } = useMemo(() => {
-		if (!enabledUsers) {
-			return { adminCount: 0, userCount: 0 };
-		}
-
-		return enabledUsers.reduce(
-			(counts, user) => {
-				if (user.role === "admin" && user.is_enabled) {
-					counts.adminCount++;
-				} else if (user.is_enabled) {
-					counts.userCount++;
-				}
-				return counts;
-			},
-			{ adminCount: 0, userCount: 0 }
-		);
-	}, [enabledUsers]);
+	const { usersCount, isLoadingUsersCount } = useGetUsersCount();
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
@@ -89,15 +69,23 @@ export default function UsersView() {
 					<>
 						<div className=" flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem] max-md:items-center">
 							<h2 className="flex text-2xl font-bold gap-[0.75rem]">
-								Users{" "}
-								<span className="opacity-55"> {enabledUsers?.length}</span>
+								Total Users{" "}
+								<span className="opacity-55">
+									{isLoadingUsersCount ? "..." : usersCount?.total_count ?? 0}
+								</span>
 							</h2>
 							<div className="flex w-1/2 max-md:w-full gap-[48px] max-md:justify-between ">
 								<p className="text-xl font-extrabold text-bg-button-primary">
-									Admins<span className="ml-4 opacity-50">{adminCount}</span>
+									Admins
+									<span className="ml-4 opacity-50">
+										{isLoadingUsersCount ? "..." : usersCount?.admin_count ?? 0}
+									</span>
 								</p>
 								<p className="text-xl font-extrabold">
-									Users<span className="ml-4 opacity-50">{userCount}</span>
+									Users
+									<span className="ml-4 opacity-50">
+										{isLoadingUsersCount ? "..." : usersCount?.user_count ?? 0}
+									</span>
 								</p>
 							</div>
 							<div className="flex w-1/2 gap-[1rem] max-md:w-full">
@@ -115,15 +103,18 @@ export default function UsersView() {
 						</div>
 						<div className="flex-1 overflow-y-auto">
 							<div className="flex flex-col">
-								{users &&
-									users.map(
+								{usersPaginated &&
+									usersPaginated.map(
 										(user) =>
 											user.is_enabled && <UserItem key={user.id} user={user} />
 									)}
 							</div>
 						</div>
-						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
-						
+						<PaginateComponent
+							totalPages={totalPages}
+							currentPage={currentPage}
+							handlePageClick={handlePageClick}
+						></PaginateComponent>
 					</>
 				)}
 			</div>

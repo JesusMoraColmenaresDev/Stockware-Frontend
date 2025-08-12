@@ -4,7 +4,7 @@ import type { CategoryType, ProductType } from "../../types";
 import { getAllCategories } from "../../api/categoriesApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createProduct } from "../../api/productsApi";
-import { ImageUploadField } from "../ImageUploadField";
+import { ImageUploadField } from "../modals/ImageUploadField";
 import { Spinner } from "../Spinner";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -157,7 +157,7 @@ export const CreateProductModal = ({
 									</div>
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2  className="text-sm">Quantity</h2>
+											<h2 className="text-sm">Quantity</h2>
 											<input
 												type="number"
 												id="stock"
@@ -171,7 +171,7 @@ export const CreateProductModal = ({
 								<div className="flex flex-row gap-[2rem]">
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2  className="text-sm">Price</h2>
+											<h2 className="text-sm">Price</h2>
 											<input
 												type="number"
 												id="price"
@@ -185,9 +185,13 @@ export const CreateProductModal = ({
 									</div>
 									<div className="w-1/2">
 										<div className="flex flex-col">
-											<h2  className="text-sm">Category</h2>
+											<h2 className="text-sm">Category</h2>
 											<div className="p-[1rem] bg-bg-secondary">
-												<select id="category_id" className="w-full" {...register("category_id")}>
+												<select
+													id="category_id"
+													className="w-full"
+													{...register("category_id")}
+												>
 													<option
 														value="0"
 														key={"0"}

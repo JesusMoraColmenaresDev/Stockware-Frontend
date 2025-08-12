@@ -4,7 +4,6 @@ import { useSearchParams } from "react-router-dom";
 import { disableUser, promoteUser } from "../../api/usersApi";
 import { ModalContainer } from "../modals/ModalContainer";
 
-
 type ConfirmActionFormValues = {
 	password_confirmation: string;
 };
@@ -32,12 +31,12 @@ const actionConfig = {
 	},
 	promote: {
 		title: "Promote User",
-		titleColor: "text-sucess",
+		titleColor: "text-success",
 		buttonText: "Confirm Promotion",
 		buttonLoadingText: "Promoting...",
-		buttonClass: "bg-bg-button-primary hover:bg-sucess",
+		buttonClass: "bg-bg-button-primary hover:bg-success",
 		// TODO: Crear la función 'promoteUser' en usersApi.ts que reciba el userId
-		mutationFn:  promoteUser ,//promoteUser,
+		mutationFn: promoteUser, //promoteUser,
 		successMessage: "User promoted to admin successfully.",
 		errorMessage: "Error promoting user.",
 	},
@@ -100,18 +99,27 @@ export const ConfirmUserActionModal = ({
 			width="w-1/3"
 			height="h-auto"
 		>
-			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-8">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="flex flex-col gap-4 mt-8"
+			>
 				<p className="text-center text-text opacity-80">
 					To confirm, please enter your password.
 				</p>
 				<input
 					type="password"
-					{...register("password_confirmation", { required: "This field is required" })}
+					{...register("password_confirmation", {
+						required: "This field is required",
+					})}
 					className="w-full px-4 py-2 bg-bg-secondary rounded-md text-text"
 					disabled={isPending}
 					autoComplete="current-password"
 				/>
-				{errors.password_confirmation && <p className="text-red-500 text-sm">{errors.password_confirmation.message}</p>}
+				{errors.password_confirmation && (
+					<p className="text-red-500 text-sm">
+						{errors.password_confirmation.message}
+					</p>
+				)}
 				<input
 					type="submit"
 					value={isPending ? config.buttonLoadingText : config.buttonText}
@@ -122,5 +130,3 @@ export const ConfirmUserActionModal = ({
 		</ModalContainer>
 	);
 };
-
-

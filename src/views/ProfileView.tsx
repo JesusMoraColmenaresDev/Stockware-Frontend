@@ -19,7 +19,7 @@ export default function ProfileView() {
 	const handleClick = async () => {
 		const response = await createDBBackUp();
 		if (response) {
-			setMessageColor("text-sucess");
+			setMessageColor("text-success");
 			setrequestMessage(response);
 		} else {
 			setMessageColor("text-bg-button-delete");

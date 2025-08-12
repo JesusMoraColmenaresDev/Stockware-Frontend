@@ -7,7 +7,7 @@ import { updateProduct, useGetProductById } from "../../api/productsApi";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useGetAllCategories } from "../../api/categoriesApi";
-import { ImageUploadField } from "../ImageUploadField";
+import { ImageUploadField } from "../modals/ImageUploadField";
 
 type EditProductModalProps = {
 	page: number;
@@ -32,7 +32,7 @@ export const EditProductModal = ({
 	const [searchParams, setSearchParams] = useSearchParams();
 	const productId = Number(searchParams.get("productId"));
 
-	console.log("productId", productId);
+	// console.log("productId", productId);
 
 	// Se añade la opción 'enabled' para evitar que el hook se ejecute
 	// con un productId de 0 cuando se cierra el modal.
@@ -119,12 +119,12 @@ export const EditProductModal = ({
 
 			// then append the file
 			formData.append("product[image]", data.image_url[0]);
-			console.log(formData);
+			// console.log(formData);
 
 			mutate(formData);
 		} else {
 			// otherwise just send JSON
-			console.log(changedFields);
+			// console.log(changedFields);
 			mutate(changedFields);
 		}
 	};

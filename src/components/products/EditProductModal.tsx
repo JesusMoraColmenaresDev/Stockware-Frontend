@@ -9,12 +9,6 @@ import { useEffect, useMemo } from "react";
 import { useGetAllCategories } from "../../api/categoriesApi";
 import { ImageUploadField } from "../modals/ImageUploadField";
 
-type EditProductModalProps = {
-	page: number;
-	search: string;
-	categoryIdKey: number;
-};
-
 type editProductForm = Pick<
 	ProductType,
 	"name" | "description" | "minimumQuantity" | "stock" | "price" | "category_id"
@@ -22,11 +16,7 @@ type editProductForm = Pick<
 	image_url?: FileList;
 };
 
-export const EditProductModal = ({
-	page = 1,
-	search = "",
-	categoryIdKey = 0,
-}: EditProductModalProps) => {
+export const EditProductModal = () => {
 	const queryClient = useQueryClient();
 
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -69,12 +59,16 @@ export const EditProductModal = ({
 			updateProduct(data, productId),
 		mutationKey: ["editProduct", productId],
 		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["products", page, search, categoryIdKey],
-			});
+			// Invalida de forma general para asegurar que todas las vistas de productos se actualicen.
+			queryClient.invalidateQueries({ queryKey: ["products"] });
+
+			// Invalida los detalles de este producto específico.
 			queryClient.invalidateQueries({
 				queryKey: ["product", productId],
 			});
+			
+			queryClient.invalidateQueries({ queryKey: ["stockMovements"] });
+
 			searchParams.delete("editProduct");
 			searchParams.delete("productId");
 			setSearchParams({}, { replace: true });

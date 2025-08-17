@@ -80,6 +80,14 @@ export default function HomePageView() {
 		setCurrentPage(1);
 	}, [debouncedSearch, categoryFilter]);
 
+	// Efecto para ajustar la página actual si excede el total de páginas
+	useEffect(() => {
+		// Se añade una comprobación para asegurar que totalPages no es undefined.
+		if (totalPages && totalPages > 0 && currentPage > totalPages) {
+			setCurrentPage(totalPages);
+		}
+	}, [totalPages, currentPage]);
+
 	return (
 		<div className="flex w-full h-full relative">
 			{/* Botón para abrir RightSideBar en móvil */}
@@ -163,16 +171,10 @@ export default function HomePageView() {
 				)}
 			</div>
 			<CreateProductModal
-				page={currentPage}
-				search={debouncedSearch}
-				categoryIdKey={categoryFilter}
+				setCurrentPage={setCurrentPage}
 			/>
 			<ProductDetailsModal />
-			<EditProductModal
-				page={currentPage}
-				search={debouncedSearch}
-				categoryIdKey={categoryFilter}
-			/>
+			<EditProductModal />
 			<DeleteProductModal
 				page={currentPage}
 				search={debouncedSearch}

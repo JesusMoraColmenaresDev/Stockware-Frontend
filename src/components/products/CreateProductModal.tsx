@@ -10,9 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 type CreateProductModalProps = {
-	page: number;
-	search: string;
-	categoryIdKey: number;
+	setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type createProductForm = Pick<
@@ -23,9 +21,7 @@ type createProductForm = Pick<
 };
 
 export const CreateProductModal = ({
-	page = 1,
-	search = "",
-	categoryIdKey = 0,
+	setCurrentPage,
 }: CreateProductModalProps) => {
 	const queryClient = useQueryClient();
 	const [searchParams, setSearchParams] = useSearchParams();
@@ -51,9 +47,11 @@ export const CreateProductModal = ({
 		mutationFn: createProduct,
 		mutationKey: ["newProduct", watch("name")],
 		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ["products", page, search, categoryIdKey],
-			});
+			// 1. Invalida TODAS las queries de productos para asegurar que se recarguen.
+			queryClient.invalidateQueries({ queryKey: ["products"] });
+			// 2. Navega a una página muy alta. El componente padre se encargará de
+			//    ajustarla a la última página real después de que los datos se recarguen.
+			setCurrentPage(9999);
 			setSaved(true);
 			reset();
 		},

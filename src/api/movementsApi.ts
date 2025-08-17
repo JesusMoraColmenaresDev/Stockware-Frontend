@@ -114,7 +114,7 @@ export const useGetStockMovements = (
 	endDate: Date | null
 ) => {
 	const { data, isLoading, isError } = useQuery<PaginatedMovementResponse>({
-		queryKey: ["stockMovements", { page, search, userSearch, categoryId }],
+		queryKey: ["stockMovements", { page, search, userSearch, categoryId, startDate, endDate }],
 		queryFn: () =>
 			getStockMovements(
 				page,

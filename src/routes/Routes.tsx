@@ -14,23 +14,59 @@ import UsersView from "../views/UsersView";
 import { AdminRouteGuard } from "../components/users/AdminRouteGuard";
 import ProfileView from "../views/ProfileView";
 import { StockMovementsView } from "../views/StockMovementsView";
+import { api } from "../api/axiosConfig";
 
-const isAuthenticated = () => {
+/**
+ * Loader for public pages like /login or /signup.
+ * If a valid token exists, redirect to `/`.
+ * If token missing/invalid, allow the route (return null).
+ */
+const isAuthenticated = async () => {
 	const token = localStorage.getItem("jwt");
-	if (token) {
-		// Si ya hay un token, no tiene sentido registrarse de nuevo.
-		return redirect("/");
+	if (!token) return null; // no token -> let user access /login
+
+	try {
+		const res = await api.get("/auth/validate");
+		if (res.status >= 200 && res.status < 300) {
+			// valid token -> redirect to the app root
+			return redirect("/");
+		}
+		// not a 2xx -> remove token and allow login
+		localStorage.removeItem("jwt");
+		return null;
+	} catch (err) {
+		console.log("unauthenticated", err);
+		// network / 401 -> remove token and allow login
+		localStorage.removeItem("jwt");
+		return null;
 	}
-	return null;
 };
 
-const isNotAuthenticated = () => {
+/**
+ * Loader for protected root (and other protected routes).
+ * If token is valid -> return null (allow render).
+ * If not -> remove token and redirect to /login.
+ */
+const isNotAuthenticated = async () => {
 	const token = localStorage.getItem("jwt");
-	if (!token) {
-		// Si no hay token, redirigimos al login.
+	if (!token) return redirect("/login");
+
+	try {
+		const res = await api.get("/auth/validate");
+
+		// controller returns 204 No Content on success; accept any 2xx
+		if (res.status >= 200 && res.status < 300) return null; // Lo mismo que redirect("/"), que no se hace directo pa evitar bucles infinitos
+
+		// non-2xx -> treat as unauthenticated
+		localStorage.removeItem("jwt");
+		return redirect("/login");
+	} catch (err) {
+		console.log("unauthenticated", err);
+		// network error or 401 -> treat as unauthenticated
+		// network / 401 / axios interceptor case -> clean up and redirect
+		localStorage.removeItem("jwt");
 		return redirect("/login");
 	}
-	return null; // Si hay token, permitimos el acceso.
 };
 
 const router = createBrowserRouter([

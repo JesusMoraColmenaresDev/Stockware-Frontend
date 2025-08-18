@@ -51,7 +51,6 @@ export const CategoryDropDown = <TFormValues extends FieldValues>({
 								title="All Categories"
 							>
 								All Categories
-								<LuChevronDown />
 							</ListboxOption>
 							{categories.map((cat) => (
 								<ListboxOption

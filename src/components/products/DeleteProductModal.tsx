@@ -3,19 +3,20 @@ import { ModalBridge } from "../modals/ModalBridge";
 import { ModalButton } from "../modals/ModalButton";
 import { useSearchParams } from "react-router-dom";
 import { deleteProduct, useGetProductById } from "../../api/productsApi";
+import { showToast } from "../../helpers/showToast";
 
 type DeleteProductModalProps = {
 	page: number;
 	search: string;
 	categoryIdKey: number;
-	setCurrentPage: React.Dispatch<React.SetStateAction<number>>
+	setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const DeleteProductModal = ({
 	page = 1,
 	search = "",
 	categoryIdKey = 0,
-	setCurrentPage
+	setCurrentPage,
 }: DeleteProductModalProps) => {
 	const [searchParams] = useSearchParams();
 	const id = Number(searchParams.get("productId"));
@@ -31,15 +32,24 @@ export const DeleteProductModal = ({
 			queryClient.invalidateQueries({
 				queryKey: ["products", page, search, categoryIdKey],
 			});
+			showToast("success", {
+				message: `Successfully Deleted the product "${product?.name}".`,
+			});
 		},
-		onError: () => {},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
+		},
 	});
 
 	const deleteFn = () => {
 		if (product) {
 			setCurrentPage(1);
 			deleteProductMutate(product.id);
-			
 		}
 	};
 

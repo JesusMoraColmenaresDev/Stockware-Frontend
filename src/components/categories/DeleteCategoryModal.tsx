@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-	deleteCategory,
-	useGetCategoryById,
-} from "../../api/categoriesApi";
+import { deleteCategory, useGetCategoryById } from "../../api/categoriesApi";
 import { ModalBridge } from "../modals/ModalBridge";
 import { ModalButton } from "../modals/ModalButton";
 import { useSearchParams } from "react-router-dom";
+import { showToast } from "../../helpers/showToast";
 
 type DeleteCategoryModalProps = {
 	page: number;
@@ -28,8 +26,19 @@ export const DeleteCategoryModal = ({
 		mutationFn: deleteCategory,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
+			queryClient.invalidateQueries({ queryKey: ["categories", id] });
+			showToast("success", {
+				message: `Successfully Deleted the Category!.`,
+			});
 		},
-		onError: () => {},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
+		},
 	});
 
 	const deleteFn = () => {

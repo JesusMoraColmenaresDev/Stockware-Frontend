@@ -14,7 +14,6 @@ export const showToast = (
 	opts?: { title?: string; message?: string } & Partial<ToastOptions>
 ) => {
 	const { title, message, ...toastOpts } = opts ?? {};
-
 	// use the function form so react-toastify injects closeToast to our component
 	const id = toast(
 		({ closeToast }) => (

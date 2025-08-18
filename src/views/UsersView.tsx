@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { ConfirmUserActionModal } from "../components/users/ConfirmActionModal";
 import { Spinner } from "../components/Spinner";
 import PaginateComponent from "../components/PaginateComponent";
+import { showToast } from "../helpers/showToast";
 
 type UsersViewFormValues = {
 	searchUser: string;
@@ -33,6 +34,8 @@ export default function UsersView() {
 		users: usersPaginated,
 		isLoadingUsers,
 		totalPages,
+		isErrorUsers,
+		usersError,
 	} = useGetUsers(currentPage, debouncedSearch);
 
 	const { usersCount, isLoadingUsersCount } = useGetUsersCount();
@@ -54,6 +57,16 @@ export default function UsersView() {
 		setCurrentPage(1);
 	}, [debouncedSearch]);
 
+	useEffect(() => {
+		if (isErrorUsers) {
+			showToast("error", {
+				title: "Error",
+				message:
+					usersError?.message || "An error occurred while fetching users.",
+			});
+		}
+	}, [isErrorUsers, usersError]);
+
 	return (
 		<div className="flex h-full w-full flex-col">
 			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0 max-md:mt-18">
@@ -65,6 +78,8 @@ export default function UsersView() {
 							colorSecondary="#3498DB"
 						/>
 					</div>
+				) : isErrorUsers ? (
+					<div>Error al Cargar los Usuarios: {usersError?.message}</div>
 				) : (
 					<>
 						<div className=" flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem] max-md:items-center">

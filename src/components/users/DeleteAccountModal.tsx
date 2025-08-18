@@ -6,6 +6,7 @@ import {
 } from "../../api/profileApi";
 import { ModalBridge } from "../modals/ModalBridge";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { showToast } from "../../helpers/showToast";
 
 // The form still requires a password for confirmation, even if not sent to the API.
 type DisableAccountFormValues = {
@@ -31,9 +32,17 @@ export const DeleteAccountModal = () => {
 			queryClient.clear();
 			localStorage.removeItem("jwt");
 			navigate("/login");
+			showToast("success", {
+				message: "Account disabled successfully.",
+			});
 		},
-		onError: (error) => {
-			console.log(error);
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
 		},
 	});
 

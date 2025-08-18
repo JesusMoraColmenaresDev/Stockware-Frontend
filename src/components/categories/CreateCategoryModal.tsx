@@ -5,6 +5,7 @@ import { SearchField } from "../SearchField";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "../../api/categoriesApi";
 import type { CategoryType } from "../../types";
+import { showToast } from "../../helpers/showToast";
 
 type CreateCategoryModalProps = {
 	page: number;
@@ -32,8 +33,19 @@ export const CreateCategoryModal = ({
 		mutationFn: createCategory,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
+			showToast("success", {
+				message: `Category "${name}" has been created successfully.`,
+			});
+			reset();
 		},
-		onError: () => {},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
+		},
 	});
 
 	const saveFn = () => {

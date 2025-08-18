@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { stockMovementsSchema, type StockMovementType } from "../types";
-import { api } from "./axiosConfig";
+import { api, handleApiError } from "./axiosConfig";
 
 export type PaginatedMovementResponse = {
 	movements: StockMovementType[];
@@ -53,8 +53,7 @@ export const getStockMovementsPdf = async (
 		);
 		return response;
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting stock movements PDF");
 	}
 };
 
@@ -100,8 +99,7 @@ export const getStockMovements = async (
 			throw new Error(response.error.message);
 		}
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting stock movements");
 	}
 };
 
@@ -113,26 +111,31 @@ export const useGetStockMovements = (
 	startDate: Date | null,
 	endDate: Date | null
 ) => {
-	const { data, isLoading, isError } = useQuery<PaginatedMovementResponse>({
-		queryKey: ["stockMovements", { page, search, userSearch, categoryId, startDate, endDate }],
-		queryFn: () =>
-			getStockMovements(
-				page,
-				search,
-				userSearch,
-				categoryId,
-				startDate,
-				endDate
-			),
-		staleTime: Infinity,
-		placeholderData: keepPreviousData,
-	});
+	const { data, isLoading, isError, error } =
+		useQuery<PaginatedMovementResponse>({
+			queryKey: [
+				"stockMovements",
+				{ page, search, userSearch, categoryId, startDate, endDate },
+			],
+			queryFn: () =>
+				getStockMovements(
+					page,
+					search,
+					userSearch,
+					categoryId,
+					startDate,
+					endDate
+				),
+			staleTime: Infinity,
+			placeholderData: keepPreviousData,
+		});
 
 	return {
 		stockMovements: data?.movements,
 		totalPages: data?.totalPages,
 		isLoadingStockMovements: isLoading,
 		isErrorStockMovements: isError,
+		stockMovementsError: error,
 	};
 };
 

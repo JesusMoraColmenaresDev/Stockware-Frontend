@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import { api } from "./axiosConfig";
+import { api, handleApiError } from "./axiosConfig";
+import { showToast } from "../helpers/showToast";
 
 // Definimos el esquema de datos del perfil con Zod para validación.
 export const profileSchema = z.object({
@@ -24,8 +25,7 @@ export const getProfileInfo = async () => {
 			throw new Error("Error al validar los datos del perfil");
 		}
 	} catch (error) {
-		console.error(error);
-		throw error;
+		throw handleApiError(error, "while fetching profile");
 	}
 };
 
@@ -53,8 +53,7 @@ export const updateProfileInfo = async (data: UpdateProfilePayload) => {
 		const { data: responseData } = await api.patch("/profile", { user: data });
 		return responseData;
 	} catch (error) {
-		console.error(error);
-		throw error;
+		throw handleApiError(error, "while updating profile");
 	}
 };
 
@@ -66,6 +65,14 @@ export const useUpdateProfile = () => {
 		onSuccess: () => {
 			// Invalida la caché del perfil para que la UI se actualice automáticamente.
 			queryClient.invalidateQueries({ queryKey: ["profile"] });
+		},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
 		},
 	});
 };
@@ -84,8 +91,7 @@ export const changePassword = async (data: ChangePasswordPayload) => {
 		const { data: responseData } = await api.patch("/password", { user: data });
 		return responseData;
 	} catch (error) {
-		console.error(error);
-		throw error;
+		throw handleApiError(error, "while changing password");
 	}
 };
 
@@ -103,7 +109,6 @@ export type DisableAccountPayload = {
 
 // Creamos la función que hace la llamada a la API para deshabilitar la cuenta del propio usuario.
 export const disableOwnAccount = async (data: DisableAccountPayload) => {
-	// eslint-disable-next-line no-useless-catch
 	try {
 		// El backend espera los datos dentro de un objeto 'user'
 		const { data: responseData } = await api.patch("/profile/disable", {
@@ -111,7 +116,7 @@ export const disableOwnAccount = async (data: DisableAccountPayload) => {
 		});
 		return responseData;
 	} catch (error) {
-		throw error; // Dejamos que React Query maneje el objeto de error.
+		throw handleApiError(error, "while disabling own account");
 	}
 };
 
@@ -125,8 +130,7 @@ export const deleteAccount = async (data: DeleteAccountPayload) => {
 		// Para peticiones DELETE con body en Axios, se pasa en el objeto de configuración.
 		await api.delete("/profile", { data: { user: data } });
 	} catch (error) {
-		console.error(error);
-		throw error;
+		throw handleApiError(error, "while deleting account");
 	}
 };
 
@@ -140,6 +144,14 @@ export const useDeleteAccount = () => {
 			queryClient.clear();
 			// Eliminamos el token de autenticación del almacenamiento local.
 			localStorage.removeItem("jwt");
+		},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
 		},
 	});
 };

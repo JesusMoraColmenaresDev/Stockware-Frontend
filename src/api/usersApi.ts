@@ -5,8 +5,7 @@ import {
 	type UserType,
 	type UsersCountResponse,
 } from "../types";
-import { api } from "./axiosConfig";
-import { isAxiosError } from "axios";
+import { api, handleApiError } from "./axiosConfig";
 
 /* const mockUsers: UserType[] = [
 	{
@@ -78,8 +77,7 @@ export const getUsers = async (page: number = 1, search: string = "") => {
 		if (response.success) return { users: response.data, totalPages };
 		else throw new Error(response.error.message);
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while fetching users");
 	}
 };
 
@@ -88,6 +86,7 @@ export const useGetUsers = (page: number = 1, search: string = "") => {
 		data,
 		isLoading: isLoadingUsers,
 		isError: isErrorUsers,
+		error: usersError,
 	} = useQuery<PaginatedUserResponse>({
 		queryFn: () => getUsers(page, search),
 		queryKey: ["users", { page, search }],
@@ -100,6 +99,7 @@ export const useGetUsers = (page: number = 1, search: string = "") => {
 		totalPages: data?.totalPages,
 		isLoadingUsers,
 		isErrorUsers,
+		usersError,
 	};
 };
 
@@ -110,8 +110,7 @@ export const getAllUsers = async () => {
 		if (response.success) return response.data;
 		else throw new Error(response.error.message);
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while fetching all users");
 	}
 };
 
@@ -120,13 +119,14 @@ export const useGetAllUsers = () => {
 		data: users,
 		isLoading: isLoadingUsers,
 		isError: isUsersError,
+		error: usersAllError,
 	} = useQuery<UserType[]>({
 		queryKey: ["users", "all"],
 		queryFn: getAllUsers,
 		staleTime: Infinity,
 	});
 
-	return { users, isLoadingUsers, isUsersError };
+	return { users, isLoadingUsers, isUsersError, usersAllError };
 };
 
 export const getUsersCount = async () => {
@@ -138,8 +138,7 @@ export const getUsersCount = async () => {
 		}
 		throw new Error("Invalid user count data from server");
 	} catch (error) {
-		console.error("Could not fetch users count:", error);
-		throw error;
+		throw handleApiError(error, "while fetching users count");
 	}
 };
 
@@ -148,6 +147,7 @@ export const useGetUsersCount = () => {
 		data: usersCount,
 		isLoading: isLoadingUsersCount,
 		isError: isErrorUsersCount,
+		error: usersCountError,
 	} = useQuery<UsersCountResponse>({
 		// A simple, unique key for this global count
 		queryKey: ["users", "count"],
@@ -155,7 +155,12 @@ export const useGetUsersCount = () => {
 		staleTime: Infinity, // This data is stable and will only be refetched on invalidation
 	});
 
-	return { usersCount, isLoadingUsersCount, isErrorUsersCount };
+	return {
+		usersCount,
+		isLoadingUsersCount,
+		isErrorUsersCount,
+		usersCountError,
+	};
 };
 
 export const disableUser = async (userId: string) => {
@@ -198,10 +203,6 @@ export const createDBBackUp = async () => {
 			);
 		}
 	} catch (error) {
-		if (isAxiosError(error)) {
-			console.error("Error creating backup:", error.response?.data);
-		} else {
-			console.error("Unexpected error:", error);
-		}
+		throw handleApiError(error, "while creating backup");
 	}
 };

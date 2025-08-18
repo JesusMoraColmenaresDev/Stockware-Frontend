@@ -7,9 +7,9 @@ import { SearchField } from "../components/SearchField";
 import { CreateCategoryModal } from "../components/categories/CreateCategoryModal";
 import { DeleteCategoryModal } from "../components/categories/DeleteCategoryModal";
 import { CategoryItem } from "../components/categories/CategoryItems";
-import ReactPaginate from "react-paginate";
 import { EditCategoryModal } from "../components/categories/EditCategoryModal";
 import PaginateComponent from "../components/PaginateComponent";
+import { showToast } from "../helpers/showToast";
 
 type CategoriesViewFormValues = {
 	searchCategory: string;
@@ -31,10 +31,13 @@ export const CategoriesView = () => {
 		defaultValues, // Evitamos los Undefined, al tener un valor de antemano
 	});
 	const searchCategory = watch("searchCategory");
-	const { categories, isLoadingCategories, totalPages } = useGetCategories(
-		currentPage,
-		debouncedSearch
-	);
+	const {
+		categories,
+		isLoadingCategories,
+		totalPages,
+		isCategoriesError,
+		categoriesError,
+	} = useGetCategories(currentPage, debouncedSearch);
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
@@ -53,6 +56,14 @@ export const CategoriesView = () => {
 		setCurrentPage(1);
 	}, [debouncedSearch]);
 
+	useEffect(() => {
+		if (isCategoriesError) {
+			showToast("error", {
+				message: categoriesError?.message || "An error occurred",
+			});
+		}
+	}, [isCategoriesError, categoriesError]);
+
 	return (
 		<div className="flex h-full w-full flex-col">
 			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0">
@@ -64,8 +75,8 @@ export const CategoriesView = () => {
 							colorSecondary="#3498DB"
 						/>
 					</div>
-				) : !categories ? (
-					<div>idk Bro</div>
+				) : !isCategoriesError && !categories ? (
+					<div>Error al cargar las categorías: {categoriesError?.message}</div>
 				) : (
 					<>
 						<div className="flex flex-col pb-[1rem] pt-[1.5rem] gap-[1rem]">
@@ -97,14 +108,17 @@ export const CategoriesView = () => {
 						</div>
 						<div className="flex-1 overflow-y-auto">
 							<div className="flex flex-col">
-								{categories.map((category) => (
+								{categories?.map((category) => (
 									<CategoryItem key={category.id} category={category} />
 								))}
 							</div>
 						</div>
 
-						<PaginateComponent totalPages = {totalPages} currentPage = {currentPage} handlePageClick = {handlePageClick}></PaginateComponent>
-						
+						<PaginateComponent
+							totalPages={totalPages}
+							currentPage={currentPage}
+							handlePageClick={handlePageClick}
+						></PaginateComponent>
 					</>
 				)}
 			</div>

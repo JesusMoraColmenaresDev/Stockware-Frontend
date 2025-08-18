@@ -7,11 +7,9 @@ import { DeleteAccountModal } from "../components/users/DeleteAccountModal";
 import { useGetProfileInfo } from "../api/profileApi";
 import { Spinner } from "../components/Spinner";
 import { createDBBackUp } from "../api/usersApi";
-import { useState } from "react";
+import { showToast } from "../helpers/showToast";
 
 export default function ProfileView() {
-	const [requestMessage, setrequestMessage] = useState("");
-	const [messageColor, setMessageColor] = useState("");
 	const navigate = useNavigate();
 
 	const { data: profile, isLoading, isError, error } = useGetProfileInfo();
@@ -19,11 +17,14 @@ export default function ProfileView() {
 	const handleClick = async () => {
 		const response = await createDBBackUp();
 		if (response) {
-			setMessageColor("text-success");
-			setrequestMessage(response);
+			showToast("info", {
+				title: "Backup Created",
+				message: "The database backup was created successfully.",
+			});
 		} else {
-			setMessageColor("text-bg-button-delete");
-			setrequestMessage("No response from the server.");
+			showToast("error", {
+				message: "An error occurred while creating the database backup.",
+			});
 		}
 	};
 
@@ -36,6 +37,8 @@ export default function ProfileView() {
 	}
 
 	if (isError) {
+		showToast("error", { message: error.message });
+
 		return <div>Error al cargar el perfil: {error.message}</div>;
 	}
 
@@ -44,11 +47,6 @@ export default function ProfileView() {
 			<div className="flex w-full min-h-screen flex-col items-center justify-start p-8 bg-bg-main gap-8 max-md:mt-18">
 				{profile?.role === "admin" && (
 					<div className="flex items-center w-full relative ">
-						<div
-							className={`flex-1 flex justify-center ${messageColor} font-bold text-lg p-4 rounded-md`}
-						>
-							{requestMessage}
-						</div>
 						<button
 							className="text-xl font-bold flex justify-end text-center items-center gap-[0.5rem] py-[0.5rem] px-[1rem] rounded-md text-white bg-bg-button-primary hover:bg-bg-button-secondary"
 							onClick={() => handleClick()}

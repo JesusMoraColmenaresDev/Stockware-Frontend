@@ -2,3 +2,12 @@
 @config "../../tailwind.config.js";
 @import "./Spinner.css";
 @import "./toast-overrides.css";
+
+/* global.css (imported somewhere in your app) */
+.multiline-ellipsis {
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /* number of lines to show */
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	white-space: normal; /* allow wrapping */
+}

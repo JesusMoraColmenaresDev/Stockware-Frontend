@@ -17,6 +17,7 @@ import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
 import GenerationReportButton from "../components/GenerationReportButton";
 import PaginateComponent from "../components/PaginateComponent";
+import { showToast } from "../helpers/showToast";
 
 type StockMovementsViewFormValues = {
 	searchProducts: string;
@@ -40,7 +41,12 @@ export const StockMovementsView = () => {
 	// Estado para la fecha de fin del filtro
 	const [endDate, setEndDate] = useState<Date | null>(null);
 
-	const { categories, isLoadingCategories } = useGetAllCategories();
+	const {
+		categories,
+		isLoadingCategories,
+		isCategoriesError,
+		categoriesAllError,
+	} = useGetAllCategories();
 
 	const { register, watch, reset, control } =
 		useForm<StockMovementsViewFormValues>({
@@ -51,15 +57,20 @@ export const StockMovementsView = () => {
 	const searchUsers = watch("searchUsers");
 	const categoryFilter = Number(watch("categoryFilter"));
 
-	const { stockMovements, totalPages, isLoadingStockMovements } =
-		useGetStockMovements(
-			currentPage,
-			debouncedSearch,
-			debouncedUserSearch,
-			categoryFilter,
-			startDate,
-			endDate
-		);
+	const {
+		stockMovements,
+		totalPages,
+		isLoadingStockMovements,
+		isErrorStockMovements,
+		stockMovementsError,
+	} = useGetStockMovements(
+		currentPage,
+		debouncedSearch,
+		debouncedUserSearch,
+		categoryFilter,
+		startDate,
+		endDate
+	);
 
 	const handlePageClick = (event: { selected: number }) => {
 		setCurrentPage(event.selected + 1);
@@ -97,6 +108,26 @@ export const StockMovementsView = () => {
 		setCurrentPage(1);
 	}, [debouncedSearch, debouncedUserSearch, categoryFilter]);
 
+	useEffect(() => {
+		if (isCategoriesError) {
+			showToast("error", {
+				message: `Error fetching categories: ${
+					categoriesAllError?.message || "Unknown error"
+				}`,
+			});
+		}
+	}, [isCategoriesError, categoriesAllError]);
+
+	useEffect(() => {
+		if (isErrorStockMovements) {
+			showToast("error", {
+				message: `Error fetching stock movements: ${
+					stockMovementsError?.message || "Unknown error"
+				}`,
+			});
+		}
+	}, [isErrorStockMovements, stockMovementsError]);
+
 	return (
 		<div className="flex h-full w-full flex-col">
 			<div className="bg-bg-main flex-1 px-4 md:px-6 py-2 flex flex-col min-w-0 max-md:mt-18">
@@ -107,6 +138,15 @@ export const StockMovementsView = () => {
 							colorPrimary="#2C3E50"
 							colorSecondary="#3498DB"
 						/>
+					</div>
+				) : isErrorStockMovements ? (
+					<div>
+						Error al cargar los Movimientos:{" "}
+						{stockMovementsError?.message || "Unknown error"}
+					</div>
+				) : isCategoriesError ? (
+					<div>
+						Error al cargar las Categorias: {categoriesAllError?.message}
 					</div>
 				) : (
 					<>

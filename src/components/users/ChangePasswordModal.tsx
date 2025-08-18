@@ -5,6 +5,7 @@ import {
 	type ChangePasswordPayload,
 } from "../../api/profileApi";
 import { ModalBridge } from "../modals/ModalBridge";
+import { showToast } from "../../helpers/showToast";
 
 export const ChangePasswordModal = () => {
 	const [, setSearchParams] = useSearchParams();
@@ -27,11 +28,19 @@ export const ChangePasswordModal = () => {
 	const onSubmit = (data: ChangePasswordPayload) => {
 		updatePassword(data, {
 			onSuccess: () => {
-				console.log("Password changed successfully")
 				handleCancel();
+				showToast("success", {
+					message: "Password changed successfully.",
+				});
+				reset();
 			},
-			onError: (error) => {
-				console.log(error)
+			onError: (err: unknown) => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const e = err as any;
+				const serverFirst =
+					e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+				const message = serverFirst ?? e?.message ?? "An error occurred";
+				showToast("error", { message });
 			},
 		});
 	};
@@ -52,19 +61,59 @@ export const ChangePasswordModal = () => {
 				className="flex flex-col gap-4 mt-8 text-text"
 			>
 				<div>
-					<label className="block mb-2 text-lg font-medium">Current Password</label>
-					<input type="password" {...register("current_password", { required: "Current password is required" })} className="w-full px-4 py-2 bg-bg-secondary rounded-md" />
-					{errors.current_password && <p className="text-red-500 text-sm mt-1">{errors.current_password.message}</p>}
+					<label className="block mb-2 text-lg font-medium">
+						Current Password
+					</label>
+					<input
+						type="password"
+						{...register("current_password", {
+							required: "Current password is required",
+						})}
+						className="w-full px-4 py-2 bg-bg-secondary rounded-md"
+					/>
+					{errors.current_password && (
+						<p className="text-red-500 text-sm mt-1">
+							{errors.current_password.message}
+						</p>
+					)}
 				</div>
 				<div>
 					<label className="block mb-2 text-lg font-medium">New Password</label>
-					<input type="password" {...register("password", { required: "New password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })} className="w-full px-4 py-2 bg-bg-secondary rounded-md" />
-					{errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+					<input
+						type="password"
+						{...register("password", {
+							required: "New password is required",
+							minLength: {
+								value: 6,
+								message: "Password must be at least 6 characters",
+							},
+						})}
+						className="w-full px-4 py-2 bg-bg-secondary rounded-md"
+					/>
+					{errors.password && (
+						<p className="text-red-500 text-sm mt-1">
+							{errors.password.message}
+						</p>
+					)}
 				</div>
 				<div>
-					<label className="block mb-2 text-lg font-medium">Confirm New Password</label>
-					<input type="password" {...register("password_confirmation", { required: "Please confirm your new password", validate: value => value === newPassword || "The passwords do not match" })} className="w-full px-4 py-2 bg-bg-secondary rounded-md" />
-					{errors.password_confirmation && <p className="text-red-500 text-sm mt-1">{errors.password_confirmation.message}</p>}
+					<label className="block mb-2 text-lg font-medium">
+						Confirm New Password
+					</label>
+					<input
+						type="password"
+						{...register("password_confirmation", {
+							required: "Please confirm your new password",
+							validate: (value) =>
+								value === newPassword || "The passwords do not match",
+						})}
+						className="w-full px-4 py-2 bg-bg-secondary rounded-md"
+					/>
+					{errors.password_confirmation && (
+						<p className="text-red-500 text-sm mt-1">
+							{errors.password_confirmation.message}
+						</p>
+					)}
 				</div>
 
 				<div className="flex justify-between items-center gap-4 mt-4">
@@ -74,7 +123,12 @@ export const ChangePasswordModal = () => {
 						disabled={disableButton}
 						className="px-8 py-2 rounded-md text-2xl text-white font-bold cursor-pointer bg-bg-button-primary hover:bg-bg-button-secondary disabled:opacity-50 disabled:cursor-not-allowed"
 					/>
-					<button type="button" onClick={handleCancel} disabled={isPending} className="px-8 py-2 rounded-md text-2xl text-white font-bold cursor-pointer bg-bg-button-delete hover:bg-bg-button-delete-hover disabled:opacity-50">
+					<button
+						type="button"
+						onClick={handleCancel}
+						disabled={isPending}
+						className="px-8 py-2 rounded-md text-2xl text-white font-bold cursor-pointer bg-bg-button-delete hover:bg-bg-button-delete-hover disabled:opacity-50"
+					>
 						Cancel
 					</button>
 				</div>

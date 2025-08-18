@@ -7,7 +7,7 @@ import {
 	type UpdateProfilePayload,
 } from "../../api/profileApi";
 import { ModalBridge } from "../modals/ModalBridge";
-
+import { showToast } from "../../helpers/showToast";
 
 // Placeholder for form values
 type EditProfileFormValues = {
@@ -67,7 +67,20 @@ export const EditProfileModal = ({ profile }: EditProfileModalProps) => {
 		// 3. Solo hacemos la llamada a la API si realmente hay cambios.
 		if (Object.keys(payload).length > 0) {
 			updateProfile(payload, {
-				onSuccess: handleCancel, // Cierra el modal en caso de éxito
+				onSuccess: () => {
+					showToast("success", {
+						message: "Profile updated successfully.",
+					});
+					handleCancel(); // Cierra el modal en caso de éxito
+				},
+				onError: (err: unknown) => {
+					showToast("error", {
+						message:
+							err instanceof Error
+								? err.message
+								: "An error occurred while updating the profile.",
+					});
+				},
 			});
 		} else {
 			handleCancel(); // Si no hay cambios, solo cierra el modal.
@@ -127,13 +140,21 @@ export const EditProfileModal = ({ profile }: EditProfileModalProps) => {
 						type="password"
 						id="current_password"
 						{...register("current_password", {
-							required: emailIsDirty ? "Password is required to change email" : false,
+							required: emailIsDirty
+								? "Password is required to change email"
+								: false,
 						})}
 						disabled={!emailIsDirty}
 						className="w-full px-4 py-2 bg-bg-secondary rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-						placeholder={emailIsDirty ? "Enter your password" : "Required to change email"}
+						placeholder={
+							emailIsDirty ? "Enter your password" : "Required to change email"
+						}
 					/>
-					{errors.current_password && <p className="text-red-500 text-sm mt-1">{errors.current_password.message}</p>}
+					{errors.current_password && (
+						<p className="text-red-500 text-sm mt-1">
+							{errors.current_password.message}
+						</p>
+					)}
 				</div>
 				<div className="flex justify-between items-center gap-4 mt-4">
 					<input

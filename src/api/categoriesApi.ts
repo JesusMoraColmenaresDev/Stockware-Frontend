@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { categoriesSchema, categorySchema, type CategoryType } from "../types";
-import { api } from "./axiosConfig";
+import { api, handleApiError } from "./axiosConfig";
 import { useMemo } from "react";
 
 export type PaginatedCategoryResponse = {
@@ -17,17 +17,16 @@ export const getCategories = async (page: number = 1, search: string = "") => {
 			params.append("search", search.toString());
 		}
 
-		console.log(params.toString());
+		// console.log(params.toString());
 		const { data } = await api.get(`/categories?${params.toString()}`);
 		const totalPages = data.metadata.pages;
 		const response = categoriesSchema.safeParse(data.data);
 		if (response.success) return { categories: response.data, totalPages };
 		else {
-			throw new Error(response.error.message);
+			throw new Error(response.error.message); // ZOD Error
 		}
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting the categories");
 	}
 };
 
@@ -36,10 +35,9 @@ export const getAllCategories = async () => {
 		const { data } = await api.get("/categories/all");
 		const response = categoriesSchema.safeParse(data);
 		if (response.success) return response.data;
-		else throw new Error(response.error.message);
+		else throw new Error(response.error.message); // ZOD Error
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting all the categories");
 	}
 };
 
@@ -48,6 +46,7 @@ export const useGetCategories = (page: number = 1, search: string = "") => {
 		data,
 		isLoading: isLoadingCategories,
 		isError: isCategoriesError,
+		error: categoriesError,
 	} = useQuery<PaginatedCategoryResponse>({
 		queryKey: ["categories", page, search],
 		queryFn: () => getCategories(page, search),
@@ -60,6 +59,7 @@ export const useGetCategories = (page: number = 1, search: string = "") => {
 		totalPages: data?.totalPages,
 		isLoadingCategories,
 		isCategoriesError,
+		categoriesError,
 	};
 };
 
@@ -68,13 +68,19 @@ export const useGetAllCategories = () => {
 		data: categories,
 		isLoading: isLoadingCategories,
 		isError: isCategoriesError,
+		error: categoriesAllError,
 	} = useQuery<CategoryType[]>({
 		queryKey: ["categories", "all"],
 		queryFn: getAllCategories,
 		staleTime: Infinity,
 	});
 
-	return { categories, isLoadingCategories, isCategoriesError };
+	return {
+		categories,
+		isLoadingCategories,
+		isCategoriesError,
+		categoriesAllError,
+	};
 };
 
 const getCategoryById = async (categoryId: CategoryType["id"]) => {
@@ -82,25 +88,28 @@ const getCategoryById = async (categoryId: CategoryType["id"]) => {
 		const { data } = await api.get(`/categories/${categoryId}`);
 		const response = categorySchema.safeParse(data);
 		if (response.success) return response.data;
-		else throw new Error(response.error.message);
+		else throw new Error(response.error.message); // ZOD Error
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting the category");
 	}
 };
 
-export const useGetCategoryById = (categoryId: CategoryType["id"], enabled : boolean) => {
+export const useGetCategoryById = (
+	categoryId: CategoryType["id"],
+	enabled: boolean
+) => {
 	const {
 		data: category,
 		isLoading: isLoadingCategory,
 		isError: isCategoryError,
+		error: categoryError,
 	} = useQuery<CategoryType>({
 		queryKey: ["categories", categoryId],
 		queryFn: () => getCategoryById(categoryId),
 		staleTime: Infinity,
-		enabled: enabled
+		enabled: enabled,
 	});
-	return { category, isLoadingCategory, isCategoryError };
+	return { category, isLoadingCategory, isCategoryError, categoryError };
 };
 
 export const useCategoryDictionary = (categories: CategoryType[]) =>
@@ -120,12 +129,15 @@ export const createCategory = async (
 		const { data } = await api.post("/categories", {
 			category: newCategoryName,
 		});
+
 		const response = categorySchema.safeParse(data);
 
 		if (response.success) return response.data;
-		else throw new Error(response.error.message);
+		else {
+			throw new Error(response.error.message); // ZOD Error
+		}
 	} catch (error) {
-		console.log(error);
+		throw handleApiError(error, "while creating the category");
 	}
 };
 
@@ -139,10 +151,9 @@ export const updateCategory = async (
 		});
 		const response = categorySchema.safeParse(data);
 		if (response.success) return response.data;
-		else throw new Error(response.error.message);
+		else throw new Error(response.error.message); // ZOD Error
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while updating the category");
 	}
 };
 
@@ -151,6 +162,6 @@ export const deleteCategory = async (categoryId: CategoryType["id"]) => {
 		const { data } = await api.delete<string>(`/categories/${categoryId}`);
 		return data;
 	} catch (error) {
-		console.log(error);
+		throw handleApiError(error, "while deleting the category");
 	}
 };

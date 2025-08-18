@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { triggerDownload } from "../utils/downloadPdfUtils";
+import { showToast } from "../helpers/showToast";
 
 export const usePdfDownloader = (
 	apiCall: () => Promise<{ data: unknown }>,
@@ -13,6 +14,9 @@ export const usePdfDownloader = (
 			const response = await apiCall();
 			triggerDownload(response.data, fileName, "application/pdf");
 		} catch (error) {
+			showToast("error", {
+				message: `Error downloading ${fileName}:`,
+			});
 			console.error(`Error downloading ${fileName}:`, error);
 		} finally {
 			setIsDownloading(false);

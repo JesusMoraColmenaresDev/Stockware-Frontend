@@ -14,7 +14,6 @@ import UsersView from "../views/UsersView";
 import { AdminRouteGuard } from "../components/users/AdminRouteGuard";
 import ProfileView from "../views/ProfileView";
 import { StockMovementsView } from "../views/StockMovementsView";
-import { showToast } from "../helpers/showToast";
 
 const isAuthenticated = () => {
 	const token = localStorage.getItem("jwt");
@@ -34,12 +33,6 @@ const isNotAuthenticated = () => {
 	return null; // Si hay token, permitimos el acceso.
 };
 
-const test = () => {
-	showToast("warning", {
-		message: "This is a test toast message.",
-	});
-};
-
 const router = createBrowserRouter([
 	{
 		path: "/", //& Ya tiene el / , los hijos no lo requieren
@@ -50,7 +43,12 @@ const router = createBrowserRouter([
 			{
 				path: "categories",
 				element: <CategoriesView />,
-				loader: test,
+				// loader: () => {
+				// 	showToast("warning", {
+				// 		message:
+				// 			"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rem impedit sed tempora ut, est, eligendi debitis praesentium quo molestiae culpa asperiores in error nulla nemo. Cupiditate, doloremque hic. Eos, dicta?",
+				// 	});
+				// },
 			},
 			{
 				// Esta es la ruta "guardia". No tiene path.

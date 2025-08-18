@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { ModalBridge } from "../modals/ModalBridge";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { showToast } from "../../helpers/showToast";
 
 type EditCategoryModalProps = {
 	page: number;
@@ -51,9 +52,21 @@ export const EditCategoryModal = ({
 		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["categories", page, search] });
+			queryClient.invalidateQueries({ queryKey: ["categories", id] });
+			showToast("success", {
+				message: `Updated Successfully the Category "${newCategoryName}".`,
+			});
 			handleCancel();
 		},
-		onError: () => {},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
+			handleCancel();
+		},
 	});
 
 	const handleSave = (data: ModifyCategoryModalProps) => {
@@ -106,7 +119,6 @@ export const EditCategoryModal = ({
 									type="submit"
 									disabled={!isDirty || isPending || !newCategoryName.length}
 									className="px-[2rem] py-[0.25rem] font-semibold rounded-lg bg-bg-button-primary hover:bg-bg-button-secondary text-bg-secondary disabled:opacity-20"
-									onClick={() => handleSave({ newCategoryName })}
 								>
 									Save
 								</button>

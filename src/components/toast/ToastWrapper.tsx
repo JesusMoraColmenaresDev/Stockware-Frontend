@@ -40,7 +40,10 @@ export const ToastWrapper = ({
 						{title ? title : `${toastType.toUpperCase()}!`}
 					</h1>
 					{message && (
-						<p className={`text-sm text-text font-semibold truncate`}>
+						<p
+							className={`text-sm text-text font-semibold multiline-ellipsis`}
+							title={message}
+						>
 							{message}
 						</p>
 					)}

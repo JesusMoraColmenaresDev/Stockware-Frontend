@@ -22,6 +22,7 @@ import { usePdfDownloader } from "../hooks/usePdfDownloader";
 import { getFileTimestamp } from "../utils/dateUtils";
 import GenerationReportButton from "../components/GenerationReportButton";
 import PaginateComponent from "../components/PaginateComponent";
+import { showToast } from "../helpers/showToast";
 
 export type HomePageViewFormValues = {
 	searchProducts: string;
@@ -59,12 +60,19 @@ export default function HomePageView() {
 	const searchProduct = watch("searchProducts");
 	const categoryFilter = Number(watch("categoryFilter"));
 
-	const { products, isLoadingProducts, totalPages } = useGetProducts(
-		currentPage,
-		debouncedSearch,
-		categoryFilter
-	);
-	const { categories, isLoadingCategories } = useGetAllCategories();
+	const {
+		products,
+		isLoadingProducts,
+		totalPages,
+		isProductsError,
+		productsError,
+	} = useGetProducts(currentPage, debouncedSearch, categoryFilter);
+	const {
+		categories,
+		isLoadingCategories,
+		isCategoriesError,
+		categoriesAllError,
+	} = useGetAllCategories();
 	const categoryDictionary = useCategoryDictionary(categories ?? []);
 
 	useEffect(() => {
@@ -88,6 +96,23 @@ export default function HomePageView() {
 		}
 	}, [totalPages, currentPage]);
 
+	// Toast
+	useEffect(() => {
+		if (isProductsError) {
+			showToast("error", {
+				message: productsError?.message || "An error occurred",
+			});
+		}
+	}, [isProductsError, productsError]);
+
+	useEffect(() => {
+		if (isCategoriesError) {
+			showToast("error", {
+				message: categoriesAllError?.message || "An error occurred",
+			});
+		}
+	}, [isCategoriesError, categoriesAllError]);
+
 	return (
 		<div className="flex w-full h-full relative">
 			{/* Botón para abrir RightSideBar en móvil */}
@@ -110,6 +135,12 @@ export default function HomePageView() {
 							colorPrimary="#2C3E50"
 							colorSecondary="#3498DB"
 						/>
+					</div>
+				) : isProductsError ? (
+					<div>Error al Cargar los Productos: {productsError?.message}</div>
+				) : isCategoriesError ? (
+					<div>
+						Error al Cargar las Categorias: {categoriesAllError?.message}
 					</div>
 				) : (
 					<>
@@ -170,9 +201,7 @@ export default function HomePageView() {
 					</>
 				)}
 			</div>
-			<CreateProductModal
-				setCurrentPage={setCurrentPage}
-			/>
+			<CreateProductModal setCurrentPage={setCurrentPage} />
 			<ProductDetailsModal />
 			<EditProductModal />
 			<DeleteProductModal

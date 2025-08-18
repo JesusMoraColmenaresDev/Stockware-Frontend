@@ -1,6 +1,6 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { productSchema, productsSchema, type ProductType } from "../types";
-import { api } from "./axiosConfig";
+import { api, handleApiError } from "./axiosConfig";
 import { useMemo } from "react";
 
 /* const mockData: ProductType[] = [
@@ -134,8 +134,7 @@ export const getProducts = async (
 			throw new Error(response.error.message);
 		}
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting products");
 	}
 };
 
@@ -159,8 +158,7 @@ export const getProductsPdf = async (
 		});
 		return response;
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting products PDF");
 	}
 };
 
@@ -171,27 +169,28 @@ export const getProduct = async (id: ProductType["id"]) => {
 		if (response.success) return response.data;
 		else throw new Error(response.error.message);
 	} catch (error) {
-		console.log(error);
-		throw error;
+		throw handleApiError(error, "while getting product");
 	}
 };
 
-export const useGetProductById = (id: ProductType["id"], enabled : boolean) => {
+export const useGetProductById = (id: ProductType["id"], enabled: boolean) => {
 	const {
 		data: product,
 		isLoading: isProductLoading,
 		isError: isProductError,
+		error: productError,
 	} = useQuery<ProductType>({
 		queryKey: ["product", id],
 		queryFn: () => getProduct(id),
 		staleTime: Infinity,
 		placeholderData: keepPreviousData,
-		enabled: enabled
+		enabled: enabled,
 	});
 	return {
 		product,
 		isProductLoading,
 		isProductError,
+		productError,
 	};
 };
 
@@ -200,7 +199,7 @@ export const createProduct = async (data: unknown) => {
 		const { data: httpsMsg } = await api.post<string>("/products", data);
 		return httpsMsg;
 	} catch (error) {
-		console.log(error);
+		throw handleApiError(error, "while creating product");
 	}
 };
 
@@ -209,17 +208,17 @@ export const updateProduct = async (data: unknown, id: number) => {
 		const { data: httpsMsg } = await api.patch<string>(`/products/${id}`, data);
 		return httpsMsg;
 	} catch (error) {
-		console.log(error);
+		throw handleApiError(error, "while updating product");
 	}
 };
 
 export const deleteProduct = async (id: number) => {
 	try {
-		console.log("eo")
+		// console.log("eo")
 		const { data } = await api.delete<string>(`/products/${id}`);
 		return data;
 	} catch (error) {
-		console.log(error);
+		throw handleApiError(error, "while deleting product");
 	}
 };
 
@@ -232,6 +231,7 @@ export const useGetProducts = (
 		data,
 		isLoading: isLoadingProducts,
 		isError: isProductsError,
+		error: productsError,
 	} = useQuery<PaginatedProductsResponse>({
 		queryKey: ["products", page, search, categoryId],
 		queryFn: () => getProducts(page, search, categoryId),
@@ -244,6 +244,7 @@ export const useGetProducts = (
 		totalPages: data?.totalPages,
 		isLoadingProducts,
 		isProductsError,
+		productsError,
 	};
 };
 

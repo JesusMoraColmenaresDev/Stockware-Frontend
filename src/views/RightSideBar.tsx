@@ -2,6 +2,8 @@ import { LuOctagonX, LuOctagonAlert, LuBadgeCheck } from "react-icons/lu";
 import { LowStockList } from "../components/products/LowStockList";
 import type { ProductType } from "../types";
 import { Spinner } from "../components/Spinner";
+import { showToast } from "../helpers/showToast";
+import { useEffect } from "react";
 
 type RightSideBarProps = {
 	products: ProductType[] | undefined;
@@ -29,6 +31,19 @@ export const RightSideBar = ({
 		},
 		{ outOfStockCount: 0, lowStockCount: 0 }
 	) ?? { outOfStockCount: 0, lowStockCount: 0 };
+
+	useEffect(() => {
+		if (outOfStockCount > 0) {
+			showToast("warning", {
+				message: `Theres ${outOfStockCount} products out of stock!`,
+			});
+		}
+		if (lowStockCount > 0) {
+			showToast("warning", {
+				message: `Theres ${lowStockCount} products with low stock!`,
+			});
+		}
+	}, [lowStockCount, outOfStockCount]);
 
 	return (
 		<aside className="bg-bg-secondary min-h-screen w-sidebar-expanded text-white border-text border">

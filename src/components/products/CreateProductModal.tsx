@@ -8,6 +8,7 @@ import { ImageUploadField } from "../modals/ImageUploadField";
 import { Spinner } from "../Spinner";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { showToast } from "../../helpers/showToast";
 
 type CreateProductModalProps = {
 	setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
@@ -54,8 +55,24 @@ export const CreateProductModal = ({
 			setCurrentPage(9999);
 			setSaved(true);
 			reset();
+			searchParams.delete("newProduct");
+			setSearchParams(searchParams, { replace: true });
+			// 3. Resetea el estado de guardado después de 2 segundos
+			showToast("success", {
+				message: "The product has been successfully created.",
+			});
+			setTimeout(() => {
+				setSaved(false);
+			}, 2000);
 		},
-		onError: () => {},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
+		},
 	});
 
 	// Reset saved state when modal opens

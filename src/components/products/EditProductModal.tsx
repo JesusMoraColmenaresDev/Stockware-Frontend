@@ -8,6 +8,7 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect, useMemo } from "react";
 import { useGetAllCategories } from "../../api/categoriesApi";
 import { ImageUploadField } from "../modals/ImageUploadField";
+import { showToast } from "../../helpers/showToast";
 
 type editProductForm = Pick<
 	ProductType,
@@ -66,15 +67,25 @@ export const EditProductModal = () => {
 			queryClient.invalidateQueries({
 				queryKey: ["product", productId],
 			});
-			
+
 			queryClient.invalidateQueries({ queryKey: ["stockMovements"] });
 
 			searchParams.delete("editProduct");
 			searchParams.delete("productId");
 			setSearchParams({}, { replace: true });
 			reset();
+			showToast("success", {
+				message: "The product has been successfully updated.",
+			});
 		},
-		onError: () => {},
+		onError: (err: unknown) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const e = err as any;
+			const serverFirst =
+				e?.errors && e.errors.length ? String(e.errors[0]) : undefined;
+			const message = serverFirst ?? e?.message ?? "An error occurred";
+			showToast("error", { message });
+		},
 	});
 
 	const onSubmit = (data: editProductForm) => {

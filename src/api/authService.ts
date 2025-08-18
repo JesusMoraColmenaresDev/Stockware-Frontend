@@ -13,9 +13,9 @@ export const register = async (data: typeUser) => {
 			},
 		});
 		if (response.status === 201) {
-			console.log("successful registration", response.data);
+			// console.log("successful registration", response.data);
 		} else {
-			console.log("unexpected error in the registry", response.status);
+			// console.log("unexpected error in the registry", response.status);
 		}
 	} catch (error) {
 		if (isAxiosError(error)) {
@@ -43,10 +43,10 @@ export const login = async (data: typeUser) => {
 			if (response.headers["authorization"]) {
 				const token = response.headers["authorization"].split(" ")[1];
 				localStorage.setItem("jwt", token);
-				console.log("successful loginnnnnnnnnnnn", response.data);
+				// console.log("successful loginnnnnnnnnnnn", response.data);
 			}
 
-			console.log("successful login", response);
+			// console.log("successful login", response);
 		} else {
 			console.log("unexpected error in the login", response.status);
 		}

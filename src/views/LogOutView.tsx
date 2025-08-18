@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 export default function LogOutView() {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
-	
+
 	/*useEffect(() => {
         // 1. Define una función asíncrona dentro del useEffect.
         const performLogout = async () => {
@@ -39,7 +39,7 @@ export default function LogOutView() {
 		<div className="bg-bg-secondary min-h-screen w-screen flex items-center justify-center p-4">
 			<div className="bg-bg-main w-full max-w-md flex flex-col px-8 py-12 gap-12 rounded-lg">
 				<div className="text-text text-[32px] font-bold text-center">
-					warning
+					Warning
 				</div>
 				<p className="text-text text-[24px] font-semibold text-center opacity-70">
 					Are you sure you want to log out and finish?
@@ -50,7 +50,7 @@ export default function LogOutView() {
 						onClick={handleLogout}
 						className="px-[3rem] py-[2px] rounded-lg bg-bg-button-primary text-bg-secondary font-bold hover:bg-bg-button-secondary text-lg w-fit"
 					>
-						Log out
+						Log Out
 					</button>
 					<button
 						onClick={() => navigate("/")}

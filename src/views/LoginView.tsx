@@ -4,6 +4,7 @@ import AuthenticationForm from "../components/AuthenticationForm";
 import { login } from "../api/authService";
 import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { showToast } from "../helpers/showToast";
 
 export default function LoginView() {
 	const {
@@ -25,6 +26,10 @@ export default function LoginView() {
 	const onSubmit = async (data: typeUser) => {
 		try {
 			await login(data);
+			showToast("success", {
+				title: "Login successful",
+				message: "You have successfully logged in.",
+			});
 			reset();
 			navigate("/");
 		} catch (error) {
@@ -37,7 +42,7 @@ export default function LoginView() {
 			<div className="bg-bg-secondary min-h-screen w-screen flex flex-col gap-8 items-center justify-center p-4">
 				<div className="relative w-full max-w-md">
 					<img
-						src="/public/StockWare_Logo.png"
+						src="/StockWare_Logo.png"
 						className="max-w-[9rem] object-contain absolute bottom-full left-1/2 -translate-x-1/2 mb-4"
 						alt="Stockware Logo"
 					/>

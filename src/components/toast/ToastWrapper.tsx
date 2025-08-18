@@ -55,7 +55,7 @@ export const ToastWrapper = ({
 				onClick={closeToast}
 				aria-label="Close Notification"
 				title="Cerrar"
-				className="absolute right-3 top-3 sm:right-4 sm:top-4 inline-grid place-items-center rounded-full w-6 h-6 sm:w-7 sm:h-7 opacity-70 transition group-hover:opacity-100 hover:bg-accent"
+				className="absolute left-0 top-0 -translate-x-[140%] -translate-y-[50%] inline-grid place-items-center rounded-full w-8 h-8 sm:w-9 sm:h-9 text-black bg-transparent hover:bg-accent/90 opacity-90 transition-opacity hover:opacity-100 z-30"
 			>
 				<svg
 					viewBox="0 0 16 16"
